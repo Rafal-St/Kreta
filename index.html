@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;700&family=Playfair+Display:ital,wght=0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -20,16 +20,16 @@
                         aegean: {
                             50: '#f0f7fc',
                             100: '#e0eff9',
-                            500: '#0B4F83', // Klasyczny niebieski egejski
+                            500: '#0B4F83',
                             900: '#083B62'
                         },
                         sand: {
-                            50: '#FAF7F2',  // Ciepły piasek/krem
+                            50: '#FAF7F2',
                             100: '#F5EFE4',
                             200: '#E6D7BD'
                         },
                         terracotta: {
-                            500: '#D96B43'  // Ciepły grecki pomarańczowy
+                            500: '#D96B43'
                         }
                     },
                     fontFamily: {
@@ -64,15 +64,14 @@
 </head>
 <body class="bg-sand-50 text-neutral-800 font-sans min-h-screen flex flex-col relative">
 
-    <!-- KONTENER NA POWIADOMIENIA TOAST -->
+    <!-- Kontener powiadomień Toast -->
     <div id="toast-container" class="fixed bottom-5 right-5 z-[999999] flex flex-col gap-2 pointer-events-none"></div>
 
-    <!-- HEADER -->
     <header class="bg-aegean-900 text-white py-5 px-8 shadow-md border-b-4 border-terracotta-500 shrink-0">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-4">
                 <div class="bg-terracotta-500 w-12 h-12 rounded-full flex items-center justify-center text-xl shadow-inner">
-                    <i class="fa-solid fa-compass-drafting text-white animate-spin-slow"></i>
+                    <i class="fa-solid fa-compass-drafting text-white"></i>
                 </div>
                 <div>
                     <h1 class="font-serif text-2xl md:text-3xl tracking-wide font-bold">Kreta 2026</h1>
@@ -95,21 +94,19 @@
         </div>
     </header>
 
-    <!-- MAIN APP WRAPPER -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-hidden">
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:overflow-hidden">
         
-        <!-- LEWA KOLUMNA: LISTA DNI -->
-        <section class="lg:col-span-4 flex flex-col gap-4 h-[calc(100vh-140px)] overflow-y-auto pr-2">
+        <!-- Lista Dni (Zoptymalizowana wysokość mobilna) -->
+        <section class="lg:col-span-4 flex flex-col gap-4 h-[350px] lg:h-[calc(100vh-160px)] overflow-y-auto pr-2">
             <h2 class="font-serif text-xl font-bold text-aegean-500 px-2 flex items-center gap-2">
                 <i class="fa-solid fa-route text-terracotta-500"></i> Plan Dnia i Wybór Trasy
             </h2>
             <div class="space-y-3" id="days-list"></div>
         </section>
 
-        <!-- PRAWA KOLUMNA: ZUNIFIKOWANY PANEL WIDOKÓW -->
-        <section class="lg:col-span-8 flex flex-col h-[calc(100vh-140px)] bg-white rounded-2xl shadow-sm border border-sand-200 overflow-hidden">
+        <!-- Panel Główny (Zoptymalizowana wysokość mobilna) -->
+        <section class="lg:col-span-8 flex flex-col h-[600px] lg:h-[calc(100vh-160px)] bg-white rounded-2xl shadow-sm border border-sand-200 overflow-hidden relative">
             
-            <!-- NAGŁÓWEK AKTYWNEGO DNIA -->
             <div class="bg-sand-100 p-4 md:p-5 border-b border-sand-200 shrink-0 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <span id="active-day-date" class="text-xs font-mono text-terracotta-500 font-bold tracking-wider uppercase">Niedziela, 14.06.2026</span>
@@ -120,21 +117,29 @@
                         <i class="fa-solid fa-toolbox"></i> Narzędzia
                     </button>
                     <a id="active-day-gmaps" href="#" target="_blank" class="bg-terracotta-500 hover:bg-terracotta-600 text-white text-xs font-bold px-4 py-2.5 rounded-lg flex items-center gap-2 shadow-sm transition-colors duration-200 shrink-0 flex-1 sm:flex-none text-center justify-center">
-                        <i class="fa-solid fa-map-location-dot"></i> Nawiguj w Google Maps
+                        <i class="fa-solid fa-map-location-dot"></i> Nawiguj trasę (Google Maps)
                     </a>
                 </div>
             </div>
 
-            <!-- PRZESTRZEŃ NA WIDOKI -->
             <div class="flex-1 flex flex-col overflow-hidden relative">
                 
-                <!-- WIDOK 1: MAPA (Domyślny) -->
+                <!-- Widok 1: MAPA -->
                 <div id="view-map" class="absolute inset-0 flex flex-col p-3">
                     <div class="flex-1 rounded-xl overflow-hidden relative border border-sand-200">
                         <div id="map" class="w-full h-full z-10"></div>
+                        
+                        <!-- Status trasy -->
                         <div class="absolute top-3 left-12 z-[1000] bg-aegean-900/90 text-white text-[10px] md:text-xs px-3 py-1.5 rounded-lg shadow backdrop-blur-sm border border-white/10 font-medium">
                             <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block mr-1.5 animate-ping"></span>
                             <span id="map-status">Trwa pobieranie trasy...</span>
+                        </div>
+
+                        <!-- Panel instrukcji ręcznego przypinania auta -->
+                        <div id="map-pinning-banner" class="absolute top-14 left-12 z-[1000] bg-emerald-600/95 text-white text-[10px] md:text-xs px-4 py-2.5 rounded-lg shadow backdrop-blur-sm border border-white/20 font-bold hidden flex items-center gap-3">
+                            <i class="fa-solid fa-crosshairs animate-spin"></i> 
+                            <span>Kliknij precyzyjnie miejsce na mapie, by zapisać postój auta!</span>
+                            <button onclick="cancelManualPinning()" class="bg-emerald-900 hover:bg-emerald-950 px-2 py-1 rounded text-[10px] text-white transition-colors">Anuluj</button>
                         </div>
                     </div>
                     <div class="mt-3 shrink-0">
@@ -144,10 +149,9 @@
                     </div>
                 </div>
 
-                <!-- WIDOK 2: SZCZEGÓŁY -->
+                <!-- Widok 2: HARMONOGRAM I NOTATKI -->
                 <div id="view-details" class="absolute inset-0 flex flex-col p-5 hidden">
                     <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-hidden min-h-0">
-                        <!-- Lewy Box: Harmonogram z osią czasu -->
                         <div class="lg:col-span-7 overflow-y-auto pr-2 flex flex-col gap-3 min-h-0">
                             <p class="font-bold text-neutral-400 uppercase tracking-widest text-[10px] mb-1 flex items-center gap-1.5 shrink-0">
                                 <i class="fa-solid fa-clock-rotate-left text-aegean-500"></i> Kolejność punktów i harmonogram
@@ -159,9 +163,7 @@
                             <div class="h-full w-px bg-sand-200"></div>
                         </div>
                         
-                        <!-- Prawy Box: Wskazówki rezydenta + Logistyka Paliwowa -->
                         <div class="lg:col-span-4 overflow-y-auto flex flex-col gap-4 min-h-0">
-                            <!-- Wskazówki rezydenta -->
                             <div class="bg-amber-50/40 p-4 rounded-xl border border-amber-100/50 flex flex-col gap-2">
                                 <p class="font-bold text-amber-800 uppercase tracking-widest text-[10px] flex items-center gap-1.5 shrink-0">
                                     <i class="fa-solid fa-circle-info text-amber-600"></i> Wskazówki rezydenta
@@ -169,7 +171,6 @@
                                 <p id="resident-notes" class="text-xs md:text-sm text-neutral-700 italic leading-relaxed font-medium">Brak uwag.</p>
                             </div>
 
-                            <!-- Logistyka Paliwowa -->
                             <div class="bg-emerald-50/40 p-4 rounded-xl border border-emerald-100/50 flex flex-col gap-2">
                                 <p class="font-bold text-emerald-800 uppercase tracking-widest text-[10px] flex items-center gap-1.5 shrink-0">
                                     <i class="fa-solid fa-gas-pump text-emerald-600"></i> Planowanie Paliwa
@@ -199,11 +200,10 @@
                     </div>
                 </div>
 
-                <!-- WIDOK 3: CIEKAWOSTKI, LEGENDY I SŁOWNICZEK AUDIO -->
+                <!-- Widok 3: CIEKAWOSTKI I AI -->
                 <div id="view-curiosities" class="absolute inset-0 flex flex-col p-5 hidden">
                     <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-hidden min-h-0">
                         
-                        <!-- Lewy Box: Lokalne ciekawostki i Słowniczek -->
                         <div class="lg:col-span-8 overflow-y-auto pr-2 flex flex-col gap-5 min-h-0">
                             <p class="font-bold text-neutral-400 uppercase tracking-widest text-[10px] flex items-center gap-1.5 shrink-0">
                                 <i class="fa-solid fa-scroll text-aegean-500"></i> Opowieści i ciekawostki regionalne
@@ -243,6 +243,20 @@
                                         </div>
                                         <button onclick="speakGreek('Yamas')" class="bg-aegean-50 hover:bg-aegean-100 text-aegean-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors"><i class="fa-solid fa-volume-high text-xs"></i></button>
                                     </div>
+                                    <div class="bg-white border border-sand-200 p-2.5 rounded-xl flex justify-between items-center shadow-sm">
+                                        <div>
+                                            <p class="text-xs text-neutral-500">Gdzie jest łazienka?</p>
+                                            <p class="font-bold text-sm text-aegean-900">Pou ine to banyo?</p>
+                                        </div>
+                                        <button onclick="speakGreek('Pou ine to banyo?')" class="bg-aegean-50 hover:bg-aegean-100 text-aegean-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors"><i class="fa-solid fa-volume-high text-xs"></i></button>
+                                    </div>
+                                    <div class="bg-white border border-sand-200 p-2.5 rounded-xl flex justify-between items-center shadow-sm">
+                                        <div>
+                                            <p class="text-xs text-neutral-500">Tak, oczywiście</p>
+                                            <p class="font-bold text-sm text-aegean-900">Ne, sigora</p>
+                                        </div>
+                                        <button onclick="speakGreek('Ne, sigora')" class="bg-aegean-50 hover:bg-aegean-100 text-aegean-500 w-8 h-8 rounded-full flex items-center justify-center transition-colors"><i class="fa-solid fa-volume-high text-xs"></i></button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -268,8 +282,8 @@
                             </div>
                             
                             <div class="relative">
-                                <input type="text" id="ai-query-input" placeholder="Zadaj pytanie..." onkeydown="handleAiInputKey(event)" class="w-full bg-white text-xs border border-sand-300 rounded-xl py-2 pl-3 pr-8 focus:outline-none focus:border-aegean-500 shadow-inner">
-                                <button onclick="triggerChatAi()" class="absolute right-1 top-1 text-aegean-500 hover:text-terracotta-500 w-6.5 h-6.5 rounded-lg flex items-center justify-center transition-colors">
+                                <input type="text" id="ai-query-input" placeholder="Zadaj pytanie..." onkeydown="handleAiInputKey(event)" class="w-full bg-white text-xs border border-sand-300 rounded-xl py-2.5 pl-3 pr-8 focus:outline-none focus:border-aegean-500 shadow-inner">
+                                <button onclick="triggerChatAi()" class="absolute right-1 top-1.5 text-aegean-500 hover:text-terracotta-500 w-6.5 h-6.5 rounded-lg flex items-center justify-center transition-colors">
                                     <i class="fa-solid fa-paper-plane text-xs"></i>
                                 </button>
                             </div>
@@ -292,19 +306,21 @@
         </section>
     </main>
 
-    <!-- ROZSUWANY PANEL BOCZNY: UTILITY TOOLS -->
+    <!-- Panel boczny: NARZĘDZIA -->
     <div id="tools-panel" class="fixed inset-y-0 right-0 w-80 bg-white shadow-2xl z-[99999] border-l border-sand-200 transform translate-x-full transition-transform duration-300 ease-in-out p-5 flex flex-col gap-6 overflow-y-auto">
         <div class="flex justify-between items-center border-b border-sand-200 pb-3 shrink-0">
             <h3 class="font-serif font-bold text-lg text-aegean-900"><i class="fa-solid fa-screwdriver-wrench text-terracotta-500 mr-1.5"></i> Panel Narzędziowy</h3>
             <button onclick="toggleToolsPanel()" class="text-neutral-400 hover:text-neutral-800 w-8 h-8 rounded-full flex items-center justify-center hover:bg-sand-100"><i class="fa-solid fa-xmark"></i></button>
         </div>
 
-        <!-- SEKCJA: LOKALIZATOR AUTA -->
         <div class="bg-sand-50 p-4 rounded-xl border border-sand-200">
             <h4 class="font-bold text-xs text-aegean-900 uppercase font-mono tracking-wider mb-2 flex items-center gap-1.5"><i class="fa-solid fa-car-side text-terracotta-500"></i> Lokalizator Caraveli</h4>
             <div class="space-y-2">
                 <button onclick="saveCarLocation()" class="w-full bg-aegean-500 hover:bg-aegean-900 text-white text-xs font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-2 shadow-sm">
-                    <i class="fa-solid fa-location-crosshairs"></i> Zapamiętaj pozycję auta
+                    <i class="fa-solid fa-location-crosshairs"></i> Zapamiętaj pozycję (GPS)
+                </button>
+                <button onclick="activateManualPinning()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-2 shadow-sm transition-colors">
+                    <i class="fa-solid fa-map-pin"></i> Zaznacz ręcznie na mapie
                 </button>
                 <button id="find-car-btn" onclick="findCar()" class="w-full bg-white text-aegean-900 border border-sand-300 text-xs font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-2 opacity-50 cursor-not-allowed" disabled>
                     <i class="fa-solid fa-route text-terracotta-500"></i> Prowadź do Caraveli
@@ -313,10 +329,9 @@
             <p id="car-status-text" class="text-[10px] text-neutral-400 font-mono mt-2 text-center">Pozycja nie została jeszcze przypięta.</p>
         </div>
 
-        <!-- SEKCJA: SYSTEM BACKUPU DANYCH -->
         <div class="bg-amber-50/60 p-4 rounded-xl border border-amber-200">
             <h4 class="font-bold text-xs text-amber-900 uppercase font-mono tracking-wider mb-2 flex items-center gap-1.5"><i class="fa-solid fa-floppy-disk text-amber-600"></i> Kopia Zapasowa (Zabezpieczenie)</h4>
-            <p class="text-[10px] text-neutral-600 mb-2 leading-normal">Ponieważ darmowe hostingi wygasają, skopiuj ten krótki kod przed zmianą linku strony, by przenieść pozycję auta!</p>
+            <p class="text-[10px] text-neutral-600 mb-2 leading-normal">Skopiuj ten krótki kod przed zmianą linku strony, by przenieść przypiętą pozycję auta między urządzeniami!</p>
             <div class="space-y-2">
                 <button onclick="exportBackupCode()" class="w-full bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5">
                     <i class="fa-solid fa-copy"></i> Kopiuj kod zapasu
@@ -328,7 +343,6 @@
             </div>
         </div>
 
-        <!-- SEKCJA: KALKULATOR NAPIWKÓW -->
         <div class="bg-sand-50 p-4 rounded-xl border border-sand-200">
             <h4 class="font-bold text-xs text-aegean-900 uppercase font-mono tracking-wider mb-2 flex items-center gap-1.5"><i class="fa-solid fa-calculator text-aegean-500"></i> Kalkulator w Tawernie</h4>
             <div class="space-y-3">
@@ -342,19 +356,19 @@
                         <span id="tip-val" class="font-mono font-bold text-emerald-600 text-sm">0.00 €</span>
                     </div>
                     <div>
-                        <span class="text-neutral-500 block text-[10px]">Razem z parą:</span>
+                        <span class="text-neutral-500 block text-[10px]">Razem z napiwkiem:</span>
                         <span id="total-val" class="font-mono font-bold text-aegean-900 text-sm">0.00 €</span>
                     </div>
                 </div>
                 <div class="bg-white p-2 rounded-lg border border-sand-200/60 text-center">
-                    <span class="text-neutral-400 block text-[10px]">Koszt na osobę:</span>
+                    <span class="text-neutral-400 block text-[10px]">Koszt na osobę (2 os.):</span>
                     <span id="per-person-val" class="font-mono font-bold text-terracotta-500 text-base">0.00 €</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL AI GEMINI -->
+    <!-- Modal AI (Poprawiony i w pełni funkcjonalny) -->
     <div id="ai-modal" class="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-[999999] flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden border border-sand-200">
             <div class="bg-aegean-900 text-white px-6 py-4 flex justify-between items-center shrink-0 border-b-2 border-terracotta-500">
@@ -381,29 +395,31 @@
         let activeMarkers = [];
         let activePolylines = [];
         let routeRequestId = 0;
+        let isPinningCar = false;
 
+        // BAZA WYJAZDU KRETA 2026
         const tripData = {
             0: {
                 title: "Dzień 0: Przylot i Logistyka",
                 date: "Niedziela, 14.06.2026",
                 distance: 18,
-                gmaps: "https://www.google.com/maps/dir/?api=1&destination=35.4831,24.0153",
                 schedule: [
                     { time: "18:40", text: "Wylot z lotniska w Krakowie (Wizz Air/Ryanair)" },
                     { time: "22:00", text: "Lądowanie na lotnisku w Chanii (CHQ)" },
-                    { name_ref: "Lotnisko Chania (CHQ)", time: "23:00", text: "Odbiór mianowicie z parkingu Caravel (kieruj się 150m w lewo od terminala)" },
+                    { name_ref: "Lotnisko CHQ", time: "23:00", text: "Odbiór samochodu z parkingu Caravel (kieruj się 150m w lewo od terminala)" },
                     { name_ref: "Miejscowość Aroni", time: "23:15", text: "Przejazd widokową drogą Akrotiriou przez Aroni i Pithari" },
                     { name_ref: "Oasis Hotel Oasis", time: "23:30", text: "Przyjazd i zakwaterowanie w Oasis Hotel Oasis (Eleftherias 122, Chania 733 00, Grecja)" }
                 ],
-                notes: "Zasada paliwowa Same-to-Same. Nie otrzymujecie klasycznego dowodu rejestracyjnego auta, lecz kontrakt najmu od Caravel. Wypożyczalnia preferuje płatność reszty gotówką.",
+                notes: "Zasada paliwowa Same-to-Same. Nie otrzymujecie dowodu rejestracyjnego auta, lecz kontrakt najmu od Caravel. Płatność reszty gotówką.",
                 curiosities: [
                     "Półwysep Akrotiri był tłem dla słynnego filmu 'Grek Zorba' (1964) – taniec Sirtaki był kręcony m.in. na plaży Stavros.",
-                    "Lotnisko w Chanii nosi imię 'Daskalogiannisa' – kreteńskiego bohatera narodowego, który przewodził powstaniu przeciwko Imperium Osmańskiemu w 1770 roku."
+                    "Lotnisko w Chanii nosi imię 'Daskalogiannisa' – kreteńskiego bohatera narodowego, który przewodził powstaniu w 1770 roku."
                 ],
                 points: [
-                    { name: "Lotnisko Chania (CHQ)", coords: [35.5317, 24.1403], icon: "fa-plane", color: "#0B4F83", desc: "Przystanek 1: Odbiór pojazdu z budki Caravel" },
-                    { name: "Miejscowość Aroni", coords: [35.5181, 24.1025], icon: "fa-location-dot", color: "#6b7280", desc: "Przystanek 2: Trasa przejazdowa na półwyspie" },
-                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-bed", color: "#D96B43", desc: "Przystanek 3: Oasis Hotel Oasis, Eleftherias 122, Chania 733 00, Grecja (Wasza oaza spokoju na pierwsze dni)" }
+                    { name: "Lotnisko CHQ", coords: [35.5317, 24.1403], icon: "fa-plane", color: "#0B4F83", desc: "Odbiór pojazdu z budki Caravel" },
+                    { name: "Miejscowość Aroni", coords: [35.5181, 24.1025], icon: "fa-location-dot", color: "#6b7280", desc: "Trasa przejazdowa na półwyspie" },
+                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-bed", color: "#D96B43", desc: "Adres: Eleftherias 122, Chania 733 00." },
+                    { name: "Supermarket INKA (Zaopatrzenie)", coords: [35.4850, 24.0180], icon: "fa-shopping-cart", color: "#4b5563", desc: "Duży lokalny market z parkingiem blisko hotelu Oasis. Idealny na zapasy wody." }
                 ],
                 routeSegments: [
                     { from: [35.5317, 24.1403], to: [35.5181, 24.1025], type: "car" },
@@ -414,26 +430,26 @@
                 title: "Dzień 1: Serce Chanii (Aklimatyzacja)",
                 date: "Poniedziałek, 15.06.2026",
                 distance: 12,
-                gmaps: "https://www.google.com/maps/dir/?api=1&origin=35.4831,24.0153&destination=35.5186,24.0108",
                 schedule: [
                     { name_ref: "Oasis Hotel Oasis", time: "09:00", text: "Śniadanie i pyszna poranna kawa w ogrodzie Oasis Hotel Oasis" },
                     { name_ref: "Parking Talos (Chania)", time: "10:30", text: "Dojazd i zostawienie Caraveli na Parkingu Talos tuż przy weneckich murach obronnych" },
-                    { name_ref: "Miejska Agora (Hala Targowa)", time: "11:00", text: "Piesza wycieczka: Zakupy lokalnych przysmaków (oliwa, sery) w Miejskiej Agorze" },
+                    { name_ref: "Miejska Agora (Hala Targowa)", time: "11:00", text: "Piesza wycieczka: Zakupy lokalnych przysmaków w Miejskiej Agorze" },
                     { name_ref: "Port Wenecki / Promenada", time: "12:30", text: "Spacer urokliwym deptakiem pod historyczną wenecką latarnię morską" },
                     { name_ref: "Plaża Nea Chora", time: "15:30", text: "Popołudniowa kąpiel i wypoczynek na piaszczystej plaży Nea Chora" },
                     { time: "19:30", text: "Klimatyczna kolacja nad wodą, a następnie powrót pieszo na parking i powrót autem do hotelu" }
                 ],
-                notes: "Uliczki starówki są śliskie, załóżcie wygodne sandały/buty sportowe. Celowy wjazd autem na starówkę jest niemożliwy, stąd parking Talos to Wasza najlepsza i bezpieczna baza przesiadkowa.",
+                notes: "Starówka jest zamknięta dla ruchu. Parking Talos to Wasz najlepszy i bezpieczny punkt przesiadkowy.",
                 curiosities: [
-                    "Miejska Agora (wybudowana w 1913 r.) ma kształt krzyża, który został odwzorowany bezpośrednio na wzór francuskiej hali hali targowej w Marsylii.",
-                    "Latarnia morskiej w Chanii jest jedną z najstarszych zachowanych na świecie – wybudowali ją Wenecjanie pod koniec XVI wieku."
+                    "Miejska Agora w Chanii ma kształt krzyża na wzór francuskich hal targowych w Marsylii.",
+                    "Wenecka latarnia morska w porcie to jedna z najstarszych tego typu konstrukcji na świecie."
                 ],
                 points: [
-                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Przystanek 1: Start trasy z hotelu" },
-                    { name: "Parking Talos (Chania)", coords: [35.5186, 24.0108], icon: "fa-square-p", color: "#2563eb", desc: "Przystanek 2: Bezpieczny parking tuż przy murach starówki" },
-                    { name: "Miejska Agora (Hala Targowa)", coords: [35.5144, 24.0203], icon: "fa-basket-shopping", color: "#0B4F83", desc: "Przystanek 3: Rynek miejski (pieszo)" },
-                    { name: "Port Wenecki / Promenada", coords: [35.5185, 24.0158], icon: "fa-monument", color: "#0B4F83", desc: "Przystanek 4: Suchy deptak i latarnia morskiej (pieszo)" },
-                    { name: "Plaża Nea Chora", coords: [35.5145, 24.0075], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Przystanek 5: Piaszczysty brzeg miejski (pieszo)" }
+                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Start trasy z hotelu" },
+                    { name: "Parking Talos (Chania)", coords: [35.5186, 24.0108], icon: "fa-square-p", color: "#2563eb", desc: "Najlepszy, bezpieczny parking przy murach starówki" },
+                    { name: "Miejska Agora (Hala Targowa)", coords: [35.5144, 24.0203], icon: "fa-basket-shopping", color: "#0B4F83", desc: "Piesze zakupy lokalnych przysmaków" },
+                    { name: "Port Wenecki / Promenada", coords: [35.5185, 24.0158], icon: "fa-monument", color: "#0B4F83", desc: "Spacer na molo i latarnię (pieszo)" },
+                    { name: "Plaża Nea Chora", coords: [35.5145, 24.0075], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Piaszczysty brzeg miejski (pieszo)" },
+                    { name: "Supermarket Lidl (Zaopatrzenie)", coords: [35.4985, 24.0392], icon: "fa-shopping-cart", color: "#4b5563", desc: "Duży Lidl na obrzeżach Chanii z darmowym, komfortowym parkingiem." }
                 ],
                 routeSegments: [
                     { from: [35.4831, 24.0153], to: [35.5186, 24.0108], type: "car" },
@@ -448,26 +464,25 @@
                 title: "Dzień 2: Laguna Balos i Gramvousa",
                 date: "Wtorek, 16.06.2026",
                 distance: 95,
-                gmaps: "https://www.google.com/maps/dir/?api=1&origin=35.4831,24.0153&destination=35.5113,23.6358",
                 schedule: [
                     { name_ref: "Oasis Hotel Oasis", time: "07:30", text: "Wczesny start samochodem z bazy w Oasis Hotel Oasis" },
-                    { name_ref: "Port Kissamos", coords: [35.5113, 23.6358], time: "08:30", text: "Dojazd do Portu Kissamos – zostawienie auta na dużym, darmowym parkingu portowym" },
+                    { name_ref: "Port Kissamos", time: "08:30", text: "Dojazd do Portu Kissamos – zostawienie auta na dużym, darmowym parkingu portowym" },
                     { name_ref: "Wyspa Gramvousa", time: "10:00", text: "Wejście na prom i rejs na Gramvousę – wspinaczka pod wenecką twierdzę (wymagający spacer pieszy)" },
                     { name_ref: "Laguna Balos", time: "13:30", text: "Relaks, kąpiele i plażowanie w płytkich wodach laguny Balos" },
                     { name_ref: "Vouves (Najstarsza Oliwna)", time: "18:00", text: "Powrót promem do portu i opcjonalny zjazd do Vouves pod 3000-letnie drzewo oliwne" },
                     { time: "20:00", text: "Powrót do hotelu na pożywną, zasłużoną kolację" }
                 ],
-                notes: "Zakaz jazdy terenowej autem Caravel! Rejs promem to jedyna bezpieczna droga na Balos. Zabierzcie buty trekkingowe na Gramvousę.",
+                notes: "Zakaz jazdy terenowej autem Caravel! Rejs promem to jedyna bezpieczna droga na Balos. Zabierzcie buty trekkingowe.",
                 curiosities: [
-                    "Różowy odcień piasku na Balos i Elafonisi pochodzi z tysięcy rozkruszonych czerwonych muszelek otwornic (Foraminifera).",
-                    "Wenecka twierdza na Gramvousie była w latach 1825–1828 bazą dla ponad 3000 kreteńskich rebeliantów, którzy zajęli się piractwem."
+                    "Różowy odcień piasku na Balos i Elafonisi pochodzi z tysięcy rozkruszonych czerwonych muszelek otwornic.",
+                    "Wenecka twierdza na Gramvousie była w latach 1825–1828 bazą dla ponad 3000 kreteńskich rebeliantów."
                 ],
                 points: [
-                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Przystanek 1: Wyjazd rano" },
-                    { name: "Port Kissamos", coords: [35.5113, 23.6358], icon: "fa-square-p", color: "#2563eb", desc: "Przystanek 2: Bezpieczny, bezpłatny parking portowy przed wejściem na prom" },
-                    { name: "Wyspa Gramvousa", coords: [35.6105, 23.5825], icon: "fa-fort-awesome", color: "#ae5050", desc: "Przystanek 3: Kamienne wzgórze z ruinami zamku (rejs + marsz pieszy)" },
-                    { name: "Laguna Balos", coords: [35.5815, 23.5910], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Przystanek 4: Kąpiel w rajskiej lagunie (rejs)" },
-                    { name: "Vouves (Najstarsza Oliwna)", coords: [35.4867, 23.7865], icon: "fa-tree", color: "#10b981", desc: "Przystanek 5: Monumentalny pomnik przyrody (dojazd autem)" }
+                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Wyjazd rano" },
+                    { name: "Port Kissamos", coords: [35.5113, 23.6358], icon: "fa-square-p", color: "#2563eb", desc: "Bezpieczny, bezpłatny parking portowy przed wejściem na prom" },
+                    { name: "Wyspa Gramvousa", coords: [35.6105, 23.5825], icon: "fa-fort-awesome", color: "#ae5050", desc: "Kamienne wzgórze z ruinami zamku" },
+                    { name: "Laguna Balos", coords: [35.5815, 23.5910], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Kąpiel w rajskiej lagunie (rejs)" },
+                    { name: "Vouves (Najstarsza Oliwna)", coords: [35.4867, 23.7865], icon: "fa-tree", color: "#10b981", desc: "Monumentalny pomnik przyrody (dojazd autem)" }
                 ],
                 routeSegments: [
                     { from: [35.4831, 24.0153], to: [35.5113, 23.6358], type: "car" },
@@ -482,7 +497,6 @@
                 title: "Dzień 3: Różowe Piaski Elafonisi",
                 date: "Środa, 17.06.2026",
                 distance: 150,
-                gmaps: "https://www.google.com/maps/dir/?api=1&origin=35.4831,24.0153&destination=35.2745,23.5435",
                 schedule: [
                     { name_ref: "Oasis Hotel Oasis", time: "07:00", text: "Poranny wyjazd z Perivolia w stronę malowniczego Wąwozu Topolia" },
                     { name_ref: "Jaskinia Agia Sofia", time: "08:30", text: "Krótkie, strome podejście schodami i zwiedzanie Jaskini Agia Sofia ze stalaktytami" },
@@ -496,10 +510,10 @@
                     "W 1907 r. u wybrzeży zatonął austriacki statek pasażerski 'Imperatrix'."
                 ],
                 points: [
-                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Przystanek 1: Start trasy górskiej" },
-                    { name: "Jaskinia Agia Sofia", coords: [35.4011, 23.6828], icon: "fa-mountain", color: "#6b7280", desc: "Przystanek 2: Grota skalna (krótki stromy spacer)" },
-                    { name: "Elafonisi Parking", coords: [35.2745, 23.5435], icon: "fa-square-p", color: "#2563eb", desc: "Przystanek 3: Ostatni możliwy punkt dla aut przed strefą ochrony przyrody" },
-                    { name: "Plaża Elafonisi", coords: [35.2725, 23.5425], icon: "fa-umbrella-beach", color: "#D96B43", desc: "Przystanek 4: Różowa plaża i wyspa (pieszo)" }
+                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Start trasy górskiej" },
+                    { name: "Jaskinia Agia Sofia", coords: [35.4011, 23.6828], icon: "fa-mountain", color: "#6b7280", desc: "Grota skalna (krótki stromy spacer)" },
+                    { name: "Elafonisi Parking", coords: [35.2745, 23.5435], icon: "fa-square-p", color: "#2563eb", desc: "Ostatni możliwy punkt dla aut przed strefą ochrony przyrody" },
+                    { name: "Plaża Elafonisi", coords: [35.2725, 23.5425], icon: "fa-umbrella-beach", color: "#D96B43", desc: "Różowa plaża i wyspa (pieszo)" }
                 ],
                 routeSegments: [
                     { from: [35.4831, 24.0153], to: [35.4011, 23.6828], type: "car" },
@@ -512,7 +526,6 @@
                 title: "Dzień 4: Chania: Relaks i ukryte perły",
                 date: "Czwartek, 18.06.2026",
                 distance: 20,
-                gmaps: "https://www.google.com/maps/dir/?api=1&origin=35.4831,24.0153&destination=35.5205,24.0395",
                 schedule: [
                     { name_ref: "Oasis Hotel Oasis", time: "09:00", text: "Spokojne rozpoczęcie dnia, śniadanie przy basenie" },
                     { name_ref: "Muzeum Morskie / Firka", time: "10:00", text: "Zwiedzanie Muzeum Morskiego w zabytkowych koszarach" },
@@ -525,10 +538,10 @@
                     "Kreteńskie białe skórzane buty 'stivania' były niegdyś dumą i najważniejszym symbolem statusu każdego mężczyzny na wyspie."
                 ],
                 points: [
-                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Przystanek 1: Baza dnia" },
-                    { name: "Muzeum Morskie / Firka", coords: [35.5185, 24.0143], icon: "fa-building-columns", color: "#0B4F83", desc: "Przystanek 2: Twierdza u wejścia do portu" },
-                    { name: "Plaża Agioi Apostoloi", coords: [35.5100, 23.9805], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Przystanek 3: Bezpieczne piaszczyste zatoczki" },
-                    { name: "Tabakaria (Garbarnie)", coords: [35.5205, 24.0395], icon: "fa-utensils", color: "#D96B43", desc: "Przystanek 4: Restauracje nad brzegiem morza" }
+                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Baza dnia" },
+                    { name: "Muzeum Morskie / Firka", coords: [35.5185, 24.0143], icon: "fa-building-columns", color: "#0B4F83", desc: "Twierdza u wejścia do portu" },
+                    { name: "Plaża Agioi Apostoloi", coords: [35.5100, 23.9805], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Bezpieczne piaszczyste zatoczki" },
+                    { name: "Tabakaria (Garbarnie)", coords: [35.5205, 24.0395], icon: "fa-utensils", color: "#D96B43", desc: "Restauracje nad brzegiem morza" }
                 ],
                 routeSegments: [
                     { from: [35.4831, 24.0153], to: [35.5185, 24.0143], type: "car" },
@@ -541,23 +554,23 @@
                 title: "Dzień 5: Przeprawa na Wschód",
                 date: "Piątek, 19.06.2026",
                 distance: 200,
-                gmaps: "https://www.google.com/maps/dir/?api=1&origin=35.4831,24.0153&destination=35.2154,25.7188",
                 schedule: [
                     { name_ref: "Oasis Hotel Oasis (Wyjazd)", time: "09:00", text: "Check-out z hotelu Oasis i start tranzytu na wschód" },
                     { name_ref: "Parking Fortezza (Rethymno)", time: "10:30", text: "Postój w Rethymno: zaparkowanie auta na Parkingu Fortezza" },
                     { name_ref: "Twierdza Fortezza", time: "10:45", text: "Piesza wspinaczka pod potężne mury twierdzy i obiad na kameralnej starówce" },
                     { name_ref: "Mirabella Apartments (Baza 2)", time: "16:00", text: "Przyjazd, zakwaterowanie i zasłużony relaks z widokiem na zatokę Mirabello" }
                 ],
-                notes: "Długa trasa krajowa (ok. 200 km). Po drodze miniecie stacje benzynowe, pamiętajcie o zasadzie Same-to-Same.",
+                notes: "Najdłuższy przejazd wycieczki. Droga krajowa EO90 jest prosta, ale uważajcie na greckich kierowców wyprzedzających na trzeciego poboczem.",
                 curiosities: [
                     "Fortezza w Rethymno to największa twierdza, jaką Wenecjanie zbudowali w swoim imperium kolonialnym.",
                     "Rethymno słynie ze wspaniałych weneckich portali z kamienia dekorowanych sentencjami po łacinie."
                 ],
                 points: [
-                    { name: "Oasis Hotel Oasis (Wyjazd)", coords: [35.4831, 24.0153], icon: "fa-arrow-right-from-bracket", color: "#D96B43", desc: "Przystanek 1: Pożegnanie bazy nr 1" },
-                    { name: "Parking Fortezza (Rethymno)", coords: [35.3728, 24.4705], icon: "fa-square-p", color: "#2563eb", desc: "Przystanek 2: Bezpieczny parking tuż pod murami obronnymi" },
-                    { name: "Twierdza Fortezza", coords: [35.3725, 24.4715], icon: "fa-fort-awesome", color: "#0B4F83", desc: "Przystanek 3: Wenecki zamek i starówka (pieszo)" },
-                    { name: "Mirabella Apartments (Baza 2)", coords: [35.2154, 25.7188], icon: "fa-bed", color: "#D96B43", desc: "Przystanek 4: Wasz nowy hotel z widokiem na zatokę Mirabello" }
+                    { name: "Oasis Hotel Oasis (Wyjazd)", coords: [35.4831, 24.0153], icon: "fa-arrow-right-from-bracket", color: "#D96B43", desc: "Pożegnanie bazy nr 1" },
+                    { name: "Parking Fortezza (Rethymno)", coords: [35.3728, 24.4705], icon: "fa-square-p", color: "#2563eb", desc: "Bezpieczny parking tuż pod murami obronnymi" },
+                    { name: "Twierdza Fortezza", coords: [35.3725, 24.4715], icon: "fa-fort-awesome", color: "#0B4F83", desc: "Wenecki zamek i starówka (pieszo)" },
+                    { name: "Mirabella Apartments (Baza 2)", coords: [35.2154, 25.7188], icon: "fa-bed", color: "#D96B43", desc: "Wasz nowy hotel z widokiem na zatokę Mirabello" },
+                    { name: "Supermarket Lidl (Rethymno - Zaopatrzenie)", coords: [35.3615, 24.4988], icon: "fa-shopping-cart", color: "#4b5563", desc: "Lidl z potężnym parkingiem przy drodze krajowej." }
                 ],
                 routeSegments: [
                     { from: [35.4831, 24.0153], to: [35.3728, 24.4705], type: "car" },
@@ -569,7 +582,6 @@
                 title: "Dzień 6: Agios Nikolaos i Relaks nad Zatoką",
                 date: "Sobota, 20.06.2026",
                 distance: 15,
-                gmaps: "https://www.google.com/maps/dir/?api=1&origin=35.2154,25.7188&destination=35.1872,25.7178",
                 schedule: [
                     { name_ref: "Mirabella Apartments (Baza)", time: "09:00", text: "Śniadanie na tarasie z widokiem na morze" },
                     { name_ref: "Parking Ammos (Agios Nikolaos)", time: "11:00", text: "Dojazd do miasta i zostawienie Caraveli na darmowym Parkingu Ammos" },
@@ -577,17 +589,18 @@
                     { name_ref: "Plaża Ammos", time: "14:00", text: "Krótkie przejście pieszo na plażowanie na miejskiej plaży Ammos" },
                     { name_ref: "Plaża Havania", time: "16:30", text: "Powrót autem i popołudniowy relaks na plaży Havania tuż przy apartamencie" }
                 ],
-                notes: "Schody w mieście ozdobione są kolorowymi muralami, warto powłóczyć się bez celu po bocznych alejkach.",
+                notes: "Miasteczko ma kaskadowy układ schodów. Parking Ammos gwarantuje brak problemów ze znalezieniem wolnego miejsca.",
                 curiosities: [
                     "Jezioro Voulismeni przez wieki uchodziło za bezdenne, dopóki brytyjska marynarka w XIX w. nie zmierzyła głębokości (aż 64 metry!).",
                     "Według legend w tym małym jeziorze kąpała się bogini Atena."
                 ],
                 points: [
-                    { name: "Mirabella Apartments (Baza)", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Przystanek 1: Start dnia" },
-                    { name: "Parking Ammos (Agios Nikolaos)", coords: [35.1872, 25.7178], icon: "fa-square-p", color: "#2563eb", desc: "Przystanek 2: Duży publiczny parking blisko portu i plaży Ammos" },
-                    { name: "Jezioro Voulismeni", coords: [35.1908, 25.7180], icon: "fa-water", color: "#0B4F83", desc: "Przystanek 3: Serce miasta (pieszo)" },
-                    { name: "Plaża Ammos", coords: [35.1878, 25.7185], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Przystanek 4: Piaszczysta plaża miejska (pieszo)" },
-                    { name: "Plaża Havania", coords: [35.2073, 25.7198], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Przystanek 5: Spokojny brzeg przy hotelu (samochód)" }
+                    { name: "Mirabella Apartments (Baza)", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Start dnia" },
+                    { name: "Parking Ammos (Agios Nikolaos)", coords: [35.1872, 25.7178], icon: "fa-square-p", color: "#2563eb", desc: "Duży publiczny parking blisko portu i plaży Ammos" },
+                    { name: "Jezioro Voulismeni", coords: [35.1908, 25.7180], icon: "fa-water", color: "#0B4F83", desc: "Serce miasta (pieszo)" },
+                    { name: "Plaża Ammos", coords: [35.1878, 25.7185], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Piaszczysta plaża miejska (pieszo)" },
+                    { name: "Plaża Havania", coords: [35.2073, 25.7198], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Spokojny brzeg przy hotelu (samochód)" },
+                    { name: "Supermarket Lidl (Agios Nikolaos - Zaopatrzenie)", coords: [35.1965, 25.7022], icon: "fa-shopping-cart", color: "#4b5563", desc: "Wygodny, duży Lidl na wjeździe do miasta." }
                 ],
                 routeSegments: [
                     { from: [35.2154, 25.7188], to: [35.1872, 25.7178], type: "car" },
@@ -602,7 +615,6 @@
                 title: "Dzień 7: Elounda i Wyspa Spinalonga",
                 date: "Niedziela, 21.06.2026",
                 distance: 30,
-                gmaps: "https://www.google.com/maps/dir/?api=1&origin=35.2154,25.7188&destination=35.3000,25.7275",
                 schedule: [
                     { name_ref: "Mirabella Apartments (Baza)", time: "09:00", text: "Wyjazd z hotelu widokową trasą wzdłuż zatoki" },
                     { name_ref: "Elounda Port", time: "09:30", text: "Krótki postój w luksusowej Eloundzie" },
@@ -615,10 +627,10 @@
                     "Trędowaci na wyspie wybudowali elektrownię znacznie wcześniej, niż prąd pojawił się w okolicznych wioskach."
                 ],
                 points: [
-                    { name: "Mirabella Apartments (Baza)", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Przystanek 1: Wyjazd rano" },
-                    { name: "Elounda Port", coords: [35.2625, 25.7215], icon: "fa-anchor", color: "#0B4F83", desc: "Przystanek 2: Nadmorska promenada" },
-                    { name: "Rybacka Wioska Plaka", coords: [35.3000, 25.7275], icon: "fa-utensils", color: "#D96B43", desc: "Przystanek 3: Miejsce startu łodzi i obiad" },
-                    { name: "Wyspa Spinalonga", coords: [35.2975, 25.7285], icon: "fa-fort-awesome", color: "#ae5050", desc: "Przystanek 4: Wyspa-twierdza" }
+                    { name: "Mirabella Apartments (Baza)", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Wyjazd rano" },
+                    { name: "Elounda Port", coords: [35.2625, 25.7215], icon: "fa-anchor", color: "#0B4F83", desc: "Nadmorska promenada" },
+                    { name: "Rybacka Wioska Plaka", coords: [35.3000, 25.7275], icon: "fa-utensils", color: "#D96B43", desc: "Miejsce startu łodzi i obiad" },
+                    { name: "Wyspa Spinalonga", coords: [35.2975, 25.7285], icon: "fa-fort-awesome", color: "#ae5050", desc: "Wyspa-twierdza" }
                 ],
                 routeSegments: [
                     { from: [35.2154, 25.7188], to: [35.2625, 25.7215], type: "car" },
@@ -632,7 +644,6 @@
                 title: "Dzień 8: Pałac Knossos i Heraklion",
                 date: "Poniedziałek, 22.06.2026",
                 distance: 140,
-                gmaps: "https://www.google.com/maps/dir/?api=1&origin=35.2154,25.7188&destination=35.2985,25.1625",
                 schedule: [
                     { name_ref: "Mirabella Apartments (Baza)", time: "08:30", text: "Wyjazd trasą szybkiego ruchu na zachód" },
                     { name_ref: "Pałac Knossos (Parking)", time: "10:00", text: "Dojazd i zostawienie auta na wyznaczonym darmowym parkingu Knossos" },
@@ -647,12 +658,13 @@
                     "Skomplikowany układ korytarzy pałacu sprawił, że Grecy uznali go w swoich podaniach za Labirynt."
                 ],
                 points: [
-                    { name: "Mirabella Apartments (Baza)", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Przystanek 1: Start trasy" },
-                    { name: "Pałac Knossos (Parking)", coords: [35.2985, 25.1625], icon: "fa-square-p", color: "#2563eb", desc: "Przystanek 2: Dedykowany, bezpłatny parking dla zwiedzających Knossos" },
-                    { name: "Pałac Knossos", coords: [35.2979, 25.1631], icon: "fa-landmark", color: "#ae5050", desc: "Przystanek 3: Historyczne ruiny pałacu (pieszo)" },
-                    { name: "Parking Portowy Heraklion", coords: [35.3435, 25.1385], icon: "fa-square-p", color: "#2563eb", desc: "Przystanek 4: Najwygodniejszy parking blisko wejścia do portu i starówki" },
-                    { name: "Muzeum Archeologiczne", coords: [35.3392, 25.1371], icon: "fa-building-columns", color: "#0B4F83", desc: "Przystanek 5: Słynne artefakty kultury minojskiej (pieszo)" },
-                    { name: "Wenecka Twierdza Koules", coords: [35.3440, 25.1367], icon: "fa-chess-rook", color: "#0B4F83", desc: "Przystanek 6: Fort obronny portu na końcu falochronu (pieszo)" }
+                    { name: "Mirabella Apartments (Baza)", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Start trasy" },
+                    { name: "Pałac Knossos (Parking)", coords: [35.2985, 25.1625], icon: "fa-square-p", color: "#2563eb", desc: "Darmowy parking pod ruinami pałacu." },
+                    { name: "Pałac Knossos", coords: [35.2979, 25.1631], icon: "fa-landmark", color: "#ae5050", desc: "Historyczne ruiny pałacu (pieszo)" },
+                    { name: "Parking Portowy Heraklion", coords: [35.3435, 25.1385], icon: "fa-square-p", color: "#2563eb", desc: "Najwygodniejszy parking blisko wejścia do portu i starówki" },
+                    { name: "Muzeum Archeologiczne", coords: [35.3392, 25.1371], icon: "fa-building-columns", color: "#0B4F83", desc: "Słynne artefakty kultury minojskiej (pieszo)" },
+                    { name: "Wenecka Twierdza Koules", coords: [35.3440, 25.1367], icon: "fa-chess-rook", color: "#0B4F83", desc: "Fort obronny portu na końcu falochronu (pieszo)" },
+                    { name: "Supermarket Lidl (Heraklion - Zaopatrzenie)", coords: [35.3312, 25.1015], icon: "fa-shopping-cart", color: "#4b5563", desc: "Lidl na obrzeżach stolicy z darmowym i bezpiecznym parkingiem." }
                 ],
                 routeSegments: [
                     { from: [35.2154, 25.7188], to: [35.2985, 25.1625], type: "car" },
@@ -668,21 +680,20 @@
                 title: "Dzień 9: Wąwóz Richtis i Sitia",
                 date: "Wtorek, 23.06.2026",
                 distance: 150,
-                gmaps: "https://www.google.com/maps/dir/?api=1&origin=35.2154,25.7188&destination=35.1583,25.9917",
                 schedule: [
                     { name_ref: "Mirabella Apartments (Baza)", time: "08:30", text: "Wyjazd krajobrazową trasą EO90 na wschód wyspy" },
                     { name_ref: "Wejście do Wąwozu Richtis", time: "10:00", text: "Trekking doliną Richtis od kamiennego mostu Lachanas pod wodospad" },
-                    { name_ref: "Urokliwa Sitia (Zamek Kazarma)", time: "14:30", text: "Obiad w porcie w spokojnej Sitii i wizyta na zamku Kazarma" }
+                    { name_ref: "Urokliwa Sitia", time: "14:30", text: "Obiad w porcie w spokojnej Sitii i wizyta na zamku Kazarma" }
                 ],
                 notes: "Buty sportowe lub trekkingowe z dobrą podeszwą to konieczność. Szlak bywa śliski i wilgotny ze względu na strumień.",
                 curiosities: [
-                    "Most Lachanas w wąwozie był arena krwawych starć partyzanckich.",
+                    "Most Lachanas w wąwozie był areną krwawych starć partyzanckich.",
                     "Wąwóz Richtis ma całoroczną wodę, co sprawia, że roślinność przypomina gęstą, zieloną dżunglę."
                 ],
                 points: [
-                    { name: "Mirabella Apartments (Baza)", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Przystanek 1: Start podróży" },
-                    { name: "Wejście do Wąwozu Richtis", coords: [35.1583, 25.9917], icon: "fa-person-hiking", color: "#10b981", desc: "Przystanek 2: Start pieszego szlaku" },
-                    { name: "Urokliwa Sitia (Zamek Kazarma)", coords: [35.2075, 26.0995], icon: "fa-city", color: "#0B4F83", desc: "Przystanek 3: Spokojny port rybacki" }
+                    { name: "Mirabella Apartments (Baza)", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Start podróży" },
+                    { name: "Wejście do Wąwozu Richtis", coords: [35.1583, 25.9917], icon: "fa-person-hiking", color: "#10b981", desc: "Start pieszego szlaku" },
+                    { name: "Urokliwa Sitia", coords: [35.2075, 26.0995], icon: "fa-city", color: "#0B4F83", desc: "Spokojny port rybacki" }
                 ],
                 routeSegments: [
                     { from: [35.2154, 25.7188], to: [35.1583, 25.9917], type: "car" },
@@ -694,7 +705,6 @@
                 title: "Dzień 10: Droga na Południe (Antyczne Zagadki)",
                 date: "Środa, 24.06.2026",
                 distance: 110,
-                gmaps: "https://www.google.com/maps/dir/?api=1&origin=35.2154,25.7188&destination=35.0968,24.6892",
                 schedule: [
                     { name_ref: "Mirabella Apartments (Check-out)", time: "09:30", text: "Wyjazd na południowe wybrzeże Krety przez góry" },
                     { name_ref: "Rzymska Gortyna", time: "11:00", text: "Zwiedzanie Gortyny – rzymskiej stolicy Krety i tablic z kodeksem prawnym" },
@@ -707,10 +717,10 @@
                     "W ruinach magazynów pałacu w Fajstos archeolodzy znaleźli słynny, gliniany Dysk z Fajstos."
                 ],
                 points: [
-                    { name: "Mirabella Apartments (Check-out)", coords: [35.2154, 25.7188], icon: "fa-arrow-right-from-bracket", color: "#D96B43", desc: "Przystanek 1: Pożegnanie północy" },
-                    { name: "Rzymska Gortyna", coords: [35.0622, 24.9472], icon: "fa-building-columns", color: "#6b7280", desc: "Przystanek 2: Kodeks Praw z V w. p.n.e." },
-                    { name: "Minojski Pałac Fajstos", coords: [35.0514, 24.8142], icon: "fa-landmark", color: "#ae5050", desc: "Przystanek 3: Autentyczne ruiny pałacu" },
-                    { name: "Areti Hotel (Baza 3)", coords: [35.0968, 24.6892], icon: "fa-bed", color: "#D96B43", desc: "Przystanek 4: Nowy hotel na południu wyspy" }
+                    { name: "Mirabella Apartments (Check-out)", coords: [35.2154, 25.7188], icon: "fa-arrow-right-from-bracket", color: "#D96B43", desc: "Pożegnanie północy" },
+                    { name: "Rzymska Gortyna", coords: [35.0622, 24.9472], icon: "fa-building-columns", color: "#6b7280", desc: "Kodeks Praw z V w. p.n.e." },
+                    { name: "Minojski Pałac Fajstos", coords: [35.0514, 24.8142], icon: "fa-landmark", color: "#ae5050", desc: "Autentyczne ruiny pałacu" },
+                    { name: "Areti Hotel (Baza 3)", coords: [35.0968, 24.6892], icon: "fa-bed", color: "#D96B43", desc: "Nowy hotel na południu wyspy" }
                 ],
                 routeSegments: [
                     { from: [35.2154, 25.7188], to: [35.0622, 24.9472], type: "car" },
@@ -722,9 +732,8 @@
                 title: "Dzień 11: Palmy Preveli & Hipisowska Matala",
                 date: "Czwartek, 25.06.2026",
                 distance: 130,
-                gmaps: "https://www.google.com/maps/dir/?api=1&origin=35.0968,24.6892&destination=34.9945,24.7515",
                 schedule: [
-                    { name_ref: "Areti Hotel (Baza)", time: "09:00", text: "Wyjazd z hotelu w stronę klifów rzeki Kourtaliotiko" },
+                    { name_ref: "Areti Hotel", time: "09:00", text: "Wyjazd z hotelu w stronę klifów rzeki Kourtaliotiko" },
                     { name_ref: "Parking Preveli (Klif)", time: "10:00", text: "Dojazd i zostawienie Caraveli na strzeżonym Parkingu na klifie" },
                     { name_ref: "Plaża Preveli", time: "10:15", text: "Zejście pieszo schodami na plażę i spacer w głąb spektakularnego lasu palmowego" },
                     { name_ref: "Parking Matala", time: "14:00", text: "Przejazd autem do Matali i zaparkowanie na głównym parkingu tuż przy plaży" },
@@ -736,11 +745,11 @@
                     "W jaskiniach Matali w latach 60. mieszkali m.in. Joni Mitchell oraz Cat Stevens, tworząc unikalną komunę hipisowską."
                 ],
                 points: [
-                    { name: "Areti Hotel (Baza)", coords: [35.0968, 24.6892], icon: "fa-house", color: "#D96B43", desc: "Przystanek 1: Start dnia" },
-                    { name: "Parking Preveli (Klif)", coords: [35.1528, 24.4755], icon: "fa-square-p", color: "#2563eb", desc: "Przystanek 2: Parking na klifie nad wejściem schodami" },
-                    { name: "Plaża Preveli", coords: [35.1525, 24.4735], icon: "fa-tree", color: "#10b981", desc: "Przystanek 3: Las palmowy i ujście rzeki (pieszo)" },
-                    { name: "Parking Matala", coords: [34.9945, 24.7515], icon: "fa-square-p", color: "#2563eb", desc: "Przystanek 4: Oficjalny parking tuż przy plaży" },
-                    { name: "Matala Caves", coords: [34.9942, 24.7505], icon: "fa-umbrella-beach", color: "#D96B43", desc: "Przystanek 5: Jaskinie hipisów nad wodą (pieszo)" }
+                    { name: "Areti Hotel", coords: [35.0968, 24.6892], icon: "fa-house", color: "#D96B43", desc: "Start dnia" },
+                    { name: "Parking Preveli (Klif)", coords: [35.1528, 24.4755], icon: "fa-square-p", color: "#2563eb", desc: "Parking na klifie nad wejściem schodami" },
+                    { name: "Plaża Preveli", coords: [35.1525, 24.4735], icon: "fa-tree", color: "#10b981", desc: "Las palmowy i ujście rzeki (pieszo)" },
+                    { name: "Parking Matala", coords: [34.9945, 24.7515], icon: "fa-square-p", color: "#2563eb", desc: "Oficjalny parking tuż przy plaży" },
+                    { name: "Matala Caves", coords: [34.9942, 24.7505], icon: "fa-umbrella-beach", color: "#D96B43", desc: "Jaskinie hipisów nad wodą (pieszo)" }
                 ],
                 routeSegments: [
                     { from: [35.0968, 24.6892], to: [35.1528, 24.4755], type: "car" },
@@ -754,9 +763,8 @@
                 title: "Dzień 12: Finał i Wylot z Heraklionu",
                 date: "Piątek, 26.06.2026",
                 distance: 80,
-                gmaps: "https://www.google.com/maps/dir/?api=1&origin=35.0968,24.6892&destination=35.3397,25.1747",
                 schedule: [
-                    { name_ref: "Areti Hotel (Wyjazd)", time: "06:30", text: "Wczesny wyjazd trasą górską prosto na lotnisko w Heraklionie" },
+                    { name_ref: "Areti Hotel", time: "06:30", text: "Wczesny wyjazd trasą górską prosto na lotnisko w Heraklionie" },
                     { time: "07:45", text: "Tankowanie auta na stacji pod lotniskiem (zasada Same-to-Same)" },
                     { name_ref: "Lotnisko Heraklion (HER)", time: "08:15", text: "Zwrot pojazdu w sektorze Just Rental na parkingu Caravel i wrzucenie klucza do skrzynki" },
                     { time: "10:15", text: "Wylot samolotu powrotnego bezpośrednio do Krakowa" }
@@ -767,8 +775,8 @@
                     "Lotnisko nosi imię Nikosa Kazantzakisa – twórcy legendarnej powieści 'Grek Zorba'."
                 ],
                 points: [
-                    { name: "Areti Hotel (Wyjazd)", coords: [35.0968, 24.6892], icon: "fa-arrow-right-from-bracket", color: "#D96B43", desc: "Przystanek 1: Start o świcie" },
-                    { name: "Lotnisko Heraklion (HER)", coords: [35.3397, 25.1747], icon: "fa-plane-departure", color: "#0B4F83", desc: "Przystanek 2: Bezpieczny zwrot auta i odlot" }
+                    { name: "Areti Hotel", coords: [35.0968, 24.6892], icon: "fa-arrow-right-from-bracket", color: "#D96B43", desc: "Start o świcie" },
+                    { name: "Lotnisko Heraklion (HER)", coords: [35.3397, 25.1747], icon: "fa-plane-departure", color: "#0B4F83", desc: "Bezpieczny zwrot auta i odlot" }
                 ],
                 routeSegments: [
                     { from: [35.0968, 24.6892], to: [35.3397, 25.1747], type: "car" }
@@ -776,43 +784,28 @@
             }
         };
 
-        // Autorski, bezbłędny system powiadomień Toast (działa idealnie w piaskownicy)
+        // System powiadomień Toast
         function showNotification(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            
             let bgColor = 'bg-aegean-900';
             let icon = 'fa-info-circle';
             
-            if (type === 'success') {
-                bgColor = 'bg-emerald-600';
-                icon = 'fa-circle-check';
-            } else if (type === 'error') {
-                bgColor = 'bg-red-600';
-                icon = 'fa-triangle-exclamation';
-            } else if (type === 'warning') {
-                bgColor = 'bg-amber-600';
-                icon = 'fa-triangle-exclamation';
-            }
+            if (type === 'success') { bgColor = 'bg-emerald-600'; icon = 'fa-circle-check'; } 
+            else if (type === 'error') { bgColor = 'bg-red-600'; icon = 'fa-triangle-exclamation'; } 
+            else if (type === 'warning') { bgColor = 'bg-amber-600'; icon = 'fa-triangle-exclamation'; }
             
             toast.className = `${bgColor} text-white text-xs md:text-sm px-4 py-3 rounded-xl shadow-lg flex items-center gap-2.5 transition-all duration-300 transform translate-y-2 opacity-0 shrink-0 pointer-events-auto`;
             toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
             
             container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            }, 10);
-            
+            setTimeout(() => { toast.classList.remove('translate-y-2', 'opacity-0'); }, 10);
             setTimeout(() => {
                 toast.classList.add('translate-y-2', 'opacity-0');
-                setTimeout(() => {
-                    toast.remove();
-                }, 300);
+                setTimeout(() => { toast.remove(); }, 300);
             }, 4000);
         }
 
-        // Prawidłowe kopiowanie do schowka odporne na restrykcje piaskownicy (sandbox)
         function copyToClipboard(text) {
             const textarea = document.createElement('textarea');
             textarea.value = text;
@@ -821,61 +814,75 @@
             textarea.select();
             try {
                 document.execCommand('copy');
-                showNotification("Kod zapasowy Caraveli został skopiowany do schowka!", "success");
+                showNotification("Kod zapasowy Caraveli został skopiowany!", "success");
             } catch (err) {
-                showNotification("Nie udało się automatycznie skopiować kodu. Skopiuj go ręcznie.", "warning");
+                showNotification("Zaznacz i skopiuj kod ręcznie.", "warning");
             }
             document.body.removeChild(textarea);
         }
 
-        // Kopia zapasowa - Eksport
+        // Kopia zapasowa lokalizatora auta
         function exportBackupCode() {
-            const lat = localStorage.getItem('car_lat');
-            const lng = localStorage.getItem('car_lng');
-            if(!lat || !lng) {
-                showNotification("Brak przypiętej pozycji Caraveli! Najpierw przypnij auto.", "warning");
+            const carLat = localStorage.getItem('car_lat') || '';
+            const carLng = localStorage.getItem('car_lng') || '';
+            if(!carLat || !carLng) {
+                showNotification("Najpierw przypnij pozycję auta, aby wyeksportować kod.", "warning");
                 return;
             }
-            const backupObj = { lat: lat, lng: lng };
-            const b64Str = btoa(JSON.stringify(backupObj));
-            copyToClipboard(b64Str);
+            const state = { car: { lat: carLat, lng: carLng } };
+            try {
+                const base64Code = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+                copyToClipboard(base64Code);
+            } catch (e) { showNotification("Błąd generowania kopii.", "error"); }
         }
 
-        // Kopia zapasowa - Import
         function importBackupCode() {
             const inputVal = document.getElementById('backup-input').value.trim();
-            if(!inputVal) {
-                showNotification("Wklej tekstowy kod zapasu przed kliknięciem wczytaj!", "warning");
-                return;
-            }
+            if (!inputVal) { showNotification("Wklej kod przed zatwierdzeniem!", "warning"); return; }
             try {
-                const decrypted = JSON.parse(atob(inputVal));
-                if(decrypted.lat && decrypted.lng) {
-                    localStorage.setItem('car_lat', decrypted.lat);
-                    localStorage.setItem('car_lng', decrypted.lng);
+                const state = JSON.parse(decodeURIComponent(escape(atob(inputVal))));
+                if (state.car && state.car.lat && state.car.lng) {
+                    localStorage.setItem('car_lat', state.car.lat);
+                    localStorage.setItem('car_lng', state.car.lng);
                     updateCarStatus();
                     document.getElementById('backup-input').value = "";
-                    showNotification("Kopia zapasowa wczytana bezbłędnie!", "success");
-                } else {
-                    throw new Error();
-                }
-            } catch (e) {
-                showNotification("Nieprawidłowy kod zapasowy! Sprawdź poprawność kodu.", "error");
-            }
+                    showNotification("Pozycję Caraveli odzyskano pomyślnie!", "success");
+                    selectDay(activeDayId);
+                } else { throw new Error(); }
+            } catch (e) { showNotification("Błędny format kodu zapasowego.", "error"); }
         }
 
-        // Lokalizowanie auta
+        // Pobieranie pozycji GPS z obsługą braku zgody/błędu
         function saveCarLocation() {
+            if (!navigator.geolocation) {
+                showNotification("Twoja przeglądarka nie wspiera geolokalizacji. Użyj zaznaczania ręcznego.", "error");
+                return;
+            }
+            showNotification("Pobieram pozycję GPS...", "info");
             navigator.geolocation.getCurrentPosition(function(position) {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                localStorage.setItem('car_lat', lat);
-                localStorage.setItem('car_lng', lng);
+                localStorage.setItem('car_lat', position.coords.latitude);
+                localStorage.setItem('car_lng', position.coords.longitude);
                 updateCarStatus();
-                showNotification("Pozycja Caraveli została pomyślnie zapisana!", "success");
-            }, function() {
-                showNotification("Nie udało się pobrać pozycji GPS. Sprawdź uprawnienia.", "error");
-            }, { enableHighAccuracy: true });
+                showNotification("Pozycja Caraveli została zapisana przez GPS!", "success");
+                selectDay(activeDayId);
+            }, function(error) { 
+                showNotification("Brak dostępu do GPS. Użyj zielonego przycisku i zaznacz auto ręcznie na mapie!", "warning"); 
+            }, { enableHighAccuracy: true, timeout: 8000 });
+        }
+
+        // Aktywacja manualnego trybu wybierania punktu na mapie
+        function activateManualPinning() {
+            isPinningCar = true;
+            document.getElementById('map-pinning-banner').classList.remove('hidden');
+            document.getElementById('map').style.cursor = 'crosshair';
+            toggleToolsPanel();
+            showNotification("Kliknij teraz precyzyjnie na mapie miejsce postoju auta.", "info");
+        }
+
+        function cancelManualPinning() {
+            isPinningCar = false;
+            document.getElementById('map-pinning-banner').classList.add('hidden');
+            document.getElementById('map').style.cursor = '';
         }
 
         function updateCarStatus() {
@@ -886,21 +893,21 @@
 
             if (lat && lng) {
                 btn.disabled = false;
-                btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                btn.classList.add('bg-white', 'hover:bg-sand-100');
-                text.innerText = `Przypięto: ${parseFloat(lat).toFixed(4)}, ${parseFloat(lng).toFixed(4)}`;
-                text.classList.remove('text-neutral-400');
-                text.classList.add('text-emerald-600', 'font-bold');
+                btn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-sm transition-colors cursor-pointer";
+                text.innerText = `Auto: ${parseFloat(lat).toFixed(5)}, ${parseFloat(lng).toFixed(5)}`;
+                text.className = "text-[10px] text-emerald-600 font-bold mt-2 text-center";
+            } else {
+                btn.disabled = true;
+                btn.className = "w-full bg-white text-neutral-400 border border-sand-200 text-xs font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 opacity-50 cursor-not-allowed";
+                text.innerText = "Pozycja nie została jeszcze przypięta.";
+                text.className = "text-[10px] text-neutral-400 font-mono mt-2 text-center";
             }
         }
 
         function findCar() {
             const lat = localStorage.getItem('car_lat');
             const lng = localStorage.getItem('car_lng');
-            if (lat && lng) {
-                const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`;
-                window.open(url, '_blank');
-            }
+            if (lat && lng) { window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`, '_blank'); }
         }
 
         function calculateTip() {
@@ -913,81 +920,73 @@
             }
             const tip = amount * 0.10;
             const total = amount + tip;
-            const perPerson = total / 2;
-
             document.getElementById('tip-val').innerText = `${tip.toFixed(2)} €`;
             document.getElementById('total-val').innerText = `${total.toFixed(2)} €`;
-            document.getElementById('per-person-val').innerText = `${perPerson.toFixed(2)} €`;
+            document.getElementById('per-person-val').innerText = `${(total / 2).toFixed(2)} €`;
         }
 
-        function toggleToolsPanel() {
-            const panel = document.getElementById('tools-panel');
-            panel.classList.toggle('translate-x-full');
-        }
+        function toggleToolsPanel() { document.getElementById('tools-panel').classList.toggle('translate-x-full'); }
 
         function changeView(viewName) {
-            const mapContainer = document.getElementById('view-map');
-            const detailsContainer = document.getElementById('view-details');
-            const curiositiesContainer = document.getElementById('view-curiosities');
+            const m = document.getElementById('view-map'), d = document.getElementById('view-details'), c = document.getElementById('view-curiosities');
+            m.classList.add('hidden'); d.classList.add('hidden'); c.classList.add('hidden');
+            if (viewName === 'map') { m.classList.remove('hidden'); if (map) setTimeout(() => map.invalidateSize(), 150); } 
+            else if (viewName === 'details') d.classList.remove('hidden');
+            else if (viewName === 'curiosities') c.classList.remove('hidden');
+        }
 
-            mapContainer.classList.add('hidden');
-            detailsContainer.classList.add('hidden');
-            curiositiesContainer.classList.add('hidden');
-
-            if (viewName === 'map') {
-                mapContainer.classList.remove('hidden');
-                if (map) { setTimeout(() => { map.invalidateSize(); }, 100); }
-            } else if (viewName === 'details') {
-                detailsContainer.classList.remove('hidden');
-            } else if (viewName === 'curiosities') {
-                curiositiesContainer.classList.remove('hidden');
+        // Generator dynamicznych linków nawigacyjnych do tras wielopunktowych
+        function generateGoogleMapsLink(dayData) {
+            if (!dayData.points || dayData.points.length === 0) return "#";
+            
+            // Ignorujemy markety przy wyznaczaniu głównej trasy podróży
+            const navPoints = dayData.points.filter(pt => pt.icon !== "fa-shopping-cart");
+            if (navPoints.length === 0) return "#";
+            
+            const origin = navPoints[0].coords;
+            const destination = navPoints[navPoints.length - 1].coords;
+            
+            let url = `https://www.google.com/maps/dir/?api=1&origin=${origin[0]},${origin[1]}&destination=${destination[0]},${destination[1]}`;
+            
+            if (navPoints.length > 2) {
+                const waypoints = navPoints.slice(1, -1).map(pt => `${pt.coords[0]},${pt.coords[1]}`).join('|');
+                url += `&waypoints=${encodeURIComponent(waypoints)}`;
             }
+            return url;
         }
 
         function initMap() {
-            map = L.map('map', {
-                scrollWheelZoom: true,
-                zoomControl: true
-            }).setView([35.3, 24.8], 8);
-
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
-                subdomains: 'abcd',
-                maxZoom: 20
-            }).addTo(map);
+            map = L.map('map', { scrollWheelZoom: true, zoomControl: true }).setView([35.3, 24.8], 8);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { attribution: '© CARTO' }).addTo(map);
+            
+            // Reagowanie na kliknięcie na mapie w celu przypięcia auta
+            map.on('click', function(e) {
+                if (isPinningCar) {
+                    localStorage.setItem('car_lat', e.latlng.lat);
+                    localStorage.setItem('car_lng', e.latlng.lng);
+                    updateCarStatus();
+                    isPinningCar = false;
+                    document.getElementById('map-pinning-banner').classList.add('hidden');
+                    document.getElementById('map').style.cursor = '';
+                    showNotification("Zapisano pozycję Caraveli na mapie!", "success");
+                    selectDay(activeDayId);
+                }
+            });
 
             selectDay(0);
         }
 
-        async function selectDay(dayId) {
-            activeDayId = dayId;
+        function renderTimeline(dayId) {
             const data = tripData[dayId];
-            if (!data) return;
-
-            changeView('map');
-            const mapStatus = document.getElementById('map-status');
-            mapStatus.innerText = "Trwa wytyczanie trasy drogowej...";
-            const currentRequestId = ++routeRequestId;
-
-            document.getElementById('active-day-date').innerText = data.date;
-            document.getElementById('active-day-title').innerText = data.title;
-            document.getElementById('active-day-gmaps').href = data.gmaps;
-
-            document.querySelectorAll('.day-btn').forEach(btn => {
-                btn.className = `day-btn w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer ${
-                    btn.dataset.day == dayId ? 'bg-aegean-500 border-aegean-500 text-white shadow-md transform -translate-y-0.5' : 'bg-white border-sand-200 text-neutral-700 hover:border-aegean-500/40 hover:bg-sand-50'
-                }`;
-            });
-
-            let timelineHTML = `<div class="space-y-4 relative before:absolute before:inset-y-0 before:left-3.5 before:w-0.5 before:bg-sand-200 pl-2">`;
+            let html = `<div class="space-y-4 relative before:absolute before:inset-y-0 before:left-3.5 before:w-0.5 before:bg-sand-200 pl-2">`;
             data.schedule.forEach((item) => {
                 let stepNumber = "";
                 if (item.name_ref) {
                     const ptIndex = data.points.findIndex(p => p.name === item.name_ref);
                     if (ptIndex !== -1) stepNumber = ptIndex + 1;
                 }
-                timelineHTML += `
-                    <div class="flex items-start gap-4 relative group">
+                html += `
+                    <div class="flex items-start gap-4 relative">
                         ${stepNumber ? `<div class="w-7 h-7 rounded-full bg-aegean-500 text-white text-xs font-bold flex items-center justify-center shrink-0 z-10 border-2 border-white shadow-sm">${stepNumber}</div>` : `<div class="w-7 h-7 rounded-full bg-sand-200 text-neutral-500 text-[10px] font-bold flex items-center justify-center shrink-0 z-10 border-2 border-white"><i class="fa-solid fa-circle text-[6px]"></i></div>`}
                         <div class="flex-1 min-w-0 bg-sand-50/50 p-2.5 rounded-lg border border-sand-100/50">
                             <div class="flex items-center gap-2 mb-0.5">
@@ -999,249 +998,269 @@
                     </div>
                 `;
             });
-            timelineHTML += `</div>`;
-            document.getElementById('timeline-container').innerHTML = timelineHTML;
+            html += `</div>`;
+            document.getElementById('timeline-container').innerHTML = html;
+        }
+
+        async function selectDay(dayId) {
+            activeDayId = dayId; const data = tripData[dayId]; if (!data) return;
+            changeView('map'); const mapStatus = document.getElementById('map-status');
+            mapStatus.innerText = "Trwa wytyczanie trasy drogowej...";
+            const currentRequestId = ++routeRequestId;
+
+            document.getElementById('active-day-date').innerText = data.date;
+            document.getElementById('active-day-title').innerText = data.title;
+            
+            // Dynamiczne generowanie linku wielopunktowego Google Maps
+            document.getElementById('active-day-gmaps').href = generateGoogleMapsLink(data);
+
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                if (btn.dataset.day == dayId) { btn.className = "day-btn w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer bg-aegean-500 text-white shadow-md transform -translate-y-0.5"; } 
+                else { btn.className = "day-btn w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer bg-white border-sand-200 text-neutral-700 hover:border-aegean-500/40 hover:bg-sand-50"; }
+            });
+
+            renderTimeline(dayId);
             document.getElementById('resident-notes').innerText = data.notes;
 
-            const currentDistance = data.distance || 0;
-            const estimatedFuel = (currentDistance * 7.5) / 100;
-            const estimatedCost = estimatedFuel * 1.85;
+            const dist = data.distance || 0; const fuel = (dist * 7.5) / 100;
+            document.getElementById('day-distance').innerText = dist + " km";
+            document.getElementById('day-fuel').innerText = `${fuel.toFixed(1)} l (~${(fuel * 1.85).toFixed(2)} €)`;
+            document.getElementById('fuel-advice').innerText = dist >= 120 ? "⚠️ Długa trasa górzysta! Sprawdź stan baku przed wyjazdem. Stacje w głębi lądu zamykają się o 21:00." : "✅ Optymalny dystans lokalny.";
 
-            document.getElementById('day-distance').innerText = currentDistance + " km";
-            document.getElementById('day-fuel').innerText = `${estimatedFuel.toFixed(1)} l (~${estimatedCost.toFixed(2)} €)`;
-
-            let fuelAdviceText = "";
-            if (currentDistance >= 120) {
-                fuelAdviceText = "⚠️ Długa trasa górzysta! Zużycie paliwa w górach gwałtownie rośnie. Bezwzględnie sprawdź stan baku przed wyjazdem. Pamiętaj, że stacje w głębi lądu często zamykają się o 21:00 i nie oferują płatności kartą po zamknięciu.";
-            } else if (currentDistance >= 50) {
-                fuelAdviceText = "🚗 Średnia trasa samochodowa. Spokojnie wystarczy standardowy bak, jednak staraj się nie schodzić poniżej 1/4 pojemności baku na prowincji.";
-            } else {
-                fuelAdviceText = "✅ Krótki dystans lokalny. Idealny dzień na oszczędzanie paliwa, nie musisz zaprzątać sobie głowy szukaniem stacji benzynowych.";
-            }
-            document.getElementById('fuel-advice').innerText = fuelAdviceText;
-
-            let curiositiesHTML = "";
+            let curiosHTML = "";
             data.curiosities.forEach((fact, fIndex) => {
-                curiositiesHTML += `
-                    <div class="flex gap-4 p-4 rounded-xl border border-amber-100 bg-amber-50/30 shadow-sm">
-                        <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 shrink-0 text-xs"><i class="fa-solid fa-lightbulb"></i></div>
-                        <div>
-                            <h5 class="font-bold text-xs text-amber-900 uppercase font-mono tracking-wider">Ciekawostka ${fIndex + 1}</h5>
-                            <p class="text-xs md:text-sm text-neutral-700 mt-1 leading-relaxed">${fact}</p>
-                        </div>
-                    </div>
-                `;
+                curiosHTML += `<div class="flex gap-4 p-4 rounded-xl border border-amber-100 bg-amber-50/30 shadow-sm"><div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 shrink-0 text-xs"><i class="fa-solid fa-lightbulb"></i></div><div><h5 class="font-bold text-xs text-amber-900 uppercase font-mono tracking-wider">Ciekawostka ${fIndex + 1}</h5><p class="text-xs md:text-sm text-neutral-700 mt-1 leading-relaxed">${fact}</p></div></div>`;
             });
-            document.getElementById('static-curiosities').innerHTML = curiositiesHTML;
+            document.getElementById('static-curiosities').innerHTML = curiosHTML;
 
-            activeMarkers.forEach(m => map.removeLayer(m));
-            activeMarkers = [];
-            activePolylines.forEach(p => map.removeLayer(p));
-            activePolylines = [];
-
+            // Wyczyszczenie starej grafiki mapy
+            activeMarkers.forEach(m => map.removeLayer(m)); activeMarkers = [];
+            activePolylines.forEach(p => map.removeLayer(p)); activePolylines = [];
             const bounds = [];
 
+            // Rysowanie punktów
             data.points.forEach((pt, index) => {
                 bounds.push(pt.coords);
-
                 const customIcon = L.divIcon({
                     html: `<div class="relative flex items-center justify-center"><div class="custom-marker w-9 h-9 rounded-full flex items-center justify-center font-bold shadow-lg text-white text-base border-2 border-white" style="background-color: ${pt.color};">${index + 1}</div><div class="absolute -bottom-1 -right-1 bg-white text-neutral-800 w-4.5 h-4.5 rounded-full flex items-center justify-center text-[10px] shadow border border-neutral-200"><i class="fa-solid ${pt.icon}"></i></div></div>`,
-                    className: 'dummy-class',
-                    iconSize: [36, 36],
-                    iconAnchor: [18, 18]
+                    className: 'dummy-class', iconSize: [36, 36], iconAnchor: [18, 18]
                 });
-
-                const marker = L.marker(pt.coords, { icon: customIcon })
-                    .bindPopup(`<div class="p-1"><p class="text-[10px] font-bold text-terracotta-500 uppercase font-mono tracking-wider">Krok ${index + 1}</p><h4 class="font-bold text-sm text-aegean-900 mt-0.5">${pt.name}</h4><p class="text-xs text-neutral-600 mt-1 leading-relaxed">${pt.desc}</p></div>`)
-                    .addTo(map);
-
+                const marker = L.marker(pt.coords, { icon: customIcon }).bindPopup(`<div class="p-1"><h4 class="font-bold text-sm text-aegean-900">${pt.name}</h4><p class="text-xs text-neutral-600 mt-1">${pt.desc}</p></div>`).addTo(map);
                 activeMarkers.push(marker);
             });
 
+            // Rysowanie stałego znacznika zaparkowanego auta Caraveli, jeśli istnieje
+            const carLat = localStorage.getItem('car_lat');
+            const carLng = localStorage.getItem('car_lng');
+            if (carLat && carLng) {
+                const carCoords = [parseFloat(carLat), parseFloat(carLng)];
+                const carIcon = L.divIcon({
+                    html: `<div class="relative flex items-center justify-center"><div class="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center border-4 border-white shadow-xl text-white"><i class="fa-solid fa-car text-sm"></i></div></div>`,
+                    className: 'dummy-car-class', iconSize: [40, 40], iconAnchor: [20, 20]
+                });
+                const carMarker = L.marker(carCoords, { icon: carIcon })
+                    .bindPopup(`<div class="p-2 text-center"><h4 class="font-bold text-xs text-neutral-800"><i class="fa-solid fa-car mr-1 text-emerald-600"></i>Twoja Caravel</h4><p class="text-[10px] text-neutral-500 mt-1">Szybka nawigacja powrotna</p><button onclick="findCar()" class="mt-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] py-1 px-2 rounded font-bold shadow-sm flex items-center justify-center gap-1.5"><i class="fa-solid fa-location-arrow"></i> Prowadź pieszo</button></div>`)
+                    .addTo(map);
+                activeMarkers.push(carMarker);
+            }
+
+            // Obsługa linii tras (z podziałem na auto, pieszo, statek)
             if (data.routeSegments && data.routeSegments.length > 0) {
                 let activeFetchCount = 0;
-                
                 for (const segment of data.routeSegments) {
                     if (segment.type === "boat") {
                         if (currentRequestId !== routeRequestId) return;
-                        const polyline = L.polyline([segment.from, segment.to], {
-                            color: '#0ea5e9',
-                            weight: 4,
-                            opacity: 0.8,
-                            dashArray: '5, 10'
-                        }).addTo(map);
-                        activePolylines.push(polyline);
+                        activePolylines.push(L.polyline([segment.from, segment.to], { color: '#0ea5e9', weight: 4, opacity: 0.8, dashArray: '5, 10' }).addTo(map));
                     } else if (segment.type === "walk") {
                         if (currentRequestId !== routeRequestId) return;
-                        const polyline = L.polyline([segment.from, segment.to], {
-                            color: '#10b981',
-                            weight: 4,
-                            opacity: 0.8,
-                            dashArray: '2, 8'
-                        }).addTo(map);
-                        activePolylines.push(polyline);
+                        activePolylines.push(L.polyline([segment.from, segment.to], { color: '#10b981', weight: 4, opacity: 0.8, dashArray: '2, 8' }).addTo(map));
                     } else if (segment.type === "car") {
                         activeFetchCount++;
-                        const url = `https://router.project-osrm.org/route/v1/driving/${segment.from[1]},${segment.from[0]};${segment.to[1]},${segment.to[0]}?overview=full&geometries=geojson`;
-                        
-                        fetch(url)
-                            .then(response => {
-                                if (response.ok && currentRequestId === routeRequestId) return response.json();
-                                throw new Error("Błąd");
-                            })
-                            .then(resData => {
-                                if (currentRequestId !== routeRequestId) return;
-                                if (resData.code === 'Ok' && resData.routes?.[0]) {
-                                    const osrmCoords = resData.routes[0].geometry.coordinates.map(coord => [coord[1], coord[0]]);
-                                    const polyline = L.polyline(osrmCoords, {
-                                        color: '#D96B43',
-                                        weight: 4,
-                                        opacity: 0.8
-                                    }).addTo(map);
-                                    activePolylines.push(polyline);
-                                } else { throw new Error(); }
-                            })
-                            .catch(e => {
-                                if (currentRequestId === routeRequestId) {
-                                    const polyline = L.polyline([segment.from, segment.to], {
-                                        color: '#D96B43',
-                                        weight: 4,
-                                        opacity: 0.8,
-                                        dashArray: '3, 6'
-                                    }).addTo(map);
-                                    activePolylines.push(polyline);
+                        fetch(`https://router.project-osrm.org/route/v1/driving/${segment.from[1]},${segment.from[0]};${segment.to[1]},${segment.to[0]}?overview=full&geometries=geojson`)
+                            .then(r => r.ok && currentRequestId === routeRequestId ? r.json() : null)
+                            .then(res => {
+                                if (currentRequestId !== routeRequestId || !res) return;
+                                if (res.code === 'Ok' && res.routes?.[0]) {
+                                    const coords = res.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+                                    activePolylines.push(L.polyline(coords, { color: '#D96B43', weight: 4, opacity: 0.8 }).addTo(map));
                                 }
-                            })
-                            .finally(() => {
-                                activeFetchCount--;
-                                if (activeFetchCount === 0 && currentRequestId === routeRequestId) {
-                                    mapStatus.innerText = "Trasa wytyczona pomyślnie";
-                                }
+                            }).catch(() => {
+                                if (currentRequestId === routeRequestId) activePolylines.push(L.polyline([segment.from, segment.to], { color: '#D96B43', weight: 4, opacity: 0.8, dashArray: '3, 6' }).addTo(map));
+                            }).finally(() => { 
+                                activeFetchCount--; 
+                                if (activeFetchCount === 0 && currentRequestId === routeRequestId) mapStatus.innerText = "Trasa wytyczona pomyślnie"; 
                             });
                     }
                 }
-                if (activeFetchCount === 0 && currentRequestId === routeRequestId) {
-                    mapStatus.innerText = "Trasa wytyczona pomyślnie";
-                }
+                if (activeFetchCount === 0 && currentRequestId === routeRequestId) mapStatus.innerText = "Trasa wytyczona pomyślnie";
             }
-
-            if (bounds.length > 0) { 
-                map.fitBounds(bounds, { padding: [50, 50], maxZoom: 13, animate: true, duration: 0.8 }); 
-            }
+            if (bounds.length > 0) map.fitBounds(bounds, { padding: [50, 50], maxZoom: 13, animate: true, duration: 0.8 });
         }
 
         window.onload = function() {
-            updateCarStatus();
-            const listContainer = document.getElementById('days-list');
+            updateCarStatus(); const listContainer = document.getElementById('days-list');
             Object.keys(tripData).forEach(dayKey => {
-                const data = tripData[dayKey];
-                const card = document.createElement('div');
-                card.dataset.day = dayKey;
+                const data = tripData[dayKey]; const card = document.createElement('div'); card.dataset.day = dayKey;
                 card.className = "day-btn w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer bg-white border-sand-200 text-neutral-700 hover:border-aegean-500/40 hover:bg-sand-50";
-                
-                let activityIcon = "fa-car";
-                if (dayKey == 0) activityIcon = "fa-plane-arrival";
-                else if (dayKey == 2 || dayKey == 7) activityIcon = "fa-ship";
-                else if (dayKey == 3 || dayKey == 11) activityIcon = "fa-umbrella-beach";
-                else if (dayKey == 9) activityIcon = "fa-person-hiking";
-                else if (dayKey == 12) activityIcon = "fa-plane-departure";
-
-                card.innerHTML = `
-                    <div class="flex items-start gap-3">
-                        <div class="p-2.5 rounded-lg bg-sand-100 text-aegean-500 shrink-0"><i class="fa-solid ${activityIcon} text-sm"></i></div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex justify-between items-baseline mb-0.5">
-                                <span class="text-[10px] font-bold uppercase tracking-widest text-neutral-400 font-mono">Dzień ${dayKey}</span>
-                                <span class="text-[10px] text-neutral-500">${dayKey == 0 || dayKey == 12 ? 'Tranzyt' : 'Zwiedzanie'} • 🚗 ${data.distance} km</span>
-                            </div>
-                            <h3 class="font-serif text-sm font-bold truncate pr-2">${data.title.replace(`Dzień ${dayKey}: `, "")}</h3>
-                            <p class="text-xs text-neutral-500 font-mono mt-0.5">${data.date}</p>
-                        </div>
-                    </div>
-                `;
-                card.addEventListener('click', () => selectDay(dayKey));
-                listContainer.appendChild(card);
+                let icon = "fa-car"; if (dayKey == 0) icon = "fa-plane-arrival"; else if (dayKey == 2 || dayKey == 7) icon = "fa-ship"; else if (dayKey == 3 || dayKey == 11) icon = "fa-umbrella-beach"; else if (dayKey == 9) icon = "fa-person-hiking"; else if (dayKey == 12) icon = "fa-plane-departure";
+                card.innerHTML = `<div class="flex items-start gap-3"><div class="p-2.5 rounded-lg bg-sand-100 text-aegean-500 shrink-0"><i class="fa-solid ${icon} text-sm"></i></div><div class="flex-1 min-w-0"><div class="flex justify-between items-baseline mb-0.5"><span class="text-[10px] font-bold uppercase text-neutral-400 font-mono">Dzień ${dayKey}</span><span class="text-[10px] text-neutral-500">🚗 ${data.distance} km</span></div><h3 class="font-serif text-sm font-bold truncate pr-2">${data.title.replace(`Dzień ${dayKey}: `, "")}</h3><p class="text-xs text-neutral-500 font-mono mt-0.5">${data.date}</p></div></div>`;
+                card.addEventListener('click', () => selectDay(dayKey)); listContainer.appendChild(card);
             });
             initMap();
         };
 
-        // Głosowe czytanie
         function speakGreek(text) {
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'el-GR';
-                utterance.rate = 0.85;
-                window.speechSynthesis.speak(utterance);
-            } else {
-                showNotification("Twoja przeglądarka nie obsługuje syntezatora mowy.", "error");
-            }
+            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = 'el-GR'; u.rate = 0.8; window.speechSynthesis.speak(u); } 
+            else showNotification("Syntezator mowy jest nieobsługiwany.", "error");
         }
 
-        /* GEMINI API CONNECT ENGINE */
+        /* SILNIK PRZETWARZANIA MARKDOWN (POPRAWIONY) */
         function parseMarkdown(text) {
-            let parsed = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/`([^`]+)`/g, '<code class="bg-sand-100 px-1 py-0.5 rounded font-mono text-xs">$1</code>');
+            if (!text) return "";
+            let parsed = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`(.*?)`/g, '<code class="bg-sand-200 px-1 rounded font-mono text-xs">$1</code>');
+            
             let lines = parsed.split('\n');
             let inList = false;
             for (let i = 0; i < lines.length; i++) {
-                if (lines[i].trim().startsWith('- ')) {
-                    if (!inList) { lines[i] = '<ul class="list-disc pl-5 my-2 space-y-1 text-xs md:text-sm">' + lines[i].replace('- ', '<li>') + '</li>'; inList = true; }
-                    else { lines[i] = lines[i].replace('- ', '<li>') + '</li>'; }
-                } else { if (inList) { lines[i-1] += '</ul>'; inList = false; } }
+                let line = lines[i].trim();
+                if (line.startsWith('- ') || line.startsWith('* ')) {
+                    let content = line.substring(2);
+                    if (!inList) {
+                        lines[i] = '<ul class="list-disc pl-5 my-2 space-y-1 text-xs text-neutral-700">' + `<li>${content}</li>`;
+                        inList = true;
+                    } else {
+                        lines[i] = `<li>${content}</li>`;
+                    }
+                } else if (line.startsWith('### ')) {
+                    if (inList) { lines[i-1] += '</ul>'; inList = false; }
+                    lines[i] = `<h5 class="font-serif font-bold text-aegean-900 text-sm mt-3 mb-1">${line.substring(4)}</h5>`;
+                } else if (line.startsWith('## ')) {
+                    if (inList) { lines[i-1] += '</ul>'; inList = false; }
+                    lines[i] = `<h4 class="font-serif font-bold text-aegean-900 text-base mt-4 mb-2">${line.substring(3)}</h4>`;
+                } else {
+                    if (inList) { lines[i-1] += '</ul>'; inList = false; }
+                    if (line.length > 0) {
+                        lines[i] = `<p class="my-1.5 text-xs md:text-sm text-neutral-700 leading-relaxed">${line}</p>`;
+                    }
+                }
             }
-            if (inList) lines[lines.length - 1] += '</ul>';
-            return lines.join('<br>');
+            if (inList) { lines[lines.length - 1] += '</ul>'; }
+            return lines.join('');
         }
 
+        /* ASYSTENT GEMINI Z WYKŁADNICZYM COFANIEM (EXPONENTIAL BACKOFF) */
         async function callGemini(prompt) {
             const apiKey = ""; 
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            const systemPrompt = "Jesteś polskim, niezwykle pomocnym i profesjonalnym przewodnikiem po Krecie. Odpowiadasz konkretnie, dzieląc się praktycznymi radami, sekretami kulinarnymi i dbając o bezpieczeństwo (np. zakaz jazdy po szutrach autem Caravel). Formatuj za pomocą Markdown.";
-            const payload = { contents: [{ parts: [{ text: prompt }] }], systemInstruction: { parts: [{ text: systemPrompt }] } };
+            const payload = { 
+                contents: [{ parts: [{ text: prompt }] }], 
+                systemInstruction: { parts: [{ text: "Jesteś polskim przewodnikiem po Krecie. Doradzaj merytorycznie, klimatycznie i konkretnie. Formatuj za pomocą przejrzystego Markdown bez nadmiarowych nagłówków najwyższego stopnia." }] } 
+            };
             
-            let delay = 1000;
+            const delays = [1000, 2000, 4000, 8000, 16000];
             for (let i = 0; i < 5; i++) {
                 try {
-                    const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (response.ok) { const result = await response.json(); return result.candidates?.[0]?.content?.parts?.[0]?.text || "Brak odpowiedzi."; }
-                } catch (error) {}
-                await new Promise(resolve => setTimeout(resolve, delay)); delay *= 2;
+                    const r = await fetch(url, { 
+                        method: 'POST', 
+                        headers: { 'Content-Type': 'application/json' }, 
+                        body: JSON.stringify(payload) 
+                    });
+                    if (r.ok) { 
+                        const res = await r.json(); 
+                        return res.candidates?.[0]?.content?.parts?.[0]?.text || "Brak odpowiedzi."; 
+                    }
+                } catch (e) {
+                    // Ciche przechwycenie błędu - brak logowania do konsoli zgodnie z wymogami
+                }
+                await new Promise(res => setTimeout(res, delays[i]));
             }
-            throw new Error("Wszystkie próby połączenia z asystentem AI nie powiodły się.");
+            throw new Error("Wszystkie próby połączenia z asystentem AI zawiodły. Sprawdź swoje połączenie sieciowe lub spróbuj ponownie później.");
         }
 
-        function openAiModal() { document.getElementById('ai-modal').classList.remove('hidden'); }
-        function closeAiModal() { document.getElementById('ai-modal').classList.add('hidden'); }
-        function showLoadingInModal(message) { document.getElementById('ai-modal-content').innerHTML = `<div class="flex flex-col items-center justify-center py-12 gap-4"><div class="relative w-16 h-16 flex items-center justify-center"><div class="absolute inset-0 border-4 border-aegean-100 rounded-full"></div><div class="absolute inset-0 border-4 border-terracotta-500 rounded-full border-t-transparent animate-spin"></div></div><p class="font-bold text-aegean-900 text-sm animate-pulse">${message}</p></div>`; openAiModal(); }
-        function showErrorInModal(errorMsg) { document.getElementById('ai-modal-content').innerHTML = `<div class="flex flex-col items-center justify-center py-12 text-center gap-3"><div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-500 text-xl"><i class="fa-solid fa-triangle-exclamation"></i></div><h4 class="font-bold text-red-900">Problem z połączeniem</h4><p class="text-xs text-neutral-600 max-w-md">${errorMsg}</p></div>`; openAiModal(); }
+        /* FUNKCJE MODALA (DODANE DO SKRYPTU) */
+        function showLoadingInModal(message) {
+            const modal = document.getElementById('ai-modal');
+            const content = document.getElementById('ai-modal-content');
+            content.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-12 gap-4">
+                    <div class="w-12 h-12 rounded-full border-4 border-aegean-500 border-t-transparent animate-spin"></div>
+                    <p class="text-sm font-medium text-aegean-900">${message}</p>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
 
+        function showErrorInModal(message) {
+            const modal = document.getElementById('ai-modal');
+            const content = document.getElementById('ai-modal-content');
+            content.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-12 gap-4 text-center">
+                    <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+                        <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                    </div>
+                    <h4 class="font-serif font-bold text-red-900">Błąd połączenia</h4>
+                    <p class="text-xs text-neutral-600 max-w-sm">${message}</p>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function closeAiModal() {
+            document.getElementById('ai-modal').classList.add('hidden');
+        }
+
+        /* AKTYWACJA ASYSTENTA AI */
         async function triggerTavernsAi() {
-            const data = tripData[activeDayId]; if (!data) return;
-            const stopsList = data.points.map(p => p.name).join(", ");
+            const data = tripData[activeDayId]; if (!data) return; 
             showLoadingInModal("✨ Gemini szuka najlepszych greckich tawern...");
-            const prompt = `Dzisiejszy plan podróży obejmuje: ${stopsList}. Zaproponuj 3 świetne lokalne tawerny lub klimatyczne kawiarnie w pobliżu tych miejsc. Podaj ich nazwy, napisz, jakie są ceny (tanio, średnio, premium), oraz jakie dania kuchni kreteńskiej warto tam zjeść.`;
-            try { const answer = await callGemini(prompt); document.getElementById('ai-modal-content').innerHTML = `<div class="flex items-center gap-3 mb-4 text-aegean-900 border-b border-sand-200 pb-3"><i class="fa-solid fa-utensils text-terracotta-500 text-xl"></i><h4 class="font-serif font-bold text-lg">Kulinarne Sekrety na dziś</h4></div><div class="prose max-w-none text-neutral-700 text-sm">${parseMarkdown(answer)}</div>`; } 
-            catch (error) { showErrorInModal(error.message); }
+            try { 
+                const answer = await callGemini(`Zaproponuj 3 świetne lokalne tawerny z pysznym, autentycznym jedzeniem, blisko trasy: ${data.title}. Uwzględnij specyfikę tego regionu.`); 
+                document.getElementById('ai-modal-content').innerHTML = `
+                    <h4 class="font-serif font-bold text-lg text-aegean-900 border-b border-sand-200 pb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-utensils text-terracotta-500"></i> Kulinarne Sekrety Regionu
+                    </h4>
+                    <div class="mt-4 leading-relaxed">${parseMarkdown(answer)}</div>`; 
+            } catch (e) { 
+                showErrorInModal(e.message); 
+            }
         }
 
         async function triggerLegendAi() {
-            const data = tripData[activeDayId]; if (!data) return;
-            const stopsList = data.points.map(p => p.name).join(", ");
-            showLoadingInModal("✨ Gemini wertuje księgi mitów i historii...");
-            const prompt = `Dzisiejszy plan podróży obejmuje: ${stopsList}. Opowiedz jedną lub dwie niezwykle ciekawe anegdoty historyczne lub mitologiczne bezpośrednio powiązane z tymi miejscami.`;
-            try { const answer = await callGemini(prompt); document.getElementById('ai-modal-content').innerHTML = `<div class="flex items-center gap-3 mb-4 text-aegean-900 border-b border-sand-200 pb-3"><i class="fa-solid fa-scroll text-terracotta-500 text-xl"></i><h4 class="font-serif font-bold text-lg">Mity, Legendy i Ciekawostki</h4></div><div class="prose max-w-none text-neutral-700 text-sm">${parseMarkdown(answer)}</div>`; } 
-            catch (error) { showErrorInModal(error.message); }
+            const data = tripData[activeDayId]; if (!data) return; 
+            showLoadingInModal("✨ Gemini wertuje księgi historii...");
+            try { 
+                const answer = await callGemini(`Opowiedz intrygującą anegdotę historyczną, mit, legendę lub ciekawostkę kulturową związaną bezpośrednio z miejscami z planu podróży: ${data.title}`); 
+                document.getElementById('ai-modal-content').innerHTML = `
+                    <h4 class="font-serif font-bold text-lg text-aegean-900 border-b border-sand-200 pb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-scroll text-terracotta-500"></i> Mity, Legendy i Opowieści
+                    </h4>
+                    <div class="mt-4 leading-relaxed">${parseMarkdown(answer)}</div>`; 
+            } catch (e) { 
+                showErrorInModal(e.message); 
+            }
         }
 
         async function triggerChatAi() {
-            const input = document.getElementById('ai-query-input'); const query = input.value.trim(); if (!query) return;
-            const data = tripData[activeDayId]; const stopsList = data ? data.points.map(p => p.name).join(", ") : "podróż po Krecie";
-            showLoadingInModal("✨ Gemini generuje odpowiedź..."); input.value = "";
-            const prompt = `Plan dnia: ${data ? data.title : ""}. Przystanki: ${stopsList}. Odpowiedz na pytanie: "${query}". Daj praktyczną odpowiedź.`;
-            try { const answer = await callGemini(prompt); document.getElementById('ai-modal-content').innerHTML = `<div class="mb-4 bg-aegean-50 p-3 rounded-xl border border-aegean-100"><p class="text-xs text-neutral-800 italic">"${query}"</p></div><div class="flex items-center gap-3 mb-3 text-aegean-900 border-b border-sand-200 pb-2"><i class="fa-solid fa-comments text-terracotta-500 text-lg"></i><h4 class="font-serif font-bold text-base">Odpowiedź asystenta</h4></div><div class="prose max-w-none text-neutral-700 text-sm">${parseMarkdown(answer)}</div>`; } 
-            catch (error) { showErrorInModal(error.message); }
+            const input = document.getElementById('ai-query-input'); 
+            const query = input.value.trim(); if (!query) return;
+            showLoadingInModal("✨ Gemini generuje odpowiedź..."); 
+            input.value = "";
+            try { 
+                const answer = await callGemini(query); 
+                document.getElementById('ai-modal-content').innerHTML = `
+                    <h4 class="font-serif font-bold text-base text-aegean-900 border-b border-sand-200 pb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-comments text-terracotta-500"></i> Odpowiedź asystenta
+                    </h4>
+                    <div class="mt-4 leading-relaxed">${parseMarkdown(answer)}</div>`; 
+            } catch (e) { 
+                showErrorInModal(e.message); 
+            }
         }
 
-        function handleAiInputKey(event) { if (event.key === 'Enter') { triggerChatAi(); } }
+        function handleAiInputKey(e) { if (e.key === 'Enter') triggerChatAi(); }
     </script>
 </body>
 </html>
