@@ -96,7 +96,7 @@
 
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:overflow-hidden">
         
-        <!-- Lista Dni (Zoptymalizowana wysokość mobilna) -->
+        <!-- Lista Dni -->
         <section class="lg:col-span-4 flex flex-col gap-4 h-[350px] lg:h-[calc(100vh-160px)] overflow-y-auto pr-2">
             <h2 class="font-serif text-xl font-bold text-aegean-500 px-2 flex items-center gap-2">
                 <i class="fa-solid fa-route text-terracotta-500"></i> Plan Dnia i Wybór Trasy
@@ -105,19 +105,19 @@
         </section>
 
         <!-- Panel Główny (Zoptymalizowana wysokość mobilna) -->
-        <section class="lg:col-span-8 flex flex-col h-[600px] lg:h-[calc(100vh-160px)] bg-white rounded-2xl shadow-sm border border-sand-200 overflow-hidden relative">
+        <section class="lg:col-span-8 flex flex-col h-[650px] lg:h-[calc(100vh-160px)] bg-white rounded-2xl shadow-sm border border-sand-200 overflow-hidden relative">
             
             <div class="bg-sand-100 p-4 md:p-5 border-b border-sand-200 shrink-0 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <span id="active-day-date" class="text-xs font-mono text-terracotta-500 font-bold tracking-wider uppercase">Niedziela, 14.06.2026</span>
-                    <h3 id="active-day-title" class="font-serif text-lg md:text-xl font-bold text-aegean-900 mt-0.5">Dzień 0: Przylot i Logistyka</h3>
+                    <span id="active-day-date" class="text-xs font-mono text-terracotta-500 font-bold tracking-wider uppercase">Zanim wsiądziesz do samolotu</span>
+                    <h3 id="active-day-title" class="font-serif text-lg md:text-xl font-bold text-aegean-900 mt-0.5">Pakowanie i Przygotowania</h3>
                 </div>
                 <div class="flex gap-2 w-full sm:w-auto">
                     <button onclick="toggleToolsPanel()" class="bg-aegean-500 hover:bg-aegean-900 text-white text-xs font-bold px-3.5 py-2.5 rounded-lg flex items-center gap-2 shadow-sm transition-colors shrink-0">
                         <i class="fa-solid fa-toolbox"></i> Narzędzia
                     </button>
-                    <a id="active-day-gmaps" href="#" target="_blank" class="bg-terracotta-500 hover:bg-terracotta-600 text-white text-xs font-bold px-4 py-2.5 rounded-lg flex items-center gap-2 shadow-sm transition-colors duration-200 shrink-0 flex-1 sm:flex-none text-center justify-center">
-                        <i class="fa-solid fa-map-location-dot"></i> Nawiguj trasę (Google Maps)
+                    <a id="active-day-gmaps" href="#" class="bg-terracotta-500 hover:bg-terracotta-600 text-white text-xs font-bold px-4 py-2.5 rounded-lg flex items-center gap-2 shadow-sm transition-colors duration-200 shrink-0 flex-1 sm:flex-none text-center justify-center">
+                        <i class="fa-solid fa-suitcase"></i> Przygotowania
                     </a>
                 </div>
             </div>
@@ -125,7 +125,7 @@
             <div class="flex-1 flex flex-col overflow-hidden relative">
                 
                 <!-- Widok 1: MAPA -->
-                <div id="view-map" class="absolute inset-0 flex flex-col p-3">
+                <div id="view-map" class="absolute inset-0 flex flex-col p-3 hidden">
                     <div class="flex-1 rounded-xl overflow-hidden relative border border-sand-200">
                         <div id="map" class="w-full h-full z-10"></div>
                         
@@ -186,6 +186,16 @@
                                     </div>
                                 </div>
                                 <p id="fuel-advice" class="text-[11px] text-neutral-600 leading-normal mt-1 border-t border-emerald-100 pt-1.5 font-medium"></p>
+                            </div>
+
+                            <!-- Interaktywna Checklista Kontekstowa -->
+                            <div class="bg-aegean-50/70 p-4 rounded-xl border border-aegean-200/50 flex flex-col gap-2">
+                                <p class="font-bold text-aegean-900 uppercase tracking-widest text-[10px] flex items-center gap-1.5 shrink-0">
+                                    <i class="fa-solid fa-clipboard-check text-terracotta-500"></i> Niezbędnik na dziś
+                                </p>
+                                <div id="checklist-container" class="space-y-2 mt-1">
+                                    <!-- Generowane dynamicznie przez JS -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -301,16 +311,181 @@
                     </div>
                 </div>
 
+                <!-- Widok 4: PRZYGOTOWANIA PRZED WYJAZDEM -->
+                <div id="view-prep" class="absolute inset-0 flex flex-col p-5 overflow-y-auto">
+                    <h3 class="font-serif text-xl font-bold text-aegean-900 flex items-center gap-2.5 mb-2">
+                        <i class="fa-solid fa-suitcase-rolling text-terracotta-500 animate-pulse"></i> 
+                        Wielki Niezbędnik Przedwyjazdowy
+                    </h3>
+                    <p class="text-xs text-neutral-500 mb-4">Przygotuj się ze spokojem. Odznaczaj spakowane przedmioty i załatwione formalności. Twój postęp zapisze się automatycznie w pamięci przeglądarki!</p>
+                    
+                    <!-- Pasek postępu -->
+                    <div class="mb-5 bg-sand-100 p-4 rounded-xl border border-sand-200">
+                        <div class="flex justify-between items-center mb-1.5 text-xs font-bold text-aegean-900">
+                            <span>Status przygotowań</span>
+                            <span id="prep-progress-text">0% (0/24)</span>
+                        </div>
+                        <div class="w-full bg-sand-200/60 rounded-full h-3.5 overflow-hidden p-0.5 border border-sand-300">
+                            <div id="prep-progress-bar" class="bg-emerald-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Siatka Kategorii Pakowania -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-6">
+                        <!-- Sekcja 1: Dokumenty i Finanse -->
+                        <div class="bg-sand-100/40 p-4 rounded-xl border border-sand-200/80 flex flex-col gap-3">
+                            <h4 class="font-serif font-bold text-sm text-aegean-900 flex items-center gap-2 border-b border-sand-200 pb-2">
+                                <i class="fa-solid fa-passport text-aegean-500"></i> Dokumenty & Finanse
+                            </h4>
+                            <div class="space-y-2">
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="doc_id" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Fizyczny dowód osobisty / paszport (mObywatel nie działa za granicą!)</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="doc_license" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Fizyczne prawo jazdy (kluczowe do odbioru Caraveli)</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="doc_cash" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Gotówka w Euro (€) – koniecznie drobne nominały (5, 10, 20 €)</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="doc_ekuz" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Wyrobiona karta EKUZ (NFZ) + dodatkowe ubezpieczenie turystyczne</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="doc_caravel" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Zapisany kontrakt/rezerwacja od Caravel Rent a Car</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="doc_boarding" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Odprawa zrobiona, karty pokładowe w telefonie (lub wydrukowane)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Sekcja 2: Apteczka i Higiena -->
+                        <div class="bg-sand-100/40 p-4 rounded-xl border border-sand-200/80 flex flex-col gap-3">
+                            <h4 class="font-serif font-bold text-sm text-aegean-900 flex items-center gap-2 border-b border-sand-200 pb-2">
+                                <i class="fa-solid fa-kit-medical text-aegean-500"></i> Apteczka & Higiena
+                            </h4>
+                            <div class="space-y-2">
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="med_personal" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Leki osobiste (przyjmowane na stałe) na cały okres wyjazdu</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="med_spf" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Krem z mocnym filtrem UV (SPF 50 to podstawa w czerwcu)</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="med_blisters" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Plastry na pęcherze i odciski (najlepiej hydrokoloidowe)</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="med_stomach" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Węgiel aktywny, lek przeciwbiegunkowy i elektrolity</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="med_mosquito" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Środek na komary / łagodzący ukąszenia (szczególnie w wąwozach)</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="med_bottles" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Kosmetyki płynne spakowane w buteleczki max 100ml</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Sekcja 3: Ubiór i Obuwie -->
+                        <div class="bg-sand-100/40 p-4 rounded-xl border border-sand-200/80 flex flex-col gap-3">
+                            <h4 class="font-serif font-bold text-sm text-aegean-900 flex items-center gap-2 border-b border-sand-200 pb-2">
+                                <i class="fa-solid fa-shirt text-aegean-500"></i> Ubiór & Obuwie
+                            </h4>
+                            <div class="space-y-2">
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="wear_trek" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Pełne buty sportowe / trekkingowe z grubszą podeszwą na kamieniste szlaki</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="wear_water" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Buty do wody (niezbędne na Gramvousie oraz dzikich plażach)</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="wear_hat" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Czapka z daszkiem, chusta lub kapelusz przeciwsłoneczny</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="wear_glasses" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Okulary przeciwsłoneczne z filtrem UV</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="wear_jacket" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Lekka bluza / wiatrówka na chłodniejsze wieczory nad morzem lub w górach</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="wear_swim" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Stroje kąpielowe oraz lekki szybkoschnący ręcznik</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Sekcja 4: Elektronika i Inne -->
+                        <div class="bg-sand-100/40 p-4 rounded-xl border border-sand-200/80 flex flex-col gap-3">
+                            <h4 class="font-serif font-bold text-sm text-aegean-900 flex items-center gap-2 border-b border-sand-200 pb-2">
+                                <i class="fa-solid fa-plug text-aegean-500"></i> Elektronika & Inne
+                            </h4>
+                            <div class="space-y-2">
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="ele_powerbank" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Powerbank (niezbędny, gdy telefon służy jako GPS, aparat i tłumacz)</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="ele_cables" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Ładowarka sieciowa, kable oraz uchwyt na telefon do samochodu</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="ele_offline" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Pobrane mapy offline w telefonie (Google Maps lub Maps.me)</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="ele_pouch" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Wodoodporne etui na telefon / kluczyki (przydatne przy plażowaniu)</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="ele_mask" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Maska do snorkelingu / okularki (woda na Krecie jest niesamowicie przejrzysta!)</span>
+                                </label>
+                                <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                                    <input type="checkbox" data-prep-id="ele_pillow" onchange="togglePrepItem(this)" class="prep-checkbox mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                                    <span class="text-xs text-neutral-700">Poduszka podróżna (zagłówek) ułatwiająca drzemkę podczas lotu</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </section>
     </main>
 
     <!-- Panel boczny: NARZĘDZIA -->
-    <div id="tools-panel" class="fixed inset-y-0 right-0 w-80 bg-white shadow-2xl z-[99999] border-l border-sand-200 transform translate-x-full transition-transform duration-300 ease-in-out p-5 flex flex-col gap-6 overflow-y-auto">
+    <div id="tools-panel" class="fixed inset-y-0 right-0 w-80 bg-white shadow-2xl z-[99999] border-l border-sand-200 transform translate-x-full transition-transform duration-300 ease-in-out p-5 flex flex-col gap-5 overflow-y-auto">
         <div class="flex justify-between items-center border-b border-sand-200 pb-3 shrink-0">
             <h3 class="font-serif font-bold text-lg text-aegean-900"><i class="fa-solid fa-screwdriver-wrench text-terracotta-500 mr-1.5"></i> Panel Narzędziowy</h3>
             <button onclick="toggleToolsPanel()" class="text-neutral-400 hover:text-neutral-800 w-8 h-8 rounded-full flex items-center justify-center hover:bg-sand-100"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- Ustawienie Klucza API Gemini -->
+        <div class="bg-aegean-50/60 p-4 rounded-xl border border-aegean-100">
+            <h4 class="font-bold text-xs text-aegean-900 uppercase font-mono tracking-wider mb-2 flex items-center gap-1.5"><i class="fa-solid fa-key text-terracotta-500"></i> Klucz API Gemini</h4>
+            <p class="text-[10px] text-neutral-600 mb-2 leading-normal">Wklej swój osobisty klucz API Gemini, aby odblokować rekomendacje restauracji i legendy na żywo na Krecie.</p>
+            <div class="flex gap-1.5">
+                <input type="password" id="gemini-key-input" placeholder="Wklej klucz AIzaSy..." class="flex-1 bg-white text-xs border border-sand-300 rounded-lg p-2 focus:outline-none focus:border-aegean-500 shadow-inner">
+                <button onclick="saveGeminiKey()" class="bg-aegean-500 hover:bg-aegean-600 text-white text-xs font-bold px-3 rounded-lg transition-colors">Zapisz</button>
+            </div>
         </div>
 
         <div class="bg-sand-50 p-4 rounded-xl border border-sand-200">
@@ -330,7 +505,7 @@
         </div>
 
         <div class="bg-amber-50/60 p-4 rounded-xl border border-amber-200">
-            <h4 class="font-bold text-xs text-amber-900 uppercase font-mono tracking-wider mb-2 flex items-center gap-1.5"><i class="fa-solid fa-floppy-disk text-amber-600"></i> Kopia Zapasowa (Zabezpieczenie)</h4>
+            <h4 class="font-bold text-xs text-amber-900 uppercase font-mono tracking-wider mb-2 flex items-center gap-1.5"><i class="fa-solid fa-floppy-disk text-amber-600"></i> Kopia Zapasowa (Auta)</h4>
             <p class="text-[10px] text-neutral-600 mb-2 leading-normal">Skopiuj ten krótki kod przed zmianą linku strony, by przenieść przypiętą pozycję auta między urządzeniami!</p>
             <div class="space-y-2">
                 <button onclick="exportBackupCode()" class="w-full bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-1.5">
@@ -368,7 +543,7 @@
         </div>
     </div>
 
-    <!-- Modal AI (Poprawiony i w pełni funkcjonalny) -->
+    <!-- Modal AI -->
     <div id="ai-modal" class="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-[999999] flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden border border-sand-200">
             <div class="bg-aegean-900 text-white px-6 py-4 flex justify-between items-center shrink-0 border-b-2 border-terracotta-500">
@@ -383,22 +558,64 @@
             </div>
             <div class="flex-grow overflow-y-auto p-6 bg-sand-50" id="ai-modal-content"></div>
             <div class="bg-sand-100 px-6 py-4 border-t border-sand-200 flex justify-between items-center shrink-0">
-                <p class="text-[10px] text-neutral-500 font-medium">Model: gemini-2.5-flash-preview-09-2025</p>
+                <p class="text-[10px] text-neutral-500 font-medium">Model: gemini-2.5-flash</p>
                 <button onclick="closeAiModal()" class="bg-aegean-500 hover:bg-aegean-900 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition-colors shadow">Zamknij wskazówki</button>
             </div>
         </div>
     </div>
 
     <script>
-        let activeDayId = 0;
+        let activeDayId = -1;
         let map;
         let activeMarkers = [];
         let activePolylines = [];
         let routeRequestId = 0;
         let isPinningCar = false;
 
-        // BAZA WYJAZDU KRETA 2026
+        // Bazy przedmiotów kontekstowych w zależności od charakteru i typu wycieczki
+        const checklistItems = {
+            standard: [
+                { id: "wallet", text: "Gotówka (€) – w małych tawernach i na parkingach karta rzadko przechodzi." },
+                { id: "water", text: "Zapas wody min. 1.5l na osobę." },
+                { id: "phone", text: "Naładowany telefon + powerbank." }
+            ],
+            beach: [
+                { id: "shoes", text: "Buty do wody (skały i jeżowce na dzikich odcinkach) + klapki." },
+                { id: "towel", text: "Ręczniki plażowe i krem z filtrem UV (bardzo silne słońce)." },
+                { id: "snack", text: "Lekkie przekąski i owoce (na Balos/Elafonisi sklepy bywają daleko i są drogie)." }
+            ],
+            trekking: [
+                { id: "trek_shoes", text: "Pełne buty sportowe/trekkingowe z przyczepną podeszwą (szlak Richtis bywa wilgotny i śliski)." },
+                { id: "hat", text: "Czapka z daszkiem / chustka na głowę." },
+                { id: "mosquito", text: "Preparat na komary/anty-insect (wilgotny ekosystem wąwozu)." }
+            ],
+            documents: [
+                { id: "docs", text: "Paszporty / Dowody osobiste + prawo jazdy kierowcy." },
+                { id: "contract", text: "Dokumenty / kontrakt najmu od Caravel." }
+            ]
+        };
+
+        // BAZA WYJAZDU KRETA 2026 (ZAKŁADA RÓWNIEŻ KROK PRZYGOTOWAWCZY -1)
         const tripData = {
+            "-1": {
+                title: "Przygotowania i Pakowanie",
+                date: "Zanim wsiądziesz do samolotu",
+                distance: 0,
+                schedule: [
+                    { time: "W domu", text: "Zgromadź fizyczne dokumenty tożsamości oraz prawo jazdy. Wydrukuj kontrakt Caravel." },
+                    { time: "Przed wylotem", text: "Zrób odprawę online w aplikacji lotniczej i zapisz bilety w telefonie (offline)." },
+                    { time: "Przed wyjazdem", text: "Sprawdź prognozę pogody dla Chanii i Heraklionu, by dostosować zawartość walizki." },
+                    { time: "W domu", text: "Pobierz mapy offline w Google Maps – na Krecie w górach zasięg potrafi całkowicie zniknąć." },
+                    { time: "Przed podróżą", text: "Przygotuj gotówkę w EUR (najlepiej drobne nominały) – oszczędzi to mnóstwo stresu na małych parkingach." }
+                ],
+                notes: "Upewnij się, że masz ważny dowód lub paszport. W Grecji polski mObywatel NIE jest honorowany przy kontroli granicznej ani w wypożyczalniach!",
+                curiosities: [
+                    "W Grecji gniazdka elektryczne są identyczne jak w Polsce (typy C oraz F), więc nie potrzebujesz przejściówek.",
+                    "Czas na Krecie różni się o +1 godzinę w stosunku do Polski (gdy u nas jest 12:00, tam jest już 13:00)."
+                ],
+                points: [],
+                routeSegments: []
+            },
             0: {
                 title: "Dzień 0: Przylot i Logistyka",
                 date: "Niedziela, 14.06.2026",
@@ -566,7 +783,7 @@
                     "Rethymno słynie ze wspaniałych weneckich portali z kamienia dekorowanych sentencjami po łacinie."
                 ],
                 points: [
-                    { name: "Oasis Hotel Oasis (Wyjazd)", coords: [35.4831, 24.0153], icon: "fa-arrow-right-from-bracket", color: "#D96B43", desc: "Pożegnanie bazy nr 1" },
+                    { name: "Oasis Hotel Oasis (Wyjazd)", coords: [35.4831, 24.0153], icon: "fa-arrow-right-from-bracket", color: "#D96B43", desc: "Pożegnanie baza nr 1" },
                     { name: "Parking Fortezza (Rethymno)", coords: [35.3728, 24.4705], icon: "fa-square-p", color: "#2563eb", desc: "Bezpieczny parking tuż pod murami obronnymi" },
                     { name: "Twierdza Fortezza", coords: [35.3725, 24.4715], icon: "fa-fort-awesome", color: "#0B4F83", desc: "Wenecki zamek i starówka (pieszo)" },
                     { name: "Mirabella Apartments (Baza 2)", coords: [35.2154, 25.7188], icon: "fa-bed", color: "#D96B43", desc: "Wasz nowy hotel z widokiem na zatokę Mirabello" },
@@ -691,7 +908,7 @@
                     "Wąwóz Richtis ma całoroczną wodę, co sprawia, że roślinność przypomina gęstą, zieloną dżunglę."
                 ],
                 points: [
-                    { name: "Mirabella Apartments (Baza)", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Start podróży" },
+                    { name: "Mirabella Apartments (Baza)", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Start dojazdów" },
                     { name: "Wejście do Wąwozu Richtis", coords: [35.1583, 25.9917], icon: "fa-person-hiking", color: "#10b981", desc: "Start pieszego szlaku" },
                     { name: "Urokliwa Sitia", coords: [35.2075, 26.0995], icon: "fa-city", color: "#0B4F83", desc: "Spokojny port rybacki" }
                 ],
@@ -852,7 +1069,6 @@
             } catch (e) { showNotification("Błędny format kodu zapasowego.", "error"); }
         }
 
-        // Pobieranie pozycji GPS z obsługą braku zgody/błędu
         function saveCarLocation() {
             if (!navigator.geolocation) {
                 showNotification("Twoja przeglądarka nie wspiera geolokalizacji. Użyj zaznaczania ręcznego.", "error");
@@ -870,7 +1086,6 @@
             }, { enableHighAccuracy: true, timeout: 8000 });
         }
 
-        // Aktywacja manualnego trybu wybierania punktu na mapie
         function activateManualPinning() {
             isPinningCar = true;
             document.getElementById('map-pinning-banner').classList.remove('hidden');
@@ -907,7 +1122,9 @@
         function findCar() {
             const lat = localStorage.getItem('car_lat');
             const lng = localStorage.getItem('car_lng');
-            if (lat && lng) { window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`, '_blank'); }
+            if (lat && lng) { 
+                window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`, '_blank'); 
+            }
         }
 
         function calculateTip() {
@@ -928,24 +1145,21 @@
         function toggleToolsPanel() { document.getElementById('tools-panel').classList.toggle('translate-x-full'); }
 
         function changeView(viewName) {
-            const m = document.getElementById('view-map'), d = document.getElementById('view-details'), c = document.getElementById('view-curiosities');
-            m.classList.add('hidden'); d.classList.add('hidden'); c.classList.add('hidden');
+            const m = document.getElementById('view-map'), d = document.getElementById('view-details'), c = document.getElementById('view-curiosities'), p = document.getElementById('view-prep');
+            m.classList.add('hidden'); d.classList.add('hidden'); c.classList.add('hidden'); p.classList.add('hidden');
             if (viewName === 'map') { m.classList.remove('hidden'); if (map) setTimeout(() => map.invalidateSize(), 150); } 
             else if (viewName === 'details') d.classList.remove('hidden');
             else if (viewName === 'curiosities') c.classList.remove('hidden');
+            else if (viewName === 'prep') p.classList.remove('hidden');
         }
 
-        // Generator dynamicznych linków nawigacyjnych do tras wielopunktowych
         function generateGoogleMapsLink(dayData) {
             if (!dayData.points || dayData.points.length === 0) return "#";
-            
-            // Ignorujemy markety przy wyznaczaniu głównej trasy podróży
             const navPoints = dayData.points.filter(pt => pt.icon !== "fa-shopping-cart");
             if (navPoints.length === 0) return "#";
             
             const origin = navPoints[0].coords;
             const destination = navPoints[navPoints.length - 1].coords;
-            
             let url = `https://www.google.com/maps/dir/?api=1&origin=${origin[0]},${origin[1]}&destination=${destination[0]},${destination[1]}`;
             
             if (navPoints.length > 2) {
@@ -959,7 +1173,6 @@
             map = L.map('map', { scrollWheelZoom: true, zoomControl: true }).setView([35.3, 24.8], 8);
             L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { attribution: '© CARTO' }).addTo(map);
             
-            // Reagowanie na kliknięcie na mapie w celu przypięcia auta
             map.on('click', function(e) {
                 if (isPinningCar) {
                     localStorage.setItem('car_lat', e.latlng.lat);
@@ -973,7 +1186,7 @@
                 }
             });
 
-            selectDay(0);
+            selectDay(-1); // Startujemy od widoku "Przed wyjazdem"
         }
 
         function renderTimeline(dayId) {
@@ -981,7 +1194,7 @@
             let html = `<div class="space-y-4 relative before:absolute before:inset-y-0 before:left-3.5 before:w-0.5 before:bg-sand-200 pl-2">`;
             data.schedule.forEach((item) => {
                 let stepNumber = "";
-                if (item.name_ref) {
+                if (item.name_ref && data.points) {
                     const ptIndex = data.points.findIndex(p => p.name === item.name_ref);
                     if (ptIndex !== -1) stepNumber = ptIndex + 1;
                 }
@@ -1002,27 +1215,170 @@
             document.getElementById('timeline-container').innerHTML = html;
         }
 
+        function renderChecklist(dayId) {
+            const container = document.getElementById('checklist-container');
+            if (!container) return;
+            let items = [...checklistItems.standard];
+
+            if (dayId == 0 || dayId == 12) {
+                items = [...items, ...checklistItems.documents];
+            }
+            if (dayId == 2 || dayId == 3 || dayId == 11) {
+                items = [...items, ...checklistItems.beach];
+            }
+            if (dayId == 2 || dayId == 7) {
+                items.push({ id: "tickets", text: "Bilety na prom / łódź (kup online rano)." });
+            }
+            if (dayId == 9) {
+                items = [...items, ...checklistItems.trekking];
+            }
+
+            let html = "";
+            items.forEach(item => {
+                const storageKey = `chk_day_${dayId}_${item.id}`;
+                const isChecked = localStorage.getItem(storageKey) === "true" ? "checked" : "";
+                const textStyle = isChecked ? "line-through text-neutral-400" : "text-neutral-700 font-medium";
+
+                html += `
+                    <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                        <input type="checkbox" ${isChecked} onchange="toggleChecklistItem(${dayId}, '${item.id}', this)" class="mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                        <span class="text-xs ${textStyle}">${item.text}</span>
+                    </label>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function toggleChecklistItem(dayId, itemId, checkbox) {
+            const storageKey = `chk_day_${dayId}_${itemId}`;
+            localStorage.setItem(storageKey, checkbox.checked);
+            
+            const span = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                span.className = "text-xs line-through text-neutral-400";
+            } else {
+                span.className = "text-xs text-neutral-700 font-medium";
+            }
+        }
+
+        function togglePrepItem(checkbox) {
+            const id = checkbox.getAttribute('data-prep-id');
+            localStorage.setItem('prep_chk_' + id, checkbox.checked);
+            
+            const span = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                span.className = "text-xs line-through text-neutral-400";
+            } else {
+                span.className = "text-xs text-neutral-700 font-medium";
+            }
+            updatePrepProgress();
+        }
+
+        function updatePrepProgress() {
+            const checkboxes = document.querySelectorAll('.prep-checkbox');
+            const total = checkboxes.length;
+            if (total === 0) return;
+            
+            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const percent = Math.round((checked / total) * 100);
+            
+            document.getElementById('prep-progress-bar').style.width = percent + '%';
+            document.getElementById('prep-progress-text').innerText = `${percent}% (${checked}/${total})`;
+            
+            const badge = document.getElementById('prep-badge');
+            if (badge) {
+                badge.innerText = `${percent}%`;
+                if (percent === 100) {
+                    badge.className = "text-[9px] bg-emerald-600 text-white px-1.5 py-0.5 rounded-full font-sans font-bold animate-bounce";
+                } else {
+                    badge.className = "text-[9px] bg-amber-600 text-white px-1.5 py-0.5 rounded-full font-sans font-bold";
+                }
+            }
+        }
+
+        function loadPrepChecklist() {
+            document.querySelectorAll('.prep-checkbox').forEach(cb => {
+                const id = cb.getAttribute('data-prep-id');
+                const isChecked = localStorage.getItem('prep_chk_' + id) === "true";
+                cb.checked = isChecked;
+                
+                const span = cb.nextElementSibling;
+                if (isChecked && span) {
+                    span.className = "text-xs line-through text-neutral-400";
+                }
+            });
+            updatePrepProgress();
+        }
+
+        function resetPrepChecklist() {
+            document.querySelectorAll('.prep-checkbox').forEach(cb => {
+                cb.checked = false;
+                const id = cb.getAttribute('data-prep-id');
+                localStorage.removeItem('prep_chk_' + id);
+                
+                const span = cb.nextElementSibling;
+                if (span) span.className = "text-xs text-neutral-700 font-medium";
+            });
+            updatePrepProgress();
+            showNotification("Wyczyszczono listę przygotowań!", "success");
+        }
+
         async function selectDay(dayId) {
-            activeDayId = dayId; const data = tripData[dayId]; if (!data) return;
-            changeView('map'); const mapStatus = document.getElementById('map-status');
-            mapStatus.innerText = "Trwa wytyczanie trasy drogowej...";
-            const currentRequestId = ++routeRequestId;
+            activeDayId = dayId; 
+            const data = tripData[dayId]; 
+            if (!data) return;
 
             document.getElementById('active-day-date').innerText = data.date;
             document.getElementById('active-day-title').innerText = data.title;
-            
-            // Dynamiczne generowanie linku wielopunktowego Google Maps
-            document.getElementById('active-day-gmaps').href = generateGoogleMapsLink(data);
 
+            // Obsługa podświetlania aktywnego kafelka na liście
             document.querySelectorAll('.day-btn').forEach(btn => {
-                if (btn.dataset.day == dayId) { btn.className = "day-btn w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer bg-aegean-500 text-white shadow-md transform -translate-y-0.5"; } 
-                else { btn.className = "day-btn w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer bg-white border-sand-200 text-neutral-700 hover:border-aegean-500/40 hover:bg-sand-50"; }
+                if (btn.dataset.day == dayId) { 
+                    if (dayId == -1) {
+                        btn.className = "day-btn w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer bg-amber-500 text-white shadow-md transform -translate-y-0.5";
+                    } else {
+                        btn.className = "day-btn w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer bg-aegean-500 text-white shadow-md transform -translate-y-0.5";
+                    }
+                } else { 
+                    if (btn.dataset.day == -1) {
+                        btn.className = "day-btn w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer bg-amber-50/70 border-amber-200 text-neutral-700 hover:border-amber-400 hover:bg-amber-100/50";
+                    } else {
+                        btn.className = "day-btn w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer bg-white border-sand-200 text-neutral-700 hover:border-aegean-500/40 hover:bg-sand-50"; 
+                    }
+                }
             });
 
+            // Jeśli to przygotowania przed wyjazdem (-1)
+            if (dayId == -1) {
+                changeView('prep');
+                loadPrepChecklist();
+                
+                // Dostosowanie przycisku nawigacji do resetu pakowania
+                const gmapsBtn = document.getElementById('active-day-gmaps');
+                gmapsBtn.innerHTML = `<i class="fa-solid fa-trash-can"></i> Reset pakowania`;
+                gmapsBtn.href = "javascript:resetPrepChecklist()";
+                gmapsBtn.target = "";
+                return; 
+            }
+
+            // Normalny dzień wycieczki - mapa
+            changeView('map'); 
+            const mapStatus = document.getElementById('map-status');
+            mapStatus.innerText = "Trwa wytyczanie trasy drogowej...";
+            const currentRequestId = ++routeRequestId;
+
+            // Przywrócenie normalnego linku nawigacji do trasy dnia
+            const gmapsBtn = document.getElementById('active-day-gmaps');
+            gmapsBtn.innerHTML = `<i class="fa-solid fa-map-location-dot"></i> Nawiguj trasę (Google Maps)`;
+            gmapsBtn.target = "_blank";
+            gmapsBtn.href = generateGoogleMapsLink(data);
+
             renderTimeline(dayId);
+            renderChecklist(dayId);
             document.getElementById('resident-notes').innerText = data.notes;
 
-            const dist = data.distance || 0; const fuel = (dist * 7.5) / 100;
+            const dist = data.distance || 0; 
+            const fuel = (dist * 7.5) / 100;
             document.getElementById('day-distance').innerText = dist + " km";
             document.getElementById('day-fuel').innerText = `${fuel.toFixed(1)} l (~${(fuel * 1.85).toFixed(2)} €)`;
             document.getElementById('fuel-advice').innerText = dist >= 120 ? "⚠️ Długa trasa górzysta! Sprawdź stan baku przed wyjazdem. Stacje w głębi lądu zamykają się o 21:00." : "✅ Optymalny dystans lokalny.";
@@ -1077,7 +1433,7 @@
                     } else if (segment.type === "car") {
                         activeFetchCount++;
                         fetch(`https://router.project-osrm.org/route/v1/driving/${segment.from[1]},${segment.from[0]};${segment.to[1]},${segment.to[0]}?overview=full&geometries=geojson`)
-                            .then(r => r.ok && currentRequestId === routeRequestId ? r.json() : null)
+                            .then(r => currentRequestId === routeRequestId ? (r.ok ? r.json() : Promise.reject()) : null)
                             .then(res => {
                                 if (currentRequestId !== routeRequestId || !res) return;
                                 if (res.code === 'Ok' && res.routes?.[0]) {
@@ -1098,23 +1454,65 @@
         }
 
         window.onload = function() {
-            updateCarStatus(); const listContainer = document.getElementById('days-list');
-            Object.keys(tripData).forEach(dayKey => {
-                const data = tripData[dayKey]; const card = document.createElement('div'); card.dataset.day = dayKey;
-                card.className = "day-btn w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer bg-white border-sand-200 text-neutral-700 hover:border-aegean-500/40 hover:bg-sand-50";
-                let icon = "fa-car"; if (dayKey == 0) icon = "fa-plane-arrival"; else if (dayKey == 2 || dayKey == 7) icon = "fa-ship"; else if (dayKey == 3 || dayKey == 11) icon = "fa-umbrella-beach"; else if (dayKey == 9) icon = "fa-person-hiking"; else if (dayKey == 12) icon = "fa-plane-departure";
-                card.innerHTML = `<div class="flex items-start gap-3"><div class="p-2.5 rounded-lg bg-sand-100 text-aegean-500 shrink-0"><i class="fa-solid ${icon} text-sm"></i></div><div class="flex-1 min-w-0"><div class="flex justify-between items-baseline mb-0.5"><span class="text-[10px] font-bold uppercase text-neutral-400 font-mono">Dzień ${dayKey}</span><span class="text-[10px] text-neutral-500">🚗 ${data.distance} km</span></div><h3 class="font-serif text-sm font-bold truncate pr-2">${data.title.replace(`Dzień ${dayKey}: `, "")}</h3><p class="text-xs text-neutral-500 font-mono mt-0.5">${data.date}</p></div></div>`;
-                card.addEventListener('click', () => selectDay(dayKey)); listContainer.appendChild(card);
+            const savedKey = localStorage.getItem('gemini_api_key');
+            if(savedKey) {
+                document.getElementById('gemini-key-input').value = savedKey;
+            }
+
+            updateCarStatus(); 
+            const listContainer = document.getElementById('days-list');
+            
+            // Gwarantujemy posortowanie dni (szczególnie, by Dzień -1 był na samej górze)
+            const sortedKeys = Object.keys(tripData).sort((a, b) => parseInt(a) - parseInt(b));
+            
+            sortedKeys.forEach(dayKey => {
+                const data = tripData[dayKey]; 
+                const card = document.createElement('div'); 
+                card.dataset.day = dayKey;
+                
+                let cardClass = "day-btn w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer bg-white border-sand-200 text-neutral-700 hover:border-aegean-500/40 hover:bg-sand-50";
+                let icon = "fa-car"; 
+                let labelText = `Dzień ${dayKey}`;
+                let distanceText = `🚗 ${data.distance} km`;
+
+                if (dayKey == -1) {
+                    cardClass = "day-btn w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer bg-amber-50/70 border-amber-200 text-neutral-700 hover:border-amber-400 hover:bg-amber-100/50";
+                    icon = "fa-suitcase";
+                    labelText = "Przed wyjazdem";
+                    distanceText = `<span id="prep-badge" class="text-[9px] bg-amber-600 text-white px-1.5 py-0.5 rounded-full font-sans font-bold">0%</span>`;
+                } else if (dayKey == 0) {
+                    icon = "fa-plane-arrival";
+                } else if (dayKey == 2 || dayKey == 7) {
+                    icon = "fa-ship";
+                } else if (dayKey == 3 || dayKey == 11) {
+                    icon = "fa-umbrella-beach";
+                } else if (dayKey == 9) {
+                    icon = "fa-person-hiking";
+                } else if (dayKey == 12) {
+                    icon = "fa-plane-departure";
+                }
+                
+                card.className = cardClass;
+                card.innerHTML = `<div class="flex items-start gap-3"><div class="p-2.5 rounded-lg ${dayKey == -1 ? 'bg-amber-100 text-amber-700' : 'bg-sand-100 text-aegean-500'} shrink-0"><i class="fa-solid ${icon} text-sm"></i></div><div class="flex-1 min-w-0"><div class="flex justify-between items-baseline mb-0.5"><span class="text-[10px] font-bold uppercase text-neutral-400 font-mono">${labelText}</span><span class="text-[10px] text-neutral-500">${distanceText}</span></div><h3 class="font-serif text-sm font-bold truncate pr-2">${data.title.replace(`Dzień ${dayKey}: `, "")}</h3><p class="text-xs text-neutral-500 font-mono mt-0.5">${data.date}</p></div></div>`;
+                card.addEventListener('click', () => selectDay(dayKey)); 
+                listContainer.appendChild(card);
             });
+            
             initMap();
+            loadPrepChecklist();
+            setTimeout(() => { if (map) map.invalidateSize(); }, 500);
         };
 
-        function speakGreek(text) {
-            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = 'el-GR'; u.rate = 0.8; window.speechSynthesis.speak(u); } 
-            else showNotification("Syntezator mowy jest nieobsługiwany.", "error");
+        window.onresize = function() {
+            if (map) map.invalidateSize();
+        };
+
+        function saveGeminiKey() {
+            const keyVal = document.getElementById('gemini-key-input').value.trim();
+            localStorage.setItem('gemini_api_key', keyVal);
+            showNotification("Klucz API Gemini został pomyślnie zapisany w pamięci telefonu!", "success");
         }
 
-        /* SILNIK PRZETWARZANIA MARKDOWN (POPRAWIONY) */
         function parseMarkdown(text) {
             if (!text) return "";
             let parsed = text
@@ -1147,17 +1545,21 @@
                     }
                 }
             }
-            if (inList) { lines[lines.length - 1] += '</ul>'; }
-            return lines.join('');
+            let result = lines.join('');
+            if (inList) { result += '</ul>'; }
+            return result;
         }
 
-        /* ASYSTENT GEMINI Z WYKŁADNICZYM COFANIEM (EXPONENTIAL BACKOFF) */
         async function callGemini(prompt) {
-            const apiKey = ""; 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const apiKey = localStorage.getItem('gemini_api_key') || "";
+            if (!apiKey) {
+                throw new Error("Brak klucza API Gemini! Otwórz Panel Narzędziowy i wklej swój klucz przed wysłaniem pytania.");
+            }
+            
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
             const payload = { 
                 contents: [{ parts: [{ text: prompt }] }], 
-                systemInstruction: { parts: [{ text: "Jesteś polskim przewodnikiem po Krecie. Doradzaj merytorycznie, klimatycznie i konkretnie. Formatuj za pomocą przejrzystego Markdown bez nadmiarowych nagłówków najwyższego stopnia." }] } 
+                systemInstruction: { parts: [{ text: "Jesteś polskim przewodnikiem po Krecie. Doradzaj merytorycznie, klimatycznie i konkretnie. Formatuj za pomocą przejrzystego Markdown bez nadmiarowych nagłówków najwyższego stopnia. Stosuj akapity i jasne listy wypunktowane." }] } 
             };
             
             const delays = [1000, 2000, 4000, 8000, 16000];
@@ -1171,16 +1573,22 @@
                     if (r.ok) { 
                         const res = await r.json(); 
                         return res.candidates?.[0]?.content?.parts?.[0]?.text || "Brak odpowiedzi."; 
+                    } else {
+                        if (r.status === 400 || r.status === 403) {
+                            throw new Error("Wklejony klucz API Gemini jest nieprawidłowy lub zablokowany. Sprawdź poprawność klucza.");
+                        }
+                        if (r.status !== 429 && r.status < 500) {
+                            throw new Error(`API zwróciło status błędu: ${r.status}`);
+                        }
                     }
                 } catch (e) {
-                    // Ciche przechwycenie błędu - brak logowania do konsoli zgodnie z wymogami
+                    if (i === 4 || e.message.includes("klucz API")) throw e;
                 }
                 await new Promise(res => setTimeout(res, delays[i]));
             }
-            throw new Error("Wszystkie próby połączenia z asystentem AI zawiodły. Sprawdź swoje połączenie sieciowe lub spróbuj ponownie później.");
+            throw new Error("Wszystkie próby połączenia z asystentem AI zawiodły. Sprawdź połączenie z internetem.");
         }
 
-        /* FUNKCJE MODALA (DODANE DO SKRYPTU) */
         function showLoadingInModal(message) {
             const modal = document.getElementById('ai-modal');
             const content = document.getElementById('ai-modal-content');
@@ -1197,12 +1605,13 @@
             const modal = document.getElementById('ai-modal');
             const content = document.getElementById('ai-modal-content');
             content.innerHTML = `
-                <div class="flex flex-col items-center justify-center py-12 gap-4 text-center">
+                <div class="flex flex-col items-center justify-center py-12 gap-4 text-center p-4">
                     <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600">
                         <i class="fa-solid fa-triangle-exclamation text-xl"></i>
                     </div>
-                    <h4 class="font-serif font-bold text-red-900">Błąd połączenia</h4>
+                    <h4 class="font-serif font-bold text-red-900">Problem z połączeniem</h4>
                     <p class="text-xs text-neutral-600 max-w-sm">${message}</p>
+                    <button onclick="toggleToolsPanel(); closeAiModal();" class="mt-2 bg-aegean-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Wklej Klucz API</button>
                 </div>
             `;
             modal.classList.remove('hidden');
@@ -1212,12 +1621,27 @@
             document.getElementById('ai-modal').classList.add('hidden');
         }
 
-        /* AKTYWACJA ASYSTENTA AI */
         async function triggerTavernsAi() {
             const data = tripData[activeDayId]; if (!data) return; 
+            const cacheKey = `cache_taverns_day_${activeDayId}`;
+            const cachedResponse = localStorage.getItem(cacheKey);
+
+            if (cachedResponse) {
+                document.getElementById('ai-modal-content').innerHTML = `
+                    <h4 class="font-serif font-bold text-lg text-aegean-900 border-b border-sand-200 pb-2 flex items-center justify-between gap-2">
+                        <span><i class="fa-solid fa-utensils text-terracotta-500"></i> Kulinarne Sekrety Regionu</span>
+                        <span class="text-[9px] bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded font-sans uppercase font-bold">Zapisane w pamięci</span>
+                    </h4>
+                    <div class="mt-4 leading-relaxed">${parseMarkdown(cachedResponse)}</div>`;
+                document.getElementById('ai-modal').classList.remove('hidden');
+                return;
+            }
+
             showLoadingInModal("✨ Gemini szuka najlepszych greckich tawern...");
             try { 
-                const answer = await callGemini(`Zaproponuj 3 świetne lokalne tawerny z pysznym, autentycznym jedzeniem, blisko trasy: ${data.title}. Uwzględnij specyfikę tego regionu.`); 
+                const answer = await callGemini(`Zaproponuj 3 świetne lokalne tawerny z pysznym, autentycznym jedzeniem, blisko trasy: ${data.title}. Uwzględnij specyfikę tego regionu, tradycyjne dania kreteńskie (np. dakos, kleftiko, kalitsounia) oraz orientacyjne ceny.`); 
+                localStorage.setItem(cacheKey, answer);
+                
                 document.getElementById('ai-modal-content').innerHTML = `
                     <h4 class="font-serif font-bold text-lg text-aegean-900 border-b border-sand-200 pb-2 flex items-center gap-2">
                         <i class="fa-solid fa-utensils text-terracotta-500"></i> Kulinarne Sekrety Regionu
@@ -1230,9 +1654,25 @@
 
         async function triggerLegendAi() {
             const data = tripData[activeDayId]; if (!data) return; 
+            const cacheKey = `cache_legends_day_${activeDayId}`;
+            const cachedResponse = localStorage.getItem(cacheKey);
+
+            if (cachedResponse) {
+                document.getElementById('ai-modal-content').innerHTML = `
+                    <h4 class="font-serif font-bold text-lg text-aegean-900 border-b border-sand-200 pb-2 flex items-center justify-between gap-2">
+                        <span><i class="fa-solid fa-scroll text-terracotta-500"></i> Mity, Legendy i Opowieści</span>
+                        <span class="text-[9px] bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded font-sans uppercase font-bold">Zapisane w pamięci</span>
+                    </h4>
+                    <div class="mt-4 leading-relaxed">${parseMarkdown(cachedResponse)}</div>`;
+                document.getElementById('ai-modal').classList.remove('hidden');
+                return;
+            }
+
             showLoadingInModal("✨ Gemini wertuje księgi historii...");
             try { 
                 const answer = await callGemini(`Opowiedz intrygującą anegdotę historyczną, mit, legendę lub ciekawostkę kulturową związaną bezpośrednio z miejscami z planu podróży: ${data.title}`); 
+                localStorage.setItem(cacheKey, answer);
+
                 document.getElementById('ai-modal-content').innerHTML = `
                     <h4 class="font-serif font-bold text-lg text-aegean-900 border-b border-sand-200 pb-2 flex items-center gap-2">
                         <i class="fa-solid fa-scroll text-terracotta-500"></i> Mity, Legendy i Opowieści
