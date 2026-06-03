@@ -60,6 +60,30 @@
         .leaflet-popup-tip {
             background-color: #FAF7F2;
         }
+        
+        /* Custom styled scrollbars for sidebar days list container */
+        #sidebar-days-container::-webkit-scrollbar {
+            width: 5px;
+        }
+        #sidebar-days-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        #sidebar-days-container::-webkit-scrollbar-thumb {
+            background: #E6D7BD;
+            border-radius: 9999px;
+        }
+        #sidebar-days-container::-webkit-scrollbar-thumb:hover {
+            background: #0B4F83;
+        }
+        
+        /* Day card hover scaling */
+        .day-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .day-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(11, 79, 131, 0.08);
+        }
     </style>
 </head>
 <body class="bg-sand-50 text-neutral-800 font-sans min-h-screen flex flex-col relative">
@@ -97,7 +121,7 @@
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:overflow-hidden">
         
         <!-- Lista Dni -->
-        <section class="lg:col-span-4 flex flex-col gap-4 h-[350px] lg:h-[calc(100vh-160px)] overflow-y-auto pr-2">
+        <section id="sidebar-days-container" class="lg:col-span-4 flex flex-col gap-4 h-[350px] lg:h-[calc(100vh-160px)] overflow-y-auto pr-2">
             <h2 class="font-serif text-xl font-bold text-aegean-500 px-2 flex items-center gap-2">
                 <i class="fa-solid fa-route text-terracotta-500"></i> Plan Dnia i Wybór Trasy
             </h2>
@@ -108,9 +132,12 @@
         <section class="lg:col-span-8 flex flex-col h-[650px] lg:h-[calc(100vh-160px)] bg-white rounded-2xl shadow-sm border border-sand-200 overflow-hidden relative">
             
             <div class="bg-sand-100 p-4 md:p-5 border-b border-sand-200 shrink-0 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                    <span id="active-day-date" class="text-xs font-mono text-terracotta-500 font-bold tracking-wider uppercase">Zanim wsiądziesz do samolotu</span>
-                    <h3 id="active-day-title" class="font-serif text-lg md:text-xl font-bold text-aegean-900 mt-0.5">Pakowanie i Przygotowania</h3>
+                <div class="flex items-center gap-3 min-w-0">
+                    <div>
+                        <span id="active-day-date" class="text-xs font-mono text-terracotta-500 font-bold tracking-wider uppercase">Zanim wsiądziesz do samolotu</span>
+                        <h3 id="active-day-title" class="font-serif text-lg md:text-xl font-bold text-aegean-900 mt-0.5 truncate">Pakowanie i Przygotowania</h3>
+                    </div>
+                    <div id="weather-widget" class="hidden flex items-center gap-1 bg-white border border-sand-300 rounded-lg px-2 py-0.5 text-xs text-aegean-900 shadow-sm font-semibold shrink-0"></div>
                 </div>
                 <div class="flex gap-2 w-full sm:w-auto">
                     <button onclick="toggleToolsPanel()" class="bg-aegean-500 hover:bg-aegean-900 text-white text-xs font-bold px-3.5 py-2.5 rounded-lg flex items-center gap-2 shadow-sm transition-colors shrink-0">
@@ -472,7 +499,7 @@
     </main>
 
     <!-- Panel boczny: NARZĘDZIA -->
-    <div id="tools-panel" class="fixed inset-y-0 right-0 w-80 bg-white shadow-2xl z-[99999] border-l border-sand-200 transform translate-x-full transition-transform duration-300 ease-in-out p-5 flex flex-col gap-5 overflow-y-auto">
+    <div id="tools-panel" class="fixed inset-y-0 right-0 w-80 bg-white/90 backdrop-blur-md shadow-2xl z-[99999] border-l border-sand-200 transform translate-x-full transition-transform duration-300 ease-in-out p-5 flex flex-col gap-5 overflow-y-auto">
         <div class="flex justify-between items-center border-b border-sand-200 pb-3 shrink-0">
             <h3 class="font-serif font-bold text-lg text-aegean-900"><i class="fa-solid fa-screwdriver-wrench text-terracotta-500 mr-1.5"></i> Panel Narzędziowy</h3>
             <button onclick="toggleToolsPanel()" class="text-neutral-400 hover:text-neutral-800 w-8 h-8 rounded-full flex items-center justify-center hover:bg-sand-100"><i class="fa-solid fa-xmark"></i></button>
@@ -482,9 +509,17 @@
         <div class="bg-aegean-50/60 p-4 rounded-xl border border-aegean-100">
             <h4 class="font-bold text-xs text-aegean-900 uppercase font-mono tracking-wider mb-2 flex items-center gap-1.5"><i class="fa-solid fa-key text-terracotta-500"></i> Klucz API Gemini</h4>
             <p class="text-[10px] text-neutral-600 mb-2 leading-normal">Wklej swój osobisty klucz API Gemini, aby odblokować rekomendacje restauracji i legendy na żywo na Krecie.</p>
-            <div class="flex gap-1.5">
+            <div class="flex gap-1.5 mb-2">
                 <input type="password" id="gemini-key-input" placeholder="Wklej klucz AIzaSy..." class="flex-1 bg-white text-xs border border-sand-300 rounded-lg p-2 focus:outline-none focus:border-aegean-500 shadow-inner">
                 <button onclick="saveGeminiKey()" class="bg-aegean-500 hover:bg-aegean-600 text-white text-xs font-bold px-3 rounded-lg transition-colors">Zapisz</button>
+            </div>
+            <div>
+                <label class="text-[10px] font-bold text-neutral-500 block mb-1">Model Gemini:</label>
+                <select id="gemini-model-select" onchange="saveGeminiModel()" class="w-full bg-white border border-sand-300 rounded-lg p-1.5 text-xs focus:outline-none focus:border-aegean-500 shadow-sm font-semibold">
+                    <option value="gemini-2.5-flash" selected>gemini-2.5-flash (zalecany)</option>
+                    <option value="gemini-2.0-flash">gemini-2.0-flash</option>
+                    <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+                </select>
             </div>
         </div>
 
@@ -525,9 +560,33 @@
                     <label class="text-[11px] font-bold text-neutral-500 block mb-1">Kwota z paragonu (€):</label>
                     <input type="number" id="bill-amount" oninput="calculateTip()" placeholder="0.00" class="w-full bg-white border border-sand-300 rounded-lg p-2 text-sm focus:outline-none focus:border-aegean-500 shadow-inner">
                 </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] font-bold text-neutral-500 block mb-1">Napiwek (%):</label>
+                        <select id="tip-percent" onchange="calculateTip()" class="w-full bg-white border border-sand-300 rounded-lg p-1.5 text-xs focus:outline-none focus:border-aegean-500 shadow-sm font-semibold">
+                            <option value="0">0%</option>
+                            <option value="0.05">5%</option>
+                            <option value="0.10" selected>10%</option>
+                            <option value="0.15">15%</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-neutral-500 block mb-1">Liczba osób:</label>
+                        <select id="split-people" onchange="calculateTip()" class="w-full bg-white border border-sand-300 rounded-lg p-1.5 text-xs focus:outline-none focus:border-aegean-500 shadow-sm font-semibold">
+                            <option value="1">1 os.</option>
+                            <option value="2" selected>2 os.</option>
+                            <option value="3">3 os.</option>
+                            <option value="4">4 os.</option>
+                            <option value="5">5 os.</option>
+                            <option value="6">6 os.</option>
+                            <option value="7">7 os.</option>
+                            <option value="8">8 os.</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="grid grid-cols-2 gap-2 text-xs border-t border-sand-200 pt-2.5">
                     <div>
-                        <span class="text-neutral-500 block text-[10px]">Napiwek (10%):</span>
+                        <span class="text-neutral-500 block text-[10px]">Napiwek:</span>
                         <span id="tip-val" class="font-mono font-bold text-emerald-600 text-sm">0.00 €</span>
                     </div>
                     <div>
@@ -536,7 +595,7 @@
                     </div>
                 </div>
                 <div class="bg-white p-2 rounded-lg border border-sand-200/60 text-center">
-                    <span class="text-neutral-400 block text-[10px]">Koszt na osobę (2 os.):</span>
+                    <span class="text-neutral-400 block text-[10px]">Koszt na osobę:</span>
                     <span id="per-person-val" class="font-mono font-bold text-terracotta-500 text-base">0.00 €</span>
                 </div>
             </div>
@@ -545,7 +604,7 @@
 
     <!-- Modal AI -->
     <div id="ai-modal" class="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-[999999] flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden border border-sand-200">
+        <div class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden border border-sand-200">
             <div class="bg-aegean-900 text-white px-6 py-4 flex justify-between items-center shrink-0 border-b-2 border-terracotta-500">
                 <div class="flex items-center gap-3">
                     <div class="w-8 h-8 rounded-full bg-terracotta-500 flex items-center justify-center text-sm shadow"><i class="fa-solid fa-sparkles text-white"></i></div>
@@ -558,7 +617,7 @@
             </div>
             <div class="flex-grow overflow-y-auto p-6 bg-sand-50" id="ai-modal-content"></div>
             <div class="bg-sand-100 px-6 py-4 border-t border-sand-200 flex justify-between items-center shrink-0">
-                <p class="text-[10px] text-neutral-500 font-medium">Model: gemini-2.5-flash</p>
+                <p class="text-[10px] text-neutral-500 font-medium" id="ai-modal-footer-model">Model: gemini-2.5-flash</p>
                 <button onclick="closeAiModal()" class="bg-aegean-500 hover:bg-aegean-900 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition-colors shadow">Zamknij wskazówki</button>
             </div>
         </div>
@@ -1129,28 +1188,163 @@
 
         function calculateTip() {
             const amount = parseFloat(document.getElementById('bill-amount').value);
+            const tipPercent = parseFloat(document.getElementById('tip-percent').value);
+            const people = parseInt(document.getElementById('split-people').value);
+            
             if (!amount || amount <= 0) {
                 document.getElementById('tip-val').innerText = "0.00 €";
                 document.getElementById('total-val').innerText = "0.00 €";
                 document.getElementById('per-person-val').innerText = "0.00 €";
                 return;
             }
-            const tip = amount * 0.10;
+            const tip = amount * tipPercent;
             const total = amount + tip;
+            const perPerson = total / people;
+            
             document.getElementById('tip-val').innerText = `${tip.toFixed(2)} €`;
             document.getElementById('total-val').innerText = `${total.toFixed(2)} €`;
-            document.getElementById('per-person-val').innerText = `${(total / 2).toFixed(2)} €`;
+            document.getElementById('per-person-val').innerText = `${perPerson.toFixed(2)} €`;
         }
 
         function toggleToolsPanel() { document.getElementById('tools-panel').classList.toggle('translate-x-full'); }
 
         function changeView(viewName) {
             const m = document.getElementById('view-map'), d = document.getElementById('view-details'), c = document.getElementById('view-curiosities'), p = document.getElementById('view-prep');
-            m.classList.add('hidden'); d.classList.add('hidden'); c.classList.add('hidden'); p.classList.add('hidden');
-            if (viewName === 'map') { m.classList.remove('hidden'); if (map) setTimeout(() => map.invalidateSize(), 150); } 
-            else if (viewName === 'details') d.classList.remove('hidden');
-            else if (viewName === 'curiosities') c.classList.remove('hidden');
-            else if (viewName === 'prep') p.classList.remove('hidden');
+            const views = [m, d, c, p];
+            views.forEach(v => {
+                v.classList.add('hidden');
+                v.style.opacity = '0';
+                v.style.transition = 'opacity 0.2s ease-in-out';
+            });
+            
+            let target;
+            if (viewName === 'map') { target = m; if (map) setTimeout(() => map.invalidateSize(), 150); } 
+            else if (viewName === 'details') target = d;
+            else if (viewName === 'curiosities') target = c;
+            else if (viewName === 'prep') target = p;
+            
+            if (target) {
+                target.classList.remove('hidden');
+                setTimeout(() => { target.style.opacity = '1'; }, 10);
+            }
+        }
+
+        function saveGeminiModel() {
+            const modelVal = document.getElementById('gemini-model-select').value;
+            localStorage.setItem('gemini_model', modelVal);
+            showNotification(`Wybrano model ${modelVal}`, "success");
+        }
+
+        function speakGreek(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Stop any currently playing speech
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'el-GR';
+                utterance.rate = 0.85;
+
+                // Try to find a Greek voice
+                const voices = window.speechSynthesis.getVoices();
+                const greekVoice = voices.find(v => v.lang.includes('el') || v.lang.includes('GR'));
+                if (greekVoice) {
+                    utterance.voice = greekVoice;
+                }
+
+                window.speechSynthesis.speak(utterance);
+            } else {
+                showNotification("Twoja przeglądarka nie obsługuje syntezy mowy.", "warning");
+            }
+        }
+
+        // Support async voice loading for speech synthesis
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {};
+        }
+
+        async function updateWeather(dayData) {
+            const widget = document.getElementById('weather-widget');
+            widget.classList.add('hidden');
+            widget.innerHTML = "";
+
+            if (!dayData || !dayData.points || dayData.points.length === 0) {
+                return;
+            }
+
+            const firstPt = dayData.points.find(p => p.coords && p.coords.length === 2);
+            if (!firstPt) return;
+
+            const [lat, lng] = firstPt.coords;
+            try {
+                const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true`);
+                if (!response.ok) return;
+                const result = await response.json();
+                const current = result.current_weather;
+                if (!current) return;
+
+                const temp = Math.round(current.temperature);
+                const code = current.weathercode;
+                
+                let iconClass = "fa-sun text-amber-500 animate-pulse";
+                let desc = "Słonecznie";
+                
+                if (code === 0) { iconClass = "fa-sun text-amber-500 animate-pulse"; desc = "Czyste niebo"; }
+                else if (code >= 1 && code <= 3) { iconClass = "fa-cloud-sun text-neutral-500"; desc = "Zachmurzenie"; }
+                else if (code >= 45 && code <= 48) { iconClass = "fa-smog text-neutral-400"; desc = "Mgła"; }
+                else if (code >= 51 && code <= 67) { iconClass = "fa-cloud-showers-heavy text-blue-400"; desc = "Opady deszczu"; }
+                else if (code >= 71 && code <= 77) { iconClass = "fa-snowflake text-blue-300"; desc = "Śnieg"; }
+                else if (code >= 80 && code <= 82) { iconClass = "fa-cloud-showers-water text-blue-500"; desc = "Przelotny deszcz"; }
+                else if (code >= 95) { iconClass = "fa-cloud-bolt text-red-500 animate-bounce"; desc = "Burza"; }
+
+                widget.innerHTML = `<i class="fa-solid ${iconClass} text-xs"></i> <span>${temp}°C</span> <span class="text-[9px] text-neutral-400 font-normal hidden md:inline">(${desc})</span>`;
+                widget.classList.remove('hidden');
+            } catch (e) {
+                console.error("Błąd pogodowy:", e);
+            }
+        }
+
+        function getDayChecklistItems(dayId) {
+            let items = [...checklistItems.standard];
+            if (dayId == 0 || dayId == 12) {
+                items = [...items, ...checklistItems.documents];
+            }
+            if (dayId == 2 || dayId == 3 || dayId == 11) {
+                items = [...items, ...checklistItems.beach];
+            }
+            if (dayId == 2 || dayId == 7) {
+                items.push({ id: "tickets", text: "Bilety na prom / łódź (kup online rano)." });
+            }
+            if (dayId == 9) {
+                items = [...items, ...checklistItems.trekking];
+            }
+            return items;
+        }
+
+        function updateDayBadges() {
+            // Update prep day progress first
+            updatePrepProgress();
+
+            // Update badges for travel days (0 to 12)
+            for (let dayId = 0; dayId <= 12; dayId++) {
+                const items = getDayChecklistItems(dayId);
+                let checkedCount = 0;
+                items.forEach(item => {
+                    const storageKey = `chk_day_${dayId}_${item.id}`;
+                    if (localStorage.getItem(storageKey) === "true") {
+                        checkedCount++;
+                    }
+                });
+
+                const badgeId = `day-badge-${dayId}`;
+                const badgeEl = document.getElementById(badgeId);
+                if (badgeEl) {
+                    if (checkedCount === items.length) {
+                        badgeEl.innerHTML = `<span class="bg-emerald-100 text-emerald-800 text-[9px] px-1.5 py-0.5 rounded font-bold flex items-center gap-0.5"><i class="fa-solid fa-circle-check"></i> OK</span>`;
+                    } else if (checkedCount > 0) {
+                        badgeEl.innerHTML = `<span class="bg-aegean-100 text-aegean-500 text-[9px] px-1.5 py-0.5 rounded font-bold">${checkedCount}/${items.length}</span>`;
+                    } else {
+                        badgeEl.innerHTML = "";
+                    }
+                }
+            }
         }
 
         function generateGoogleMapsLink(dayData) {
@@ -1173,6 +1367,21 @@
             map = L.map('map', { scrollWheelZoom: true, zoomControl: true }).setView([35.3, 24.8], 8);
             L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { attribution: '© CARTO' }).addTo(map);
             
+            // Legenda mapy
+            const legend = L.control({ position: 'bottomleft' });
+            legend.onAdd = function() {
+                const div = L.DomUtil.create('div', 'bg-white/95 backdrop-blur-sm p-2 rounded-lg border border-sand-200 shadow text-[9px] text-neutral-700 flex flex-col gap-1.5 z-[1000]');
+                div.innerHTML = `
+                    <div class="font-bold text-aegean-900 border-b border-sand-200 pb-0.5 uppercase tracking-wider text-[8px]">Trasy i Oznaczenia</div>
+                    <div class="flex items-center gap-1.5"><span class="w-3.5 h-0.5 bg-[#D96B43] inline-block"></span> Auto</div>
+                    <div class="flex items-center gap-1.5"><span class="w-3.5 h-0.5 border-t border-dashed border-[#10b981] inline-block"></span> Pieszo</div>
+                    <div class="flex items-center gap-1.5"><span class="w-3.5 h-0.5 border-t border-dashed border-[#0ea5e9] inline-block"></span> Prom/Łódź</div>
+                    <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-600 flex items-center justify-center text-white"><i class="fa-solid fa-car text-[7px]"></i></span> Caravel</div>
+                `;
+                return div;
+            };
+            legend.addTo(map);
+
             map.on('click', function(e) {
                 if (isPinningCar) {
                     localStorage.setItem('car_lat', e.latlng.lat);
@@ -1259,6 +1468,7 @@
             } else {
                 span.className = "text-xs text-neutral-700 font-medium";
             }
+            updateDayBadges();
         }
 
         function togglePrepItem(checkbox) {
@@ -1367,6 +1577,9 @@
             mapStatus.innerText = "Trwa wytyczanie trasy drogowej...";
             const currentRequestId = ++routeRequestId;
 
+            // Uruchomienie asynchronicznej pogody
+            updateWeather(data);
+
             // Przywrócenie normalnego linku nawigacji do trasy dnia
             const gmapsBtn = document.getElementById('active-day-gmaps');
             gmapsBtn.innerHTML = `<i class="fa-solid fa-map-location-dot"></i> Nawiguj trasę (Google Maps)`;
@@ -1420,7 +1633,7 @@
                 activeMarkers.push(carMarker);
             }
 
-            // Obsługa linii tras (z podziałem na auto, pieszo, statek)
+            // Obsługa linii tras (z podziałem na auto, pieszo, statek z cachingiem tras OSRM)
             if (data.routeSegments && data.routeSegments.length > 0) {
                 let activeFetchCount = 0;
                 for (const segment of data.routeSegments) {
@@ -1432,11 +1645,32 @@
                         activePolylines.push(L.polyline([segment.from, segment.to], { color: '#10b981', weight: 4, opacity: 0.8, dashArray: '2, 8' }).addTo(map));
                     } else if (segment.type === "car") {
                         activeFetchCount++;
+                        
+                        const cacheKey = `route_cache_${segment.from.join(',')}_${segment.to.join(',')}`;
+                        const cached = localStorage.getItem(cacheKey);
+                        if (cached) {
+                            try {
+                                const cachedRes = JSON.parse(cached);
+                                if (currentRequestId === routeRequestId) {
+                                    const coords = cachedRes.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+                                    activePolylines.push(L.polyline(coords, { color: '#D96B43', weight: 4, opacity: 0.8 }).addTo(map));
+                                }
+                                activeFetchCount--;
+                                if (activeFetchCount === 0 && currentRequestId === routeRequestId) {
+                                    mapStatus.innerText = "Trasa wczytana z pamięci podręcznej";
+                                }
+                                continue;
+                            } catch (e) {
+                                localStorage.removeItem(cacheKey);
+                            }
+                        }
+
                         fetch(`https://router.project-osrm.org/route/v1/driving/${segment.from[1]},${segment.from[0]};${segment.to[1]},${segment.to[0]}?overview=full&geometries=geojson`)
                             .then(r => currentRequestId === routeRequestId ? (r.ok ? r.json() : Promise.reject()) : null)
                             .then(res => {
                                 if (currentRequestId !== routeRequestId || !res) return;
                                 if (res.code === 'Ok' && res.routes?.[0]) {
+                                    localStorage.setItem(cacheKey, JSON.stringify(res));
                                     const coords = res.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
                                     activePolylines.push(L.polyline(coords, { color: '#D96B43', weight: 4, opacity: 0.8 }).addTo(map));
                                 }
@@ -1458,11 +1692,15 @@
             if(savedKey) {
                 document.getElementById('gemini-key-input').value = savedKey;
             }
+            const savedModel = localStorage.getItem('gemini_model');
+            if(savedModel) {
+                document.getElementById('gemini-model-select').value = savedModel;
+            }
 
             updateCarStatus(); 
             const listContainer = document.getElementById('days-list');
             
-            // Gwarantujemy posortowanie dni (szczególnie, by Dzień -1 był na samej górze)
+            // Grawantujemy posortowanie dni (szczególnie, by Dzień -1 był na samej górze)
             const sortedKeys = Object.keys(tripData).sort((a, b) => parseInt(a) - parseInt(b));
             
             sortedKeys.forEach(dayKey => {
@@ -1474,12 +1712,14 @@
                 let icon = "fa-car"; 
                 let labelText = `Dzień ${dayKey}`;
                 let distanceText = `🚗 ${data.distance} km`;
+                let badgePlaceholder = `<span id="day-badge-${dayKey}" class="ml-1.5 shrink-0"></span>`;
 
                 if (dayKey == -1) {
                     cardClass = "day-btn w-full text-left p-4 rounded-xl border transition-all duration-200 cursor-pointer bg-amber-50/70 border-amber-200 text-neutral-700 hover:border-amber-400 hover:bg-amber-100/50";
                     icon = "fa-suitcase";
                     labelText = "Przed wyjazdem";
                     distanceText = `<span id="prep-badge" class="text-[9px] bg-amber-600 text-white px-1.5 py-0.5 rounded-full font-sans font-bold">0%</span>`;
+                    badgePlaceholder = "";
                 } else if (dayKey == 0) {
                     icon = "fa-plane-arrival";
                 } else if (dayKey == 2 || dayKey == 7) {
@@ -1493,7 +1733,7 @@
                 }
                 
                 card.className = cardClass;
-                card.innerHTML = `<div class="flex items-start gap-3"><div class="p-2.5 rounded-lg ${dayKey == -1 ? 'bg-amber-100 text-amber-700' : 'bg-sand-100 text-aegean-500'} shrink-0"><i class="fa-solid ${icon} text-sm"></i></div><div class="flex-1 min-w-0"><div class="flex justify-between items-baseline mb-0.5"><span class="text-[10px] font-bold uppercase text-neutral-400 font-mono">${labelText}</span><span class="text-[10px] text-neutral-500">${distanceText}</span></div><h3 class="font-serif text-sm font-bold truncate pr-2">${data.title.replace(`Dzień ${dayKey}: `, "")}</h3><p class="text-xs text-neutral-500 font-mono mt-0.5">${data.date}</p></div></div>`;
+                card.innerHTML = `<div class="flex items-start gap-3"><div class="p-2.5 rounded-lg ${dayKey == -1 ? 'bg-amber-100 text-amber-700' : 'bg-sand-100 text-aegean-500'} shrink-0"><i class="fa-solid ${icon} text-sm"></i></div><div class="flex-1 min-w-0"><div class="flex justify-between items-baseline mb-0.5"><span class="text-[10px] font-bold uppercase text-neutral-400 font-mono">${labelText}</span><div class="flex items-center gap-1"><span class="text-[10px] text-neutral-500">${distanceText}</span>${badgePlaceholder}</div></div><h3 class="font-serif text-sm font-bold truncate pr-2">${data.title.replace(`Dzień ${dayKey}: `, "")}</h3><p class="text-xs text-neutral-500 font-mono mt-0.5">${data.date}</p></div></div>`;
                 card.addEventListener('click', () => selectDay(dayKey)); 
                 listContainer.appendChild(card);
             });
@@ -1556,7 +1796,8 @@
                 throw new Error("Brak klucza API Gemini! Otwórz Panel Narzędziowy i wklej swój klucz przed wysłaniem pytania.");
             }
             
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            const model = localStorage.getItem('gemini_model') || "gemini-2.5-flash";
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
             const payload = { 
                 contents: [{ parts: [{ text: prompt }] }], 
                 systemInstruction: { parts: [{ text: "Jesteś polskim przewodnikiem po Krecie. Doradzaj merytorycznie, klimatycznie i konkretnie. Formatuj za pomocą przejrzystego Markdown bez nadmiarowych nagłówków najwyższego stopnia. Stosuj akapity i jasne listy wypunktowane." }] } 
@@ -1623,6 +1864,10 @@
 
         async function triggerTavernsAi() {
             const data = tripData[activeDayId]; if (!data) return; 
+            
+            const currentModel = localStorage.getItem('gemini_model') || "gemini-2.5-flash";
+            document.getElementById('ai-modal-footer-model').innerText = `Model: ${currentModel}`;
+
             const cacheKey = `cache_taverns_day_${activeDayId}`;
             const cachedResponse = localStorage.getItem(cacheKey);
 
@@ -1654,6 +1899,10 @@
 
         async function triggerLegendAi() {
             const data = tripData[activeDayId]; if (!data) return; 
+            
+            const currentModel = localStorage.getItem('gemini_model') || "gemini-2.5-flash";
+            document.getElementById('ai-modal-footer-model').innerText = `Model: ${currentModel}`;
+
             const cacheKey = `cache_legends_day_${activeDayId}`;
             const cachedResponse = localStorage.getItem(cacheKey);
 
@@ -1686,6 +1935,10 @@
         async function triggerChatAi() {
             const input = document.getElementById('ai-query-input'); 
             const query = input.value.trim(); if (!query) return;
+            
+            const currentModel = localStorage.getItem('gemini_model') || "gemini-2.5-flash";
+            document.getElementById('ai-modal-footer-model').innerText = `Model: ${currentModel}`;
+
             showLoadingInModal("✨ Gemini generuje odpowiedź..."); 
             input.value = "";
             try { 
