@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kreta-guide-v3';
+const CACHE_NAME = 'kreta-guide-v4';
 const ASSETS = [
   'index.html',
   'manifest.json',

@@ -140,7 +140,7 @@
         }
 
         /* Dolny panel (iOS Bottom Sheet) dla telefonów i tabletów w pionie */
-        @media (max-w: 1023px) {
+        @media (max-width: 1023px) {
             #view-details {
                 position: absolute !important;
                 left: 0 !important;
@@ -148,6 +148,7 @@
                 bottom: 0 !important;
                 top: 0 !important;
                 z-index: 2000 !important;
+                padding: 0 !important;
                 background-color: rgba(250, 247, 242, 0.96) !important;
                 backdrop-filter: blur(20px) !important;
                 -webkit-backdrop-filter: blur(20px) !important;
@@ -167,7 +168,19 @@
             #view-details > .flex-1 {
                 overflow-y: auto !important;
                 -webkit-overflow-scrolling: touch !important;
-                padding-bottom: calc(2rem + env(safe-area-inset-bottom)) !important;
+                padding-left: 1.25rem !important;
+                padding-right: 1.25rem !important;
+                padding-top: 0.25rem !important;
+                padding-bottom: calc(1rem + env(safe-area-inset-bottom)) !important;
+            }
+
+            /* Pływający dolny pasek przycisków w dolnym panelu na mobile */
+            #view-details > div.mt-4 {
+                margin-top: 0 !important;
+                padding: 0.75rem 1.25rem !important;
+                padding-bottom: calc(0.75rem + env(safe-area-inset-bottom)) !important;
+                background-color: rgba(250, 247, 242, 0.98) !important;
+                border-top: 1px solid #E6D7BD !important;
             }
         }
     </style>
@@ -292,7 +305,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-3 shrink-0">
+                    <div class="mt-3 shrink-0 hidden lg:block">
                         <button onclick="changeView('details')" class="w-full bg-aegean-500 hover:bg-aegean-900 text-white font-bold text-sm md:text-base py-3.5 px-6 rounded-xl flex items-center justify-center gap-3 shadow transition-all transform hover:-translate-y-0.5">
                             <i class="fa-solid fa-file-invoice"></i> Pokaż szczegóły i harmonogram dnia
                         </button>
@@ -302,11 +315,11 @@
                 <!-- Widok 2: HARMONOGRAM I NOTATKI -->
                 <div id="view-details" class="absolute inset-0 flex flex-col p-5 hidden">
                     <!-- iOS Drag Handle for Bottom Sheet (Tylko na telefonie) -->
-                    <div class="lg:hidden flex flex-col items-center pb-3 cursor-pointer select-none shrink-0" onclick="toggleBottomSheet()">
-                        <div class="w-10 h-1.5 bg-sand-300 rounded-full"></div>
-                        <div class="flex items-center gap-2 mt-1 text-[10px] uppercase tracking-wider font-bold text-neutral-400">
+                    <div class="lg:hidden flex flex-col items-center pt-3 pb-2 cursor-pointer select-none shrink-0" onclick="toggleBottomSheet()">
+                        <div class="w-10 h-1 bg-sand-300 rounded-full"></div>
+                        <div class="flex items-center gap-2 mt-1 text-[9px] uppercase tracking-wider font-bold text-neutral-400">
                             <span>Szczegóły Dnia</span>
-                            <i id="bottom-sheet-chevron" class="fa-solid fa-chevron-up transition-transform duration-300 text-[8px]"></i>
+                            <i id="bottom-sheet-chevron" class="fa-solid fa-chevron-up transition-transform duration-300 text-[7px]"></i>
                         </div>
                     </div>
                     <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 overflow-hidden min-h-0">
