@@ -12,6 +12,14 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
+    <!-- PWA & iOS Mobile configurations -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0B4F83">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kreta 2026">
+    <link rel="apple-touch-icon" href="app_icon.png">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -215,15 +223,19 @@
                                 <p id="fuel-advice" class="text-[11px] text-neutral-600 leading-normal mt-1 border-t border-emerald-100 pt-1.5 font-medium"></p>
                             </div>
 
-                            <!-- Interaktywna Checklista Kontekstowa -->
-                            <div class="bg-aegean-50/70 p-4 rounded-xl border border-aegean-200/50 flex flex-col gap-2">
-                                <p class="font-bold text-aegean-900 uppercase tracking-widest text-[10px] flex items-center gap-1.5 shrink-0">
-                                    <i class="fa-solid fa-clipboard-check text-terracotta-500"></i> Niezbędnik na dziś
-                                </p>
-                                <div id="checklist-container" class="space-y-2 mt-1">
-                                    <!-- Generowane dynamicznie przez JS -->
-                                </div>
-                            </div>
+                             <div class="bg-aegean-50/70 p-4 rounded-xl border border-aegean-200/50 flex flex-col gap-2.5">
+                                 <p class="font-bold text-aegean-900 uppercase tracking-widest text-[10px] flex items-center gap-1.5 shrink-0">
+                                     <i class="fa-solid fa-clipboard-check text-terracotta-500"></i> Niezbędnik na dziś
+                                 </p>
+                                 <div id="checklist-container" class="space-y-2 mt-0.5">
+                                     <!-- Generowane dynamicznie przez JS -->
+                                 </div>
+                                 <!-- Custom todo inputs -->
+                                 <div class="flex gap-1.5 border-t border-aegean-200/40 pt-2">
+                                     <input type="text" id="new-todo-input" placeholder="Dodaj własne zadanie..." class="flex-1 bg-white text-xs border border-sand-300 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-aegean-500 shadow-inner">
+                                     <button onclick="addCustomTodo()" class="bg-aegean-500 hover:bg-aegean-600 text-white font-bold text-xs px-2.5 rounded-lg flex items-center justify-center transition-colors"><i class="fa-solid fa-plus"></i></button>
+                                 </div>
+                             </div>                       
                         </div>
                     </div>
                     
@@ -505,6 +517,18 @@
             <button onclick="toggleToolsPanel()" class="text-neutral-400 hover:text-neutral-800 w-8 h-8 rounded-full flex items-center justify-center hover:bg-sand-100"><i class="fa-solid fa-xmark"></i></button>
         </div>
 
+        <!-- Instrukcja instalacji PWA na iOS -->
+        <div class="bg-aegean-50/60 p-4 rounded-xl border border-aegean-100 flex flex-col gap-2">
+            <h4 class="font-bold text-xs text-aegean-900 uppercase font-mono tracking-wider flex items-center gap-1.5"><i class="fa-solid fa-mobile-screen-button text-terracotta-500 animate-pulse"></i> Uruchom jako Aplikację</h4>
+            <p class="text-[10px] text-neutral-600 leading-normal font-medium">Aby przewodnik działał na pełnym ekranie i 100% offline na Twoim iPhone:</p>
+            <ol class="text-[10px] text-neutral-700 list-decimal pl-4.5 space-y-1 font-semibold">
+                <li>Otwórz tę stronę w przeglądarce <strong>Safari</strong>.</li>
+                <li>Kliknij przycisk <strong>Udostępnij <i class="fa-solid fa-share-from-square text-aegean-500 mx-0.5"></i></strong> na dolnym pasku.</li>
+                <li>Wybierz opcję <strong>"Dodaj do ekranu pocz." <i class="fa-solid fa-square-plus text-aegean-500 mx-0.5"></i></strong>.</li>
+                <li>Uruchom przewodnik bezpośrednio z pulpitu!</li>
+            </ol>
+        </div>
+
         <!-- Ustawienie Klucza API Gemini -->
         <div class="bg-aegean-50/60 p-4 rounded-xl border border-aegean-100">
             <h4 class="font-bold text-xs text-aegean-900 uppercase font-mono tracking-wider mb-2 flex items-center gap-1.5"><i class="fa-solid fa-key text-terracotta-500"></i> Klucz API Gemini</h4>
@@ -556,9 +580,15 @@
         <div class="bg-sand-50 p-4 rounded-xl border border-sand-200">
             <h4 class="font-bold text-xs text-aegean-900 uppercase font-mono tracking-wider mb-2 flex items-center gap-1.5"><i class="fa-solid fa-calculator text-aegean-500"></i> Kalkulator w Tawernie</h4>
             <div class="space-y-3">
-                <div>
-                    <label class="text-[11px] font-bold text-neutral-500 block mb-1">Kwota z paragonu (€):</label>
-                    <input type="number" id="bill-amount" oninput="calculateTip()" placeholder="0.00" class="w-full bg-white border border-sand-300 rounded-lg p-2 text-sm focus:outline-none focus:border-aegean-500 shadow-inner">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[10px] font-bold text-neutral-500 block mb-1">Kwota (€):</label>
+                        <input type="number" id="bill-amount" oninput="calculateTip()" placeholder="0.00" class="w-full bg-white border border-sand-300 rounded-lg p-2 text-xs focus:outline-none focus:border-aegean-500 shadow-inner">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-neutral-500 block mb-1">Nazwa wydatku:</label>
+                        <input type="text" id="expense-name" placeholder="np. Kolacja" class="w-full bg-white border border-sand-300 rounded-lg p-2 text-xs focus:outline-none focus:border-aegean-500 shadow-inner">
+                    </div>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
@@ -597,6 +627,25 @@
                 <div class="bg-white p-2 rounded-lg border border-sand-200/60 text-center">
                     <span class="text-neutral-400 block text-[10px]">Koszt na osobę:</span>
                     <span id="per-person-val" class="font-mono font-bold text-terracotta-500 text-base">0.00 €</span>
+                </div>
+                <!-- Dziennik wydatków -->
+                <div class="border-t border-sand-200 pt-2.5">
+                    <button onclick="saveExpense()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-2 shadow-sm transition-colors mb-3">
+                        <i class="fa-solid fa-folder-plus"></i> Zapisz wydatek
+                    </button>
+                    <div id="expense-log-section" class="hidden">
+                        <h5 class="font-bold text-[10px] text-aegean-900 uppercase font-mono tracking-wider mb-2 flex justify-between items-center">
+                            <span><i class="fa-solid fa-clock-rotate-left"></i> Zapisane wydatki</span>
+                            <button onclick="clearAllExpenses()" class="text-red-500 hover:text-red-700 text-[9px] lowercase font-normal">Wyczyść</button>
+                        </h5>
+                        <div id="expense-list" class="max-h-36 overflow-y-auto space-y-1.5 mb-2 pr-1 text-[10px] text-neutral-600 scrollbar-thin animate-fade">
+                            <!-- Zapisane wydatki -->
+                        </div>
+                        <div class="bg-sand-100 p-2 rounded-lg border border-sand-200 text-center flex justify-between items-center text-[11px] font-bold text-aegean-900">
+                            <span>Suma wydatków:</span>
+                            <span id="expense-total-sum" class="font-mono text-xs">0.00 €</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1324,11 +1373,28 @@
 
             // Update badges for travel days (0 to 12)
             for (let dayId = 0; dayId <= 12; dayId++) {
-                const items = getDayChecklistItems(dayId);
+                const standardItems = getDayChecklistItems(dayId);
+                
+                // Get custom items
+                const customKey = `custom_chk_day_${dayId}`;
+                let customItems = [];
+                try {
+                    customItems = JSON.parse(localStorage.getItem(customKey)) || [];
+                } catch (e) {}
+
+                const totalItemsCount = standardItems.length + customItems.length;
+                if (totalItemsCount === 0) continue;
+
                 let checkedCount = 0;
-                items.forEach(item => {
+                standardItems.forEach(item => {
                     const storageKey = `chk_day_${dayId}_${item.id}`;
                     if (localStorage.getItem(storageKey) === "true") {
+                        checkedCount++;
+                    }
+                });
+
+                customItems.forEach(item => {
+                    if (item.checked) {
                         checkedCount++;
                     }
                 });
@@ -1336,14 +1402,177 @@
                 const badgeId = `day-badge-${dayId}`;
                 const badgeEl = document.getElementById(badgeId);
                 if (badgeEl) {
-                    if (checkedCount === items.length) {
+                    if (checkedCount === totalItemsCount) {
                         badgeEl.innerHTML = `<span class="bg-emerald-100 text-emerald-800 text-[9px] px-1.5 py-0.5 rounded font-bold flex items-center gap-0.5"><i class="fa-solid fa-circle-check"></i> OK</span>`;
                     } else if (checkedCount > 0) {
-                        badgeEl.innerHTML = `<span class="bg-aegean-100 text-aegean-500 text-[9px] px-1.5 py-0.5 rounded font-bold">${checkedCount}/${items.length}</span>`;
+                        badgeEl.innerHTML = `<span class="bg-aegean-100 text-aegean-500 text-[9px] px-1.5 py-0.5 rounded font-bold">${checkedCount}/${totalItemsCount}</span>`;
                     } else {
                         badgeEl.innerHTML = "";
                     }
                 }
+            }
+        }
+
+        // Custom Checklist management
+        function addCustomTodo() {
+            const input = document.getElementById('new-todo-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const customKey = `custom_chk_day_${activeDayId}`;
+            let customItems = [];
+            try {
+                customItems = JSON.parse(localStorage.getItem(customKey)) || [];
+            } catch (e) {
+                customItems = [];
+            }
+
+            customItems.push({ text: text, checked: false });
+            localStorage.setItem(customKey, JSON.stringify(customItems));
+            
+            input.value = "";
+            renderChecklist(activeDayId);
+            updateDayBadges();
+        }
+
+        function toggleCustomTodo(dayId, idx, checkbox) {
+            const customKey = `custom_chk_day_${dayId}`;
+            let customItems = [];
+            try {
+                customItems = JSON.parse(localStorage.getItem(customKey)) || [];
+            } catch (e) {}
+
+            if (customItems[idx]) {
+                customItems[idx].checked = checkbox.checked;
+                localStorage.setItem(customKey, JSON.stringify(customItems));
+            }
+
+            const span = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                span.className = "text-xs line-through text-neutral-400 font-normal break-all";
+            } else {
+                span.className = "text-xs text-neutral-700 font-medium break-all";
+            }
+            updateDayBadges();
+        }
+
+        function deleteCustomTodo(dayId, idx) {
+            const customKey = `custom_chk_day_${dayId}`;
+            let customItems = [];
+            try {
+                customItems = JSON.parse(localStorage.getItem(customKey)) || [];
+            } catch (e) {}
+
+            customItems.splice(idx, 1);
+            localStorage.setItem(customKey, JSON.stringify(customItems));
+            renderChecklist(dayId);
+            updateDayBadges();
+        }
+
+        // Trip Expense Tracker management
+        function renderExpenses() {
+            const listEl = document.getElementById('expense-list');
+            const totalEl = document.getElementById('expense-total-sum');
+            const logSection = document.getElementById('expense-log-section');
+            if (!listEl || !totalEl || !logSection) return;
+
+            let expenses = [];
+            try {
+                expenses = JSON.parse(localStorage.getItem('trip_expenses')) || [];
+            } catch (e) {
+                expenses = [];
+            }
+
+            if (expenses.length === 0) {
+                logSection.classList.add('hidden');
+                return;
+            }
+
+            logSection.classList.remove('hidden');
+            let html = "";
+            let sum = 0;
+
+            expenses.forEach((exp, idx) => {
+                sum += exp.total;
+                html += `
+                    <div class="flex justify-between items-center p-1.5 rounded bg-white border border-sand-200/50">
+                        <div class="min-w-0 pr-1">
+                            <span class="font-bold text-neutral-800 text-[10px] block truncate">${exp.name || 'Wydatek bez nazwy'}</span>
+                            <span class="text-[8px] text-neutral-400 font-mono">${exp.date} &bull; ${exp.people} os.</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <span class="font-mono font-bold text-neutral-800 text-[10px]">${exp.total.toFixed(2)} €</span>
+                            <button onclick="deleteExpense(${idx})" class="text-neutral-300 hover:text-red-500 text-[9px] transition-colors"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            listEl.innerHTML = html;
+            totalEl.innerText = `${sum.toFixed(2)} €`;
+        }
+
+        function saveExpense() {
+            const amountInput = document.getElementById('bill-amount');
+            const nameInput = document.getElementById('expense-name');
+            const amount = parseFloat(amountInput.value);
+            const name = nameInput.value.trim();
+
+            if (!amount || amount <= 0) {
+                showNotification("Wpisz kwotę paragonu przed zapisaniem wydatku!", "warning");
+                return;
+            }
+
+            const tipPercent = parseFloat(document.getElementById('tip-percent').value);
+            const people = parseInt(document.getElementById('split-people').value);
+            
+            const tip = amount * tipPercent;
+            const total = amount + tip;
+            
+            let expenses = [];
+            try {
+                expenses = JSON.parse(localStorage.getItem('trip_expenses')) || [];
+            } catch (e) {
+                expenses = [];
+            }
+
+            const dateStr = tripData[activeDayId] ? (tripData[activeDayId].date.split(',')[1]?.trim() || "Dzień " + activeDayId) : "Baza";
+
+            expenses.push({
+                name: name || `Rachunek (${dateStr})`,
+                amount: amount,
+                tip: tip,
+                total: total,
+                people: people,
+                date: dateStr
+            });
+
+            localStorage.setItem('trip_expenses', JSON.stringify(expenses));
+            
+            amountInput.value = "";
+            nameInput.value = "";
+            calculateTip();
+            
+            renderExpenses();
+            showNotification("Wydatek został zapisany w dzienniku!", "success");
+        }
+
+        function deleteExpense(idx) {
+            let expenses = [];
+            try {
+                expenses = JSON.parse(localStorage.getItem('trip_expenses')) || [];
+            } catch (e) {}
+
+            expenses.splice(idx, 1);
+            localStorage.setItem('trip_expenses', JSON.stringify(expenses));
+            renderExpenses();
+        }
+
+        function clearAllExpenses() {
+            if (confirm("Czy na pewno chcesz usunąć całą historię wydatków?")) {
+                localStorage.removeItem('trip_expenses');
+                renderExpenses();
+                showNotification("Historia wydatków wyczyszczona.", "info");
             }
         }
 
@@ -1403,17 +1632,31 @@
             let html = `<div class="space-y-4 relative before:absolute before:inset-y-0 before:left-3.5 before:w-0.5 before:bg-sand-200 pl-2">`;
             data.schedule.forEach((item) => {
                 let stepNumber = "";
+                let navLinkHtml = "";
+                
                 if (item.name_ref && data.points) {
                     const ptIndex = data.points.findIndex(p => p.name === item.name_ref);
-                    if (ptIndex !== -1) stepNumber = ptIndex + 1;
+                    if (ptIndex !== -1) {
+                        stepNumber = ptIndex + 1;
+                        const pt = data.points[ptIndex];
+                        if (pt.coords && pt.coords.length === 2) {
+                            navLinkHtml = `
+                                <a href="https://www.google.com/maps/search/?api=1&query=${pt.coords[0]},${pt.coords[1]}" target="_blank" class="text-[9px] bg-terracotta-500/10 hover:bg-terracotta-500 hover:text-white text-terracotta-500 px-1.5 py-0.5 rounded font-sans transition-colors font-bold flex items-center gap-1 ml-auto shrink-0" title="Nawiguj do tego miejsca w Google Maps">
+                                    <i class="fa-solid fa-location-arrow"></i> Jedź
+                                </a>
+                            `;
+                        }
+                    }
                 }
+                
                 html += `
                     <div class="flex items-start gap-4 relative">
                         ${stepNumber ? `<div class="w-7 h-7 rounded-full bg-aegean-500 text-white text-xs font-bold flex items-center justify-center shrink-0 z-10 border-2 border-white shadow-sm">${stepNumber}</div>` : `<div class="w-7 h-7 rounded-full bg-sand-200 text-neutral-500 text-[10px] font-bold flex items-center justify-center shrink-0 z-10 border-2 border-white"><i class="fa-solid fa-circle text-[6px]"></i></div>`}
                         <div class="flex-1 min-w-0 bg-sand-50/50 p-2.5 rounded-lg border border-sand-100/50">
-                            <div class="flex items-center gap-2 mb-0.5">
+                            <div class="flex items-center gap-2 mb-0.5 font-semibold">
                                 <span class="font-mono text-xs font-bold text-terracotta-500 bg-sand-100 px-1.5 py-0.5 rounded shrink-0">${item.time}</span>
-                                ${item.name_ref ? `<span class="text-[10px] font-bold text-aegean-900 truncate uppercase tracking-wider">${item.name_ref}</span>` : ""}
+                                ${item.name_ref ? `<span class="text-[10px] font-bold text-aegean-900 truncate uppercase tracking-wider min-w-0 pr-1">${item.name_ref}</span>` : ""}
+                                ${navLinkHtml}
                             </div>
                             <p class="text-xs md:text-sm text-neutral-700 leading-relaxed">${item.text}</p>
                         </div>
@@ -1427,34 +1670,50 @@
         function renderChecklist(dayId) {
             const container = document.getElementById('checklist-container');
             if (!container) return;
-            let items = [...checklistItems.standard];
-
-            if (dayId == 0 || dayId == 12) {
-                items = [...items, ...checklistItems.documents];
-            }
-            if (dayId == 2 || dayId == 3 || dayId == 11) {
-                items = [...items, ...checklistItems.beach];
-            }
-            if (dayId == 2 || dayId == 7) {
-                items.push({ id: "tickets", text: "Bilety na prom / łódź (kup online rano)." });
-            }
-            if (dayId == 9) {
-                items = [...items, ...checklistItems.trekking];
-            }
+            let items = getDayChecklistItems(dayId);
 
             let html = "";
+            
+            // Render standard pre-configured items
             items.forEach(item => {
                 const storageKey = `chk_day_${dayId}_${item.id}`;
                 const isChecked = localStorage.getItem(storageKey) === "true" ? "checked" : "";
-                const textStyle = isChecked ? "line-through text-neutral-400" : "text-neutral-700 font-medium";
+                const textStyle = isChecked ? "line-through text-neutral-400 font-normal" : "text-neutral-700 font-medium";
 
                 html += `
-                    <label class="flex items-start gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
-                        <input type="checkbox" ${isChecked} onchange="toggleChecklistItem(${dayId}, '${item.id}', this)" class="mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
-                        <span class="text-xs ${textStyle}">${item.text}</span>
+                    <label class="flex items-start justify-between gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm cursor-pointer hover:bg-sand-50/50 transition-colors">
+                        <div class="flex items-start gap-2.5 min-w-0">
+                            <input type="checkbox" ${isChecked} onchange="toggleChecklistItem(${dayId}, '${item.id}', this)" class="mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                            <span class="text-xs ${textStyle}">${item.text}</span>
+                        </div>
                     </label>
                 `;
             });
+
+            // Load and render custom user checklist items
+            const customKey = `custom_chk_day_${dayId}`;
+            let customItems = [];
+            try {
+                customItems = JSON.parse(localStorage.getItem(customKey)) || [];
+            } catch (e) {
+                customItems = [];
+            }
+
+            customItems.forEach((item, idx) => {
+                const isChecked = item.checked ? "checked" : "";
+                const textStyle = isChecked ? "line-through text-neutral-400 font-normal" : "text-neutral-700 font-medium";
+
+                html += `
+                    <div class="flex items-start justify-between gap-2.5 p-2 rounded-lg bg-white border border-sand-200/60 shadow-sm hover:bg-sand-50/50 transition-colors">
+                        <label class="flex items-start gap-2.5 min-w-0 cursor-pointer flex-1">
+                            <input type="checkbox" ${isChecked} onchange="toggleCustomTodo(${dayId}, ${idx}, this)" class="mt-0.5 rounded border-sand-300 text-aegean-500 focus:ring-aegean-500 h-4 w-4 shrink-0">
+                            <span class="text-xs ${textStyle} break-all">${item.text}</span>
+                        </label>
+                        <button onclick="deleteCustomTodo(${dayId}, ${idx})" class="text-neutral-300 hover:text-red-500 transition-colors px-1 text-xs shrink-0"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                `;
+            });
+
             container.innerHTML = html;
         }
 
@@ -1688,6 +1947,15 @@
         }
 
         window.onload = function() {
+            // Rejestracja Service Workera dla wsparcia PWA offline
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('sw.js')
+                        .then(reg => console.log('Service Worker registered successfully!', reg.scope))
+                        .catch(err => console.log('Service Worker registration failed:', err));
+                });
+            }
+
             const savedKey = localStorage.getItem('gemini_api_key');
             if(savedKey) {
                 document.getElementById('gemini-key-input').value = savedKey;
@@ -1740,6 +2008,8 @@
             
             initMap();
             loadPrepChecklist();
+            renderExpenses();
+            updateDayBadges();
             setTimeout(() => { if (map) map.invalidateSize(); }, 500);
         };
 
