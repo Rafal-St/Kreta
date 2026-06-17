@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kreta 2026 - Interaktywny Przewodnik</title>
+    <title>Kreta 2026 - Interaktywny Przewodnik wersja 1.5.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -844,7 +844,7 @@
             ]
         };
 
-        // BAZA WYJAZDU KRETA 2026 (ZAKŁADA RÓWNIEŻ KROK PRZYGOTOWAWCZY -1)
+// BAZA WYJAZDU KRETA 2026 - Zsynchronizowana z rezerwacjami lotów i hoteli
         const tripData = {
             "-1": {
                 title: "Przygotowania i Pakowanie",
@@ -868,325 +868,289 @@
             0: {
                 title: "Dzień 0: Przylot i Logistyka",
                 date: "Niedziela, 14.06.2026",
-                distance: 18,
+                distance: 15,
                 schedule: [
-                    { time: "18:40", text: "Wylot z lotniska w Krakowie (Wizz Air/Ryanair)" },
-                    { time: "22:00", text: "Lądowanie na lotnisku w Chanii (CHQ)" },
-                    { name_ref: "Lotnisko CHQ", time: "23:00", text: "Odbiór samochodu z parkingu Caravel (kieruj się 150m w lewo od terminala)" },
-                    { name_ref: "Miejscowość Aroni", time: "23:15", text: "Przejazd widokową drogą Akrotiriou przez Aroni i Pithari" },
-                    { name_ref: "Oasis Hotel Oasis", time: "23:30", text: "Przyjazd i zakwaterowanie w Oasis Hotel Oasis (Eleftherias 122, Chania 733 00, Grecja)" }
+                    { time: "18:40", text: "Wylot z lotniska w Krakowie (Ryanair FR3051)" },
+                    { time: "22:15", text: "Lądowanie na lotnisku w Chanii (CHQ)" },
+                    { name_ref: "Lotnisko CHQ", time: "23:00", text: "Odbiór samochodu z parkingu Caravela Car Rental (brak kaucji, ubezpieczenie FCDW)" },
+                    { name_ref: "Oasis Guesthouse", time: "23:30", text: "Przyjazd i zakwaterowanie w Oasis Guesthouse (Perivolia, Chania)" }
                 ],
-                notes: "Zasada paliwowa Same-to-Same. Nie otrzymujecie dowodu rejestracyjnego auta, lecz kontrakt najmu od Caravel. Płatność reszty gotówką.",
+                notes: "W Caraveli nie potrzebujesz karty kredytowej do blokady. Zrób wideo telefonem wokół auta przy latarkach, by zapisać stan początkowy.",
                 curiosities: [
-                    "Półwysep Akrotiri był tłem dla słynnego filmu 'Grek Zorba' (1964) – taniec Sirtaki był kręcony m.in. na plaży Stavros.",
-                    "Lotnisko w Chanii nosi imię 'Daskalogiannisa' – kreteńskiego bohatera narodowego, który przewodził powstaniu w 1770 roku."
+                    "Lotnisko w Chanii nosi imię Daskalogiannisa – kreteńskiego bohatera narodowego, który przewodził antytureckiemu powstaniu w XVIII wieku.",
+                    "Perivolia, gdzie śpicie, to spokojne przedmieście Chanii, słynące z ogrodów warzywnych i gajów oliwnych."
                 ],
                 points: [
-                    { name: "Lotnisko CHQ", coords: [35.5317, 24.1403], icon: "fa-plane", color: "#0B4F83", desc: "Odbiór pojazdu z budki Caravel" },
-                    { name: "Miejscowość Aroni", coords: [35.5181, 24.1025], icon: "fa-location-dot", color: "#6b7280", desc: "Trasa przejazdowa na półwyspie" },
-                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-bed", color: "#D96B43", desc: "Adres: Eleftherias 122, Chania 733 00." },
-                    { name: "Supermarket INKA (Zaopatrzenie)", coords: [35.4850, 24.0180], icon: "fa-shopping-cart", color: "#4b5563", desc: "Duży lokalny market z parkingiem blisko hotelu Oasis. Idealny na zapasy wody." }
+                    { name: "Lotnisko CHQ", coords: [35.5317, 24.1403], icon: "fa-plane", color: "#0B4F83", desc: "Odbiór Caraveli ze strefy przylotów" },
+                    { name: "Oasis Guesthouse", coords: [35.4831, 24.0153], icon: "fa-bed", color: "#D96B43", desc: "Pierwsza baza noclegowa (14-18.06)" }
                 ],
                 routeSegments: [
-                    { from: [35.5317, 24.1403], to: [35.5181, 24.1025], type: "car" },
-                    { from: [35.5181, 24.1025], to: [35.4831, 24.0153], type: "car" }
+                    { from: [35.5317, 24.1403], to: [35.4831, 24.0153], type: "car" }
                 ]
             },
             1: {
-                title: "Dzień 1: Serce Chanii (Aklimatyzacja)",
+                title: "Dzień 1: Wenecka Chania i Plaża Nea Chora",
                 date: "Poniedziałek, 15.06.2026",
                 distance: 12,
                 schedule: [
-                    { name_ref: "Oasis Hotel Oasis", time: "09:00", text: "Śniadanie i pyszna poranna kawa w ogrodzie Oasis Hotel Oasis" },
-                    { name_ref: "Parking Talos (Chania)", time: "10:30", text: "Dojazd i zostawienie Caraveli na Parkingu Talos tuż przy weneckich murach obronnych" },
-                    { name_ref: "Miejska Agora (Hala Targowa)", time: "11:00", text: "Piesza wycieczka: Zakupy lokalnych przysmaków w Miejskiej Agorze" },
-                    { name_ref: "Port Wenecki / Promenada", time: "12:30", text: "Spacer urokliwym deptakiem pod historyczną wenecką latarnię morską" },
-                    { name_ref: "Plaża Nea Chora", time: "15:30", text: "Popołudniowa kąpiel i wypoczynek na piaszczystej plaży Nea Chora" },
-                    { time: "19:30", text: "Klimatyczna kolacja nad wodą, a następnie powrót pieszo na parking i powrót autem do hotelu" }
+                    { name_ref: "Oasis Guesthouse", time: "09:00", text: "Śniadanie w hotelu i planowanie dnia przy basenie." },
+                    { name_ref: "Parking Talos (Chania)", time: "10:30", text: "Dojazd na bezpłatny parking Talos tuż przy murach obronnych starówki." },
+                    { name_ref: "Port Wenecki", time: "11:00", text: "Spacer po Starym Porcie, podejście pod latarnię morską i meczet Janczarów." },
+                    { name_ref: "Plaża Nea Chora", time: "15:00", text: "Popołudniowy relaks i kąpiel na piaszczystej plaży miejskiej." },
+                    { time: "19:30", text: "Kolacja w jednej z bocznych, ukrytych uliczek dzielnicy Splantzia i powrót do hotelu." }
                 ],
-                notes: "Starówka jest zamknięta dla ruchu. Parking Talos to Wasz najlepszy i bezpieczny punkt przesiadkowy.",
+                notes: "Starówka Chanii jest całkowicie wyłączona z ruchu kołowego. Parking Talos to najlepsze i najbezpieczniejsze miejsce na zostawienie auta.",
                 curiosities: [
-                    "Miejska Agora w Chanii ma kształt krzyża na wzór francuskich hal targowych w Marsylii.",
-                    "Wenecka latarnia morska w porcie to jedna z najstarszych tego typu konstrukcji na świecie."
+                    "Wenecka latarnia morska w Chanii jest jedną z najstarszych na świecie – w XIX wieku Egipcjanie przebudowali ją na kształt minaretu.",
+                    "Dzielnica Splantzia była dawniej turecką strefą miasta, stąd obok kościołów zobaczysz tam zachowane minarety."
                 ],
                 points: [
-                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Start trasy z hotelu" },
-                    { name: "Parking Talos (Chania)", coords: [35.5186, 24.0108], icon: "fa-square-p", color: "#2563eb", desc: "Najlepszy, bezpieczny parking przy murach starówki" },
-                    { name: "Miejska Agora (Hala Targowa)", coords: [35.5144, 24.0203], icon: "fa-basket-shopping", color: "#0B4F83", desc: "Piesze zakupy lokalnych przysmaków" },
-                    { name: "Port Wenecki / Promenada", coords: [35.5185, 24.0158], icon: "fa-monument", color: "#0B4F83", desc: "Spacer na molo i latarnię (pieszo)" },
-                    { name: "Plaża Nea Chora", coords: [35.5145, 24.0075], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Piaszczysty brzeg miejski (pieszo)" },
-                    { name: "Supermarket Lidl (Zaopatrzenie)", coords: [35.4985, 24.0392], icon: "fa-shopping-cart", color: "#4b5563", desc: "Duży Lidl na obrzeżach Chanii z darmowym, komfortowym parkingiem." }
+                    { name: "Oasis Guesthouse", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Start z hotelu" },
+                    { name: "Parking Talos (Chania)", coords: [35.5186, 24.0108], icon: "fa-square-p", color: "#2563eb", desc: "Darmowy parking przy murach" },
+                    { name: "Port Wenecki", coords: [35.5185, 24.0158], icon: "fa-monument", color: "#0B4F83", desc: "Historyczne serce Chanii" },
+                    { name: "Plaża Nea Chora", coords: [35.5145, 24.0075], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Miejska plaża z łagodnym zejściem" }
                 ],
                 routeSegments: [
                     { from: [35.4831, 24.0153], to: [35.5186, 24.0108], type: "car" },
-                    { from: [35.5186, 24.0108], to: [35.5144, 24.0203], type: "walk" },
-                    { from: [35.5144, 24.0203], to: [35.5185, 24.0158], type: "walk" },
+                    { from: [35.5186, 24.0108], to: [35.5185, 24.0158], type: "walk" },
                     { from: [35.5185, 24.0158], to: [35.5145, 24.0075], type: "walk" },
                     { from: [35.5145, 24.0075], to: [35.5186, 24.0108], type: "walk" },
                     { from: [35.5186, 24.0108], to: [35.4831, 24.0153], type: "car" }
                 ]
             },
             2: {
-                title: "Dzień 2: Laguna Balos i Gramvousa",
+                title: "Dzień 2: Rejs na Balos & Gramvousa",
                 date: "Wtorek, 16.06.2026",
-                distance: 95,
+                distance: 110,
                 schedule: [
-                    { name_ref: "Oasis Hotel Oasis", time: "07:30", text: "Wczesny start samochodem z bazy w Oasis Hotel Oasis" },
-                    { name_ref: "Port Kissamos", time: "08:30", text: "Dojazd do Portu Kissamos – zostawienie auta na dużym, darmowym parkingu portowym" },
-                    { name_ref: "Wyspa Gramvousa", time: "10:00", text: "Wejście na prom i rejs na Gramvousę – wspinaczka pod wenecką twierdzę (wymagający spacer pieszy)" },
-                    { name_ref: "Laguna Balos", time: "13:30", text: "Relaks, kąpiele i plażowanie w płytkich wodach laguny Balos" },
-                    { name_ref: "Vouves (Najstarsza Oliwna)", time: "18:00", text: "Powrót promem do portu i opcjonalny zjazd do Vouves pod 3000-letnie drzewo oliwne" },
-                    { time: "20:00", text: "Powrót do hotelu na pożywną, zasłużoną kolację" }
+                    { name_ref: "Oasis Guesthouse", time: "08:00", text: "Wyjazd ekspresowy na zachód w stronę Kissamos." },
+                    { name_ref: "Port Kissamos", time: "09:00", text: "Zaparkowanie auta w porcie (darmowy parking) i wejście na pokład promu." },
+                    { name_ref: "Twierdza Gramvousa", time: "11:30", text: "Dopłynięcie do Gramvousy, wspinaczka na wenecką twierdzę z genialnym widokiem." },
+                    { name_ref: "Laguna Balos", time: "13:30", text: "Kotwiczenie przy lagunie Balos. Czas na rajskie kąpiele w płytkiej, ciepłej wodzie." },
+                    { time: "17:45", text: "Powrót promem do portu Kissamos i powrót autem do bazy." }
                 ],
-                notes: "Zakaz jazdy terenowej autem Caravel! Rejs promem to jedyna bezpieczna droga na Balos. Zabierzcie buty trekkingowe.",
+                notes: "Ponieważ masz auto z Caraveli, zapytaj przy odbiorze, czy pozwalają jechać szutrem na Balos. Jeśli nie – rejs z Kissamos to najwygodniejsza i bezstresowa opcja.",
                 curiosities: [
-                    "Różowy odcień piasku na Balos i Elafonisi pochodzi z tysięcy rozkruszonych czerwonych muszelek otwornic.",
-                    "Wenecka twierdza na Gramvousie była w latach 1825–1828 bazą dla ponad 3000 kreteńskich rebeliantów."
+                    "Twierdza na Gramvousie była przez pewien czas oficjalną bazą piratów, którzy rabowali statki na Morzu Śródziemnym.",
+                    "Woda w lagunie Balos mieni się kilkunastoma odcieniami błękitu i turkusu z powodu różnej głębokości i unikalnego podłoża piaskowego."
                 ],
                 points: [
-                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Wyjazd rano" },
-                    { name: "Port Kissamos", coords: [35.5113, 23.6358], icon: "fa-square-p", color: "#2563eb", desc: "Bezpieczny, bezpłatny parking portowy przed wejściem na prom" },
-                    { name: "Wyspa Gramvousa", coords: [35.6105, 23.5825], icon: "fa-fort-awesome", color: "#ae5050", desc: "Kamienne wzgórze z ruinami zamku" },
-                    { name: "Laguna Balos", coords: [35.5815, 23.5910], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Kąpiel w rajskiej lagunie (rejs)" },
-                    { name: "Vouves (Najstarsza Oliwna)", coords: [35.4867, 23.7865], icon: "fa-tree", color: "#10b981", desc: "Monumentalny pomnik przyrody (dojazd autem)" }
+                    { name: "Oasis Guesthouse", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Start rano" },
+                    { name: "Port Kissamos", coords: [35.5113, 23.6358], icon: "fa-anchor", color: "#2563eb", desc: "Stąd odpływają promy pasażerskie" },
+                    { name: "Twierdza Gramvousa", coords: [35.6105, 23.5825], icon: "fa-fort-awesome", color: "#ae5050", desc: "Zamek na szczycie klifu" },
+                    { name: "Laguna Balos", coords: [35.5815, 23.5910], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Kąpielisko z różowym piaskiem" }
                 ],
                 routeSegments: [
                     { from: [35.4831, 24.0153], to: [35.5113, 23.6358], type: "car" },
                     { from: [35.5113, 23.6358], to: [35.6105, 23.5825], type: "boat" },
                     { from: [35.6105, 23.5825], to: [35.5815, 23.5910], type: "boat" },
                     { from: [35.5815, 23.5910], to: [35.5113, 23.6358], type: "boat" },
-                    { from: [35.5113, 23.6358], to: [35.4867, 23.7865], type: "car" },
-                    { from: [35.4867, 23.7865], to: [35.4831, 24.0153], type: "car" }
+                    { from: [35.5113, 23.6358], to: [35.4831, 24.0153], type: "car" }
                 ]
             },
             3: {
-                title: "Dzień 3: Różowe Piaski Elafonisi",
+                title: "Dzień 3: Różowa Plaża Elafonisi",
                 date: "Środa, 17.06.2026",
                 distance: 150,
                 schedule: [
-                    { name_ref: "Oasis Hotel Oasis", time: "07:00", text: "Poranny wyjazd z Perivolia w stronę malowniczego Wąwozu Topolia" },
-                    { name_ref: "Jaskinia Agia Sofia", time: "08:30", text: "Krótkie, strome podejście schodami i zwiedzanie Jaskini Agia Sofia ze stalaktytami" },
-                    { name_ref: "Elafonisi Parking", time: "10:00", text: "Dojazd na Elafonisi – zaparkowanie auta na wyznaczonym, piaszczystym parkingu" },
-                    { name_ref: "Plaża Elafonisi", time: "10:15", text: "Piesze przejście ścieżką przez wydmy na różową plażę oraz relaksujący spacer przez wodę na wysepkę" },
-                    { time: "16:00", text: "Powrót pieszo do auta i droga powrotna spektakularną, krętą trasą górską" }
+                    { name_ref: "Oasis Guesthouse", time: "07:35", text: "Wczesny start, aby ominąć autokary w górzystym Wąwozie Topolia." },
+                    { name_ref: "Jaskinia Agia Sofia", coords: [35.4011, 23.6828], time: "08:45", text: "Przystanek w górach. Wspinaczka schodami do potężnej groty z kapliczką." },
+                    { name_ref: "Plaża Elafonisi", time: "10:15", text: "Przyjazd na piaszczysty parking. Przejście przez płytką lagunę na dziką wysepkę." },
+                    { time: "16:00", text: "Powrót autem widokową trasą wzdłuż zachodniego wybrzeża przez Elos." }
                 ],
-                notes: "Elafonisi to rezerwat przyrody. Wynoszenie różowego piasku lub muszelek jest surowo zabronione przez strażników.",
+                notes: "Zabierz buty sportowe na podejście do jaskini. Na Elafonisi mocno wieje – zabezpiecz ręczniki i nakrycia głowy.",
                 curiosities: [
-                    "W kwietniu 1824 roku na wysepce doszło do tragicznej masakry – osmańskie wojska odnalazły i zgładziły kilkuset Kreteńczyków.",
-                    "W 1907 r. u wybrzeży zatonął austriacki statek pasażerski 'Imperatrix'."
+                    "W Jaskini Agia Sofia znaleziono ceramikę neolityczną sprzed kilku tysięcy lat.",
+                    "Elafonisi jest domem dla zagrożonych żółwi morskich Caretta caretta."
                 ],
                 points: [
-                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Start trasy górskiej" },
-                    { name: "Jaskinia Agia Sofia", coords: [35.4011, 23.6828], icon: "fa-mountain", color: "#6b7280", desc: "Grota skalna (krótki stromy spacer)" },
-                    { name: "Elafonisi Parking", coords: [35.2745, 23.5435], icon: "fa-square-p", color: "#2563eb", desc: "Ostatni możliwy punkt dla aut przed strefą ochrony przyrody" },
-                    { name: "Plaża Elafonisi", coords: [35.2725, 23.5425], icon: "fa-umbrella-beach", color: "#D96B43", desc: "Różowa plaża i wyspa (pieszo)" }
+                    { name: "Oasis Guesthouse", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Wyjazd z bazy zachodniej" },
+                    { name: "Jaskinia Agia Sofia", coords: [35.4011, 23.6828], icon: "fa-mountain", color: "#6b7280", desc: "Grota skalna w Wąwozie Topolia" },
+                    { name: "Plaża Elafonisi", coords: [35.2725, 23.5425], icon: "fa-umbrella-beach", color: "#D96B43", desc: "Egzotyczna plaża o różowym odcieniu" }
                 ],
                 routeSegments: [
                     { from: [35.4831, 24.0153], to: [35.4011, 23.6828], type: "car" },
-                    { from: [35.4011, 23.6828], to: [35.2745, 23.5435], type: "car" },
-                    { from: [35.2745, 23.5435], to: [35.2725, 23.5425], type: "walk" },
+                    { from: [35.4011, 23.6828], to: [35.2725, 23.5425], type: "car" },
                     { from: [35.2725, 23.5425], to: [35.4831, 24.0153], type: "car" }
                 ]
             },
             4: {
-                title: "Dzień 4: Chania: Relaks i ukryte perły",
+                title: "Dzień 4: Transfer na Wschód (Uroki Rethymno)",
                 date: "Czwartek, 18.06.2026",
-                distance: 20,
+                distance: 210,
                 schedule: [
-                    { name_ref: "Oasis Hotel Oasis", time: "09:00", text: "Spokojne rozpoczęcie dnia, śniadanie przy basenie" },
-                    { name_ref: "Muzeum Morskie / Firka", time: "10:00", text: "Zwiedzanie Muzeum Morskiego w zabytkowych koszarach" },
-                    { name_ref: "Plaża Agioi Apostoloi", time: "14:00", text: "Relaks i plażowanie w zatoczkach Agioi Apostoloi" },
-                    { name_ref: "Tabakaria (Garbarnie)", time: "19:30", text: "Kolacja w klimatycznych restauracjach nad falami w historycznej dzielnicy Tabakaria" }
+                    { name_ref: "Oasis Guesthouse", time: "09:00", text: "Spakowanie bagaży, check-out i ruszenie trasą narodową na wschód." },
+                    { name_ref: "Weneckie Rethymno", time: "10:30", text: "Przystanek w połowie drogi. Spacer po starówce i wejście na Fortezzę." },
+                    { name_ref: "Mirabella Apartments", time: "16:00", text: "Przyjazd do nowej bazy, zameldowanie i skok do basenu z widokiem na zatokę." }
                 ],
-                notes: "Dzień bez dalekiej jazdy. Korzystajcie z uroków basenu i bliskich, osłoniętych od wiatru plaż.",
+                notes: "To najdłuższy odcinek tranzytowy wyjazdu. Jedźcie spokojnie trasą EO90 – widoki na morze są zachwycające.",
                 curiosities: [
-                    "Dzielnica Tabakaria była idealnym miejscem dla garbarzy, ponieważ tamtejsza woda ma wyjątkowo wysokie naturalne zasolenie.",
-                    "Kreteńskie białe skórzane buty 'stivania' były niegdyś dumą i najważniejszym symbolem statusu każdego mężczyzny na wyspie."
+                    "Wenecka Fortezza w Rethymno została zbudowana na wzgórzu Paleokastro, gdzie w starożytności stała świątynia Artemidy.",
+                    "Zatoka Mirabello to największa zatoka na greckich wyspach i piąta co do wielkości na Morzu Śródziemnym."
                 ],
                 points: [
-                    { name: "Oasis Hotel Oasis", coords: [35.4831, 24.0153], icon: "fa-house", color: "#D96B43", desc: "Baza dnia" },
-                    { name: "Muzeum Morskie / Firka", coords: [35.5185, 24.0143], icon: "fa-building-columns", color: "#0B4F83", desc: "Twierdza u wejścia do portu" },
-                    { name: "Plaża Agioi Apostoloi", coords: [35.5100, 23.9805], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Bezpieczne piaszczyste zatoczki" },
-                    { name: "Tabakaria (Garbarnie)", coords: [35.5205, 24.0395], icon: "fa-utensils", color: "#D96B43", desc: "Restauracje nad brzegiem morza" }
+                    { name: "Oasis Guesthouse", coords: [35.4831, 24.0153], icon: "fa-arrow-right-from-bracket", color: "#6b7280", desc: "Check-out z bazy pierwszej" },
+                    { name: "Weneckie Rethymno", coords: [35.3725, 24.4715], icon: "fa-fort-awesome", color: "#0B4F83", desc: "Zwiedzanie zamku i obiad w porcie" },
+                    { name: "Mirabella Apartments", coords: [35.2154, 25.7188], icon: "fa-bed", color: "#D96B43", desc: "Druga baza noclegowa (18-24.06)" }
                 ],
                 routeSegments: [
-                    { from: [35.4831, 24.0153], to: [35.5185, 24.0143], type: "car" },
-                    { from: [35.5185, 24.0143], to: [35.5100, 23.9805], type: "car" },
-                    { from: [35.5100, 23.9805], to: [35.5205, 24.0395], type: "car" },
-                    { from: [35.5205, 24.0395], to: [35.4831, 24.0153], type: "car" }
+                    { from: [35.4831, 24.0153], to: [35.3725, 24.4715], type: "car" },
+                    { from: [35.3725, 24.4715], to: [35.2154, 25.7188], type: "car" }
                 ]
             },
             5: {
-                title: "Dzień 5: Przeprawa na Wschód",
+                title: "Dzień 5: Agios Nikolaos i Jezioro Voulismeni",
                 date: "Piątek, 19.06.2026",
-                distance: 200,
-                schedule: [
-                    { name_ref: "Oasis Hotel Oasis (Wyjazd)", time: "09:00", text: "Check-out z hotelu Oasis i start tranzytu na wschód" },
-                    { name_ref: "Parking Fortezza (Rethymno)", time: "10:30", text: "Postój w Rethymno: zaparkowanie auta na Parkingu Fortezza" },
-                    { name_ref: "Twierdza Fortezza", time: "10:45", text: "Piesza wspinaczka pod potężne mury twierdzy i obiad na kameralnej starówce" },
-                    { name_ref: "Mirabella Apartments (Baza 2)", time: "16:00", text: "Przyjazd, zakwaterowanie i zasłużony relaks z widokiem na zatokę Mirabello" }
-                ],
-                notes: "Najdłuższy przejazd wycieczki. Droga krajowa EO90 jest prosta, ale uważajcie na greckich kierowców wyprzedzających na trzeciego poboczem.",
-                curiosities: [
-                    "Fortezza w Rethymno to największa twierdza, jaką Wenecjanie zbudowali w swoim imperium kolonialnym.",
-                    "Rethymno słynie ze wspaniałych weneckich portali z kamienia dekorowanych sentencjami po łacinie."
-                ],
-                points: [
-                    { name: "Oasis Hotel Oasis (Wyjazd)", coords: [35.4831, 24.0153], icon: "fa-arrow-right-from-bracket", color: "#D96B43", desc: "Pożegnanie baza nr 1" },
-                    { name: "Parking Fortezza (Rethymno)", coords: [35.3728, 24.4705], icon: "fa-square-p", color: "#2563eb", desc: "Bezpieczny parking tuż pod murami obronnymi" },
-                    { name: "Twierdza Fortezza", coords: [35.3725, 24.4715], icon: "fa-fort-awesome", color: "#0B4F83", desc: "Wenecki zamek i starówka (pieszo)" },
-                    { name: "Mirabella Apartments (Baza 2)", coords: [35.2154, 25.7188], icon: "fa-bed", color: "#D96B43", desc: "Wasz nowy hotel z widokiem na zatokę Mirabello" },
-                    { name: "Supermarket Lidl (Rethymno - Zaopatrzenie)", coords: [35.3615, 24.4988], icon: "fa-shopping-cart", color: "#4b5563", desc: "Lidl z potężnym parkingiem przy drodze krajowej." }
-                ],
-                routeSegments: [
-                    { from: [35.4831, 24.0153], to: [35.3728, 24.4705], type: "car" },
-                    { from: [35.3728, 24.4705], to: [35.3725, 24.4715], type: "walk" },
-                    { from: [35.3728, 24.4705], to: [35.2154, 25.7188], type: "car" }
-                ]
-            },
-            6: {
-                title: "Dzień 6: Agios Nikolaos i Relaks nad Zatoką",
-                date: "Sobota, 20.06.2026",
                 distance: 15,
                 schedule: [
-                    { name_ref: "Mirabella Apartments (Baza)", time: "09:00", text: "Śniadanie na tarasie z widokiem na morze" },
-                    { name_ref: "Parking Ammos (Agios Nikolaos)", time: "11:00", text: "Dojazd do miasta i zostawienie Caraveli na darmowym Parkingu Ammos" },
-                    { name_ref: "Jezioro Voulismeni", time: "11:15", text: "Spacer pieszy: odkrywanie brzegów jeziora Voulismeni i wspinaczka pod punkt widokowy" },
-                    { name_ref: "Plaża Ammos", time: "14:00", text: "Krótkie przejście pieszo na plażowanie na miejskiej plaży Ammos" },
-                    { name_ref: "Plaża Havania", time: "16:30", text: "Powrót autem i popołudniowy relaks na plaży Havania tuż przy apartamencie" }
+                    { name_ref: "Mirabella Apartments", time: "10:00", text: "Krótki podjazd do centrum Agios Nikolaos. Zaparkowanie na darmowym parkingu Ammos." },
+                    { name_ref: "Jezioro Voulismeni", time: "10:30", text: "Kawa nad mitycznym jeziorem połączonym z portem, spacer na punkt widokowy." },
+                    { name_ref: "Plaża Havania", time: "15:00", text: "Powrót w okolice hotelu na popołudniowe leżakowanie." }
                 ],
-                notes: "Miasteczko ma kaskadowy układ schodów. Parking Ammos gwarantuje brak problemów ze znalezieniem wolnego miejsca.",
+                notes: "Agios Nikolaos ma świetny mikroklimat i jest znacznie spokojniejsze niż Heraklion. Idealny dzień na zwolnienie tempa.",
                 curiosities: [
-                    "Jezioro Voulismeni przez wieki uchodziło za bezdenne, dopóki brytyjska marynarka w XIX w. nie zmierzyła głębokości (aż 64 metry!).",
-                    "Według legend w tym małym jeziorze kąpała się bogini Atena."
+                    "Miejscowi wierzyli, że jezioro Voulismeni nie ma dna, ponieważ po wybuchu wulkanu na Santorini (odległym o 120 km) woda w jeziorze zaczęła bulgotać.",
+                    "W miasteczku kręcono kultowy brytyjski serial przygodowy 'Who Pays the Ferryman?' (1977)."
                 ],
                 points: [
-                    { name: "Mirabella Apartments (Baza)", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Start dnia" },
-                    { name: "Parking Ammos (Agios Nikolaos)", coords: [35.1872, 25.7178], icon: "fa-square-p", color: "#2563eb", desc: "Duży publiczny parking blisko portu i plaży Ammos" },
-                    { name: "Jezioro Voulismeni", coords: [35.1908, 25.7180], icon: "fa-water", color: "#0B4F83", desc: "Serce miasta (pieszo)" },
-                    { name: "Plaża Ammos", coords: [35.1878, 25.7185], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Piaszczysta plaża miejska (pieszo)" },
-                    { name: "Plaża Havania", coords: [35.2073, 25.7198], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Spokojny brzeg przy hotelu (samochód)" },
-                    { name: "Supermarket Lidl (Agios Nikolaos - Zaopatrzenie)", coords: [35.1965, 25.7022], icon: "fa-shopping-cart", color: "#4b5563", desc: "Wygodny, duży Lidl na wjeździe do miasta." }
+                    { name: "Mirabella Apartments", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Baza wschodnia" },
+                    { name: "Jezioro Voulismeni", coords: [35.1908, 25.7180], icon: "fa-water", color: "#0B4F83", desc: "Słodkowodne jezioro w środku miasta" },
+                    { name: "Plaża Havania", coords: [35.2073, 25.7198], icon: "fa-umbrella-beach", color: "#0B4F83", desc: "Zorganizowana, spokojna plaża blisko hotelu" }
                 ],
                 routeSegments: [
-                    { from: [35.2154, 25.7188], to: [35.1872, 25.7178], type: "car" },
-                    { from: [35.1872, 25.7178], to: [35.1908, 25.7180], type: "walk" },
-                    { from: [35.1908, 25.7180], to: [35.1878, 25.7185], type: "walk" },
-                    { from: [35.1878, 25.7185], to: [35.1872, 25.7178], type: "walk" },
-                    { from: [35.1872, 25.7178], to: [35.2073, 25.7198], type: "car" },
+                    { from: [35.2154, 25.7188], to: [35.1908, 25.7180], type: "car" },
+                    { from: [35.1908, 25.7180], to: [35.2073, 25.7198], type: "car" },
                     { from: [35.2073, 25.7198], to: [35.2154, 25.7188], type: "car" }
                 ]
             },
-            7: {
-                title: "Dzień 7: Elounda i Wyspa Spinalonga",
-                date: "Niedziela, 21.06.2026",
-                distance: 30,
+            6: {
+                title: "Dzień 6: Elounda i Mroczna Historia Spinalongi",
+                date: "Sobota, 20.06.2026",
+                distance: 32,
                 schedule: [
-                    { name_ref: "Mirabella Apartments (Baza)", time: "09:00", text: "Wyjazd z hotelu widokową trasą wzdłuż zatoki" },
-                    { name_ref: "Elounda Port", time: "09:30", text: "Krótki postój w luksusowej Eloundzie" },
-                    { name_ref: "Rybacka Wioska Plaka", time: "10:15", text: "Przejazd do wioski Plaka i wejście na łódź na Spinalongę" },
-                    { name_ref: "Wyspa Spinalonga", time: "10:30", text: "Eksploracja dawnego sanatorium dla trędowatych" }
+                    { name_ref: "Mirabella Apartments", time: "09:00", text: "Przejazd widokową drogą klifową na północ." },
+                    { name_ref: "Wioska Rybacka Plaka", time: "09:40", text: "Dojazd do Plaki, zostawienie auta przy plaży i wejście na tradycyjną łódź motorową." },
+                    { name_ref: "Wyspa Spinalonga", time: "10:00", text: "Eksploracja weneckiej twierdzy, która do 1957 roku była ostatnią kolonią trędowatych w Europie." },
+                    { time: "13:30", text: "Obiad w rybackiej tawernie w Place z widokiem na wyspę, a w drodze powrotnej kawa w porcie Elounda." }
                 ],
-                notes: "Łodzie z Plaki pływają bardzo często, rejs trwa zaledwie 10 minut. Na wyspie przydadzą się czapka i woda.",
+                notes: "Łodzie z Plaki kosztują ok. 10-12 EUR w obie strony i płyną zaledwie 10 minut (krócej i taniej niż z Agios Nikolaos czy Eloundy).",
                 curiosities: [
-                    "Spinalonga została przekopana przez Wenecjan w XVI w., aby odciąć ją od lądu i stworzyć bezpieczną twierdzę morską.",
-                    "Trędowaci na wyspie wybudowali elektrownię znacznie wcześniej, niż prąd pojawił się w okolicznych wioskach."
+                    "Trędowaci na Spinalondze stworzyli własne samowystarczalne państwo – mieli sklepy, teatr, a nawet kawiarnię.",
+                    "Historia wyspy stała się kanwą światowego bestsellera Victorii Hislop pt. 'Wyspa' (The Island)."
                 ],
                 points: [
-                    { name: "Mirabella Apartments (Baza)", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Wyjazd rano" },
-                    { name: "Elounda Port", coords: [35.2625, 25.7215], icon: "fa-anchor", color: "#0B4F83", desc: "Nadmorska promenada" },
-                    { name: "Rybacka Wioska Plaka", coords: [35.3000, 25.7275], icon: "fa-utensils", color: "#D96B43", desc: "Miejsce startu łodzi i obiad" },
-                    { name: "Wyspa Spinalonga", coords: [35.2975, 25.7285], icon: "fa-fort-awesome", color: "#ae5050", desc: "Wyspa-twierdza" }
+                    { name: "Mirabella Apartments", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Baza startowa" },
+                    { name: "Wioska Rybacka Plaka", coords: [35.3000, 25.7275], icon: "fa-anchor", color: "#2563eb", desc: "Najlepszy punkt wypadowy łodzi" },
+                    { name: "Wyspa Spinalonga", coords: [35.2975, 25.7285], icon: "fa-fort-awesome", color: "#ae5050", desc: "Dawne leprozorium i wenecki fort" }
                 ],
                 routeSegments: [
-                    { from: [35.2154, 25.7188], to: [35.2625, 25.7215], type: "car" },
-                    { from: [35.2625, 25.7215], to: [35.3000, 25.7275], type: "car" },
+                    { from: [35.2154, 25.7188], to: [35.3000, 25.7275], type: "car" },
                     { from: [35.3000, 25.7275], to: [35.2975, 25.7285], type: "boat" },
                     { from: [35.2975, 25.7285], to: [35.3000, 25.7275], type: "boat" },
                     { from: [35.3000, 25.7275], to: [35.2154, 25.7188], type: "car" }
                 ]
             },
+            7: {
+                title: "Dzień 7: Wolny Dzień / Egzotyczna Plaża Vai",
+                date: "Niedziela, 21.06.2026",
+                distance: 180,
+                schedule: [
+                    { name_ref: "Mirabella Apartments", time: "08:30", text: "Opcjonalna długa wycieczka na kraniec wschodni lub leniwy dzień w hotelu." },
+                    { name_ref: "Plaża Vai (Las Palmowy)", time: "10:30", text: "Odpoczynek na jedynej plaży w Europie otoczonej naturalnym gajem palm daktylowych." },
+                    { time: "17:00", text: "Powrót przez Sitia i kolacja na promenadzie w Agios Nikolaos." }
+                ],
+                notes: "Trasa jest długa, ale bardzo pusta i widokowa. Jeśli wolicie odpocząć przed Knossos – zostańcie przy hotelowym basenie.",
+                curiosities: [
+                    "Według legendy gaj palmowy w Vai wyrósł z pestek daktyli wyrzuconych przez fenickich piratów.",
+                    "W latach 70. Vai było dziką bazą hippisów, zanim ogłoszono je chronionym rezerwatem przyrody."
+                ],
+                points: [
+                    { name: "Mirabella Apartments", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Punkt startowy" },
+                    { name: "Plaża Vai (Las Palmowy)", coords: [35.2544, 26.2652], icon: "fa-umbrella-beach", color: "#10b981", desc: "Unikalna plaża palmowa" }
+                ],
+                routeSegments: [
+                    { from: [35.2154, 25.7188], to: [35.2544, 26.2652], type: "car" },
+                    { from: [35.2544, 26.2652], to: [35.2154, 25.7188], type: "car" }
+                ]
+            },
             8: {
-                title: "Dzień 8: Pałac Knossos i Heraklion",
+                title: "Dzień 8: Kolebka Cywilizacji (Knossos & Heraklion)",
                 date: "Poniedziałek, 22.06.2026",
                 distance: 140,
                 schedule: [
-                    { name_ref: "Mirabella Apartments (Baza)", time: "08:30", text: "Wyjazd trasą szybkiego ruchu na zachód" },
-                    { name_ref: "Pałac Knossos (Parking)", time: "10:00", text: "Dojazd i zostawienie auta na wyznaczonym darmowym parkingu Knossos" },
-                    { name_ref: "Pałac Knossos", time: "10:15", text: "Eksploracja ruin starożytnego Pałacu (Mityczny Labirynt) - pieszo" },
-                    { name_ref: "Parking Portowy Heraklion", time: "13:00", text: "Przejazd autem do centrum i zaparkowanie na strzeżonym Parkingu Portowym" },
-                    { name_ref: "Muzeum Archeologiczne", time: "13:30", text: "Niespieszny spacer do Muzeum Archeologicznego (pieszo)" },
-                    { name_ref: "Wenecka Twierdza Koules", time: "16:30", text: "Dalszy spacer molo portowym pod potężną twierdzę Koules (pieszo)" }
+                    { name_ref: "Mirabella Apartments", time: "08:30", text: "Wyjazd autostradą E75 na zachód w stronę stolicy." },
+                    { name_ref: "Pałac w Knossos", time: "10:00", text: "Zwiedzanie legendarnego labiryntu minojskiego (rezerwacja online obowiązkowa)." },
+                    { name_ref: "Muzeum Archeologiczne", time: "13:00", text: "Przejazd do centrum Heraklionu, lunch przy fontannie Morosini i zwiedzanie muzeum z oryginałami fresków." },
+                    { name_ref: "Forteca Koules", time: "16:30", text: "Spacer wzdłuż weneckiego falochronu pod zabytkową fortecę morską." },
+                    { time: "18:30", text: "Powrót trasą EO90 do hotelu w Agios Nikolaos." }
                 ],
-                notes: "Kupcie bilety online przed wyjazdem, co pozwoli ominąć gigantyczne kolejki stojące w pełnym słońcu.",
+                notes: "W Knossos nie ma cienia – weźcie czapki i wodę. Połączenie biletu z Muzeum w Heraklionie pozwala zaoszczędzić sporo euro.",
                 curiosities: [
-                    "Pałac w Knossos posiadał spłukiwane toalety oraz zaawansowaną sieć rur glinianych już 3500 lat temu.",
-                    "Skomplikowany układ korytarzy pałacu sprawił, że Grecy uznali go w swoich podaniach za Labirynt."
+                    "Pałac w Knossos posiadał zaawansowaną sieć kanalizacyjną i wielopiętrową architekturę już 1800 lat przed naszą erą.",
+                    "Rekonstrukcja pałacu wykonana przez sir Arthura Evansa do dziś budzi kontrowersje wśród archeologów z powodu użycia żelbetu."
                 ],
                 points: [
-                    { name: "Mirabella Apartments (Baza)", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Start trasy" },
-                    { name: "Pałac Knossos (Parking)", coords: [35.2985, 25.1625], icon: "fa-square-p", color: "#2563eb", desc: "Darmowy parking pod ruinami pałacu." },
-                    { name: "Pałac Knossos", coords: [35.2979, 25.1631], icon: "fa-landmark", color: "#ae5050", desc: "Historyczne ruiny pałacu (pieszo)" },
-                    { name: "Parking Portowy Heraklion", coords: [35.3435, 25.1385], icon: "fa-square-p", color: "#2563eb", desc: "Najwygodniejszy parking blisko wejścia do portu i starówki" },
-                    { name: "Muzeum Archeologiczne", coords: [35.3392, 25.1371], icon: "fa-building-columns", color: "#0B4F83", desc: "Słynne artefakty kultury minojskiej (pieszo)" },
-                    { name: "Wenecka Twierdza Koules", coords: [35.3440, 25.1367], icon: "fa-chess-rook", color: "#0B4F83", desc: "Fort obronny portu na końcu falochronu (pieszo)" },
-                    { name: "Supermarket Lidl (Heraklion - Zaopatrzenie)", coords: [35.3312, 25.1015], icon: "fa-shopping-cart", color: "#4b5563", desc: "Lidl na obrzeżach stolicy z darmowym i bezpiecznym parkingiem." }
+                    { name: "Mirabella Apartments", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Start trasy" },
+                    { name: "Pałac w Knossos", coords: [35.2979, 25.1631], icon: "fa-landmark", color: "#ae5050", desc: "Mityczny Labirynt Minotaura" },
+                    { name: "Muzeum Archeologiczne", coords: [35.3392, 25.1371], icon: "fa-building-columns", color: "#0B4F83", desc: "Najważniejsze muzeum sztuki minojskiej na świecie" },
+                    { name: "Forteca Koules", coords: [35.3440, 25.1367], icon: "fa-chess-rook", color: "#0B4F83", desc: "Wenecka twierdza portowa" }
                 ],
                 routeSegments: [
-                    { from: [35.2154, 25.7188], to: [35.2985, 25.1625], type: "car" },
-                    { from: [35.2985, 25.1625], to: [35.2979, 25.1631], type: "walk" },
-                    { from: [35.2985, 25.1625], to: [35.3435, 25.1385], type: "car" },
-                    { from: [35.3435, 25.1385], to: [35.3392, 25.1371], type: "walk" },
+                    { from: [35.2154, 25.7188], to: [35.2979, 25.1631], type: "car" },
+                    { from: [35.2979, 25.1631], to: [35.3392, 25.1371], type: "car" },
                     { from: [35.3392, 25.1371], to: [35.3440, 25.1367], type: "walk" },
-                    { from: [35.3440, 25.1367], to: [35.3435, 25.1385], type: "walk" },
-                    { from: [35.3435, 25.1385], to: [35.2154, 25.7188], type: "car" }
+                    { from: [35.3440, 25.1367], to: [35.2154, 25.7188], type: "car" }
                 ]
             },
             9: {
-                title: "Dzień 9: Wąwóz Richtis i Sitia",
+                title: "Dzień 9: Zielona Dżungla Richtis & Portowa Sitia",
                 date: "Wtorek, 23.06.2026",
-                distance: 150,
+                distance: 145,
                 schedule: [
-                    { name_ref: "Mirabella Apartments (Baza)", time: "08:30", text: "Wyjazd krajobrazową trasą EO90 na wschód wyspy" },
-                    { name_ref: "Wejście do Wąwozu Richtis", time: "10:00", text: "Trekking doliną Richtis od kamiennego mostu Lachanas pod wodospad" },
-                    { name_ref: "Urokliwa Sitia", time: "14:30", text: "Obiad w porcie w spokojnej Sitii i wizyta na zamku Kazarma" }
+                    { name_ref: "Mirabella Apartments", time: "08:30", text: "Trasa wzdłuż klifów północnego wybrzeża na wschód." },
+                    { name_ref: "Wąwóz Richtis (Most Lachanas)", time: "10:00", text: "Trekking niesamowicie zielonym, zacienionym wąwozem wzdłuż strumienia." },
+                    { name_ref: "Wodospad Richtis", time: "11:30", text: "Odpoczynek, zdjęcia i lodowata, orzeźwiająca kąpiel pod 20-metrowym wodospadem." },
+                    { name_ref: "Portowa Sitia", time: "14:30", text: "Przejazd na zasłużony obiad (owoce morza) do spokojnego, nieturystycznego miasteczka Sitia." }
                 ],
-                notes: "Buty sportowe lub trekkingowe z dobrą podeszwą to konieczność. Szlak bywa śliski i wilgotny ze względu na strumień.",
+                notes: "Buty sportowe lub trekkingowe z dobrym bieżnikiem to wymóg absolutny – szlak prowadzi po wilgotnych głazach. Spakujcie stroje kąpielowe do plecaka!",
                 curiosities: [
-                    "Most Lachanas w wąwozie był areną krwawych starć partyzanckich.",
-                    "Wąwóz Richtis ma całoroczną wodę, co sprawia, że roślinność przypomina gęstą, zieloną dżunglę."
+                    "Mikroklimat wąwozu Richtis sprawia, że woda płynie tam przez cały rok, co na suchej Krecie jest wielką rzadkością.",
+                    "Zabytkowy kamienny most Lachanas na starcie szlaku pamięta okres panowania osmańskiego na wyspie."
                 ],
                 points: [
-                    { name: "Mirabella Apartments (Baza)", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Start dojazdów" },
-                    { name: "Wejście do Wąwozu Richtis", coords: [35.1583, 25.9917], icon: "fa-person-hiking", color: "#10b981", desc: "Start pieszego szlaku" },
-                    { name: "Urokliwa Sitia", coords: [35.2075, 26.0995], icon: "fa-city", color: "#0B4F83", desc: "Spokojny port rybacki" }
+                    { name: "Mirabella Apartments", coords: [35.2154, 25.7188], icon: "fa-house", color: "#D96B43", desc: "Ostatni poranek ze startem z bazy nr 2" },
+                    { name: "Wąwóz Richtis (Most Lachanas)", coords: [35.1583, 25.9917], icon: "fa-person-hiking", color: "#10b981", desc: "Początek pieszego trekkingu dżunglą" },
+                    { name: "Wodospad Richtis", coords: [35.1685, 25.9930], icon: "fa-water", color: "#0ea5e9", desc: "Kąpielisko pod wodospadem (pieszo)" },
+                    { name: "Portowa Sitia", coords: [35.2075, 26.0995], icon: "fa-anchor", color: "#0B4F83", desc: "Urokliwa promenada rybacka na obiad" }
                 ],
                 routeSegments: [
                     { from: [35.2154, 25.7188], to: [35.1583, 25.9917], type: "car" },
+                    { from: [35.1583, 25.9917], to: [35.1685, 25.9930], type: "walk" },
+                    { from: [35.1685, 25.9930], to: [35.1583, 25.9917], type: "walk" },
                     { from: [35.1583, 25.9917], to: [35.2075, 26.0995], type: "car" },
                     { from: [35.2075, 26.0995], to: [35.2154, 25.7188], type: "car" }
                 ]
             },
             10: {
-                title: "Dzień 10: Droga na Południe (Antyczne Zagadki)",
+                title: "Dzień 10: Przejazd na Południe (Gortyna & Fajstos)",
                 date: "Środa, 24.06.2026",
-                distance: 110,
+                distance: 115,
                 schedule: [
-                    { name_ref: "Mirabella Apartments (Check-out)", time: "09:30", text: "Wyjazd na południowe wybrzeże Krety przez góry" },
-                    { name_ref: "Rzymska Gortyna", time: "11:00", text: "Zwiedzanie Gortyny – rzymskiej stolicy Krety i tablic z kodeksem prawnym" },
-                    { name_ref: "Minojski Pałac Fajstos", time: "13:00", text: "Zwiedzanie surowego, autentycznego pałacu minojskiego w Fajstos" },
-                    { name_ref: "Areti Hotel (Baza 3)", time: "15:30", text: "Zameldowanie w Areti Hotel w malowniczym Agia Galini na klifie" }
+                    { name_ref: "Mirabella Apartments", time: "09:30", text: "Check-out ze wschodniej bazy. Ruszamy na dzikie południe wyspy drogami przez góry." },
+                    { name_ref: "Ruiny Gortyny", time: "11:00", text: "Odkrywanie rzymskiej stolicy Krety i potężnego kamiennego Kodeksu Praw." },
+                    { name_ref: "Pałac w Fajstos", time: "13:00", text: "Zwiedzanie surowego, autentycznego pałacu minojskiego bez tłumów i betonowych rekonstrukcji." },
+                    { name_ref: "Areti Hotel (Agia Galini)", time: "15:30", text: "Zameldowanie w hotelu Areti. Popołudniowe frappe i kolacja w amfiteatralnym porcie rybackim." }
                 ],
-                notes: "Zmieniacie morze na Morze Libijskie. Agia Galini powita Was kaskadową, tradycyjną architekturą rybacką.",
+                notes: "Zmieniacie krajobraz i morze na Morze Libijskie. Agia Galini ma strome, wąskie uliczki schodzące prosto do portu.",
                 curiosities: [
-                    "Kamienne prawo z Gortyny regulowało zasady ochrony praw niewolników oraz zabezpieczało majątek kobiet przy rozwodzie.",
-                    "W ruinach magazynów pałacu w Fajstos archeolodzy znaleźli słynny, gliniany Dysk z Fajstos."
+                    "Kodeks z Gortyny (V w. p.n.e.) to najstarszy zachowany akt prawny w Europie – określał m.in. prawa kobiet i niewolników.",
+                    "W ruinach pałacu w Fajstos odnaleziono słynny gliniany dysk z hieroglifami, którego treść do dziś pozostaje nieodszyfrowana."
                 ],
                 points: [
-                    { name: "Mirabella Apartments (Check-out)", coords: [35.2154, 25.7188], icon: "fa-arrow-right-from-bracket", color: "#D96B43", desc: "Pożegnanie północy" },
-                    { name: "Rzymska Gortyna", coords: [35.0622, 24.9472], icon: "fa-building-columns", color: "#6b7280", desc: "Kodeks Praw z V w. p.n.e." },
-                    { name: "Minojski Pałac Fajstos", coords: [35.0514, 24.8142], icon: "fa-landmark", color: "#ae5050", desc: "Autentyczne ruiny pałacu" },
-                    { name: "Areti Hotel (Baza 3)", coords: [35.0968, 24.6892], icon: "fa-bed", color: "#D96B43", desc: "Nowy hotel na południu wyspy" }
+                    { name: "Mirabella Apartments", coords: [35.2154, 25.7188], icon: "fa-arrow-right-from-bracket", color: "#6b7280", desc: "Pożegnanie bazy nr 2" },
+                    { name: "Ruiny Gortyny", coords: [35.0622, 24.9472], icon: "fa-building-columns", color: "#6b7280", desc: "Antyczne miasto rzymskie" },
+                    { name: "Pałac w Fajstos", coords: [35.0514, 24.8142], icon: "fa-landmark", color: "#ae5050", desc: "Minojski pałac nad równiną Messara" },
+                    { name: "Areti Hotel (Agia Galini)", coords: [35.0968, 24.6892], icon: "fa-bed", color: "#D96B43", desc: "Trzecia baza noclegowa na południu (24-26.06)" }
                 ],
                 routeSegments: [
                     { from: [35.2154, 25.7188], to: [35.0622, 24.9472], type: "car" },
@@ -1195,61 +1159,55 @@
                 ]
             },
             11: {
-                title: "Dzień 11: Palmy Preveli & Hipisowska Matala",
+                title: "Dzień 11: Las Palmowy Preveli & Jaskinie Matala",
                 date: "Czwartek, 25.06.2026",
-                distance: 130,
+                distance: 90,
                 schedule: [
-                    { name_ref: "Areti Hotel", time: "09:00", text: "Wyjazd z hotelu w stronę klifów rzeki Kourtaliotiko" },
-                    { name_ref: "Parking Preveli (Klif)", time: "10:00", text: "Dojazd i zostawienie Caraveli na strzeżonym Parkingu na klifie" },
-                    { name_ref: "Plaża Preveli", time: "10:15", text: "Zejście pieszo schodami na plażę i spacer w głąb spektakularnego lasu palmowego" },
-                    { name_ref: "Parking Matala", time: "14:00", text: "Przejazd autem do Matali i zaparkowanie na głównym parkingu tuż przy plaży" },
-                    { name_ref: "Matala Caves", time: "14:15", text: "Krótkie piesze podejście do jaskiń hipisów wykutych w piaskowcu" }
+                    { name_ref: "Areti Hotel", time: "09:00", text: "Start pętli po najpiękniejszych punktach południowego wybrzeża." },
+                    { name_ref: "Gaj Palmowy Preveli", time: "10:00", text: "Zejście ze skalnego klifu na rajską plażę i trekking wgłąb afrykańskiego lasu palmowego wzdłuż rzeki." },
+                    { name_ref: "Klify i Jaskinie w Matali", time: "14:00", text: "Przejazd na obiad do Matali, zwiedzanie jaskiń rzymskich opanowanych w latach 70. przez hipisów." },
+                    { time: "18:00", text: "Powrót do Agia Galini na pożegnalną kolację z owocami morza i kreteńskim winem." }
                 ],
-                notes: "Schodzenie na plażę Preveli od parkingu na klifie wymaga pokonania ok. 400 kamiennych stopni – powrót pod górę w słońcu bywa męczący.",
+                notes: "Zejście na Preveli ma ok. 400 kamiennych schodów. Powrót pod górę w pełnym słońcu bywa wymagający – zostawcie siły i wodę na powrót!",
                 curiosities: [
-                    "Las palmowy w Preveli uległ całkowitemu spaleniu w 2010 roku, lecz natura zregenerowała go samoistnie w zaledwie 3 lata.",
-                    "W jaskiniach Matali w latach 60. mieszkali m.in. Joni Mitchell oraz Cat Stevens, tworząc unikalną komunę hipisowską."
+                    "Unikalny las palmowy Theophrasti w Preveli doszczętnie spłonął w 2010 roku, ale dzięki niesamowitej żywotności odrodził się w pełni w zaledwie 3 lata.",
+                    "W jaskiniach klifu w Matali w latach 60. mieszkały legendy muzyki, m.in. Joni Mitchell czy Cat Stevens."
                 ],
                 points: [
-                    { name: "Areti Hotel", coords: [35.0968, 24.6892], icon: "fa-house", color: "#D96B43", desc: "Start dnia" },
-                    { name: "Parking Preveli (Klif)", coords: [35.1528, 24.4755], icon: "fa-square-p", color: "#2563eb", desc: "Parking na klifie nad wejściem schodami" },
-                    { name: "Plaża Preveli", coords: [35.1525, 24.4735], icon: "fa-tree", color: "#10b981", desc: "Las palmowy i ujście rzeki (pieszo)" },
-                    { name: "Parking Matala", coords: [34.9945, 24.7515], icon: "fa-square-p", color: "#2563eb", desc: "Oficjalny parking tuż przy plaży" },
-                    { name: "Matala Caves", coords: [34.9942, 24.7505], icon: "fa-umbrella-beach", color: "#D96B43", desc: "Jaskinie hipisów nad wodą (pieszo)" }
+                    { name: "Areti Hotel", coords: [35.0968, 24.6892], icon: "fa-house", color: "#D96B43", desc: "Start i koniec pętli" },
+                    { name: "Gaj Palmowy Preveli", coords: [35.1525, 24.4735], icon: "fa-tree", color: "#10b981", desc: "Ujście rzeki i las palmowy" },
+                    { name: "Klify i Jaskinie w Matali", coords: [34.9942, 24.7505], icon: "fa-peace", color: "#D96B43", desc: "Zatoka z rzymskimi grobowcami/jaskiniami hippisów" }
                 ],
                 routeSegments: [
-                    { from: [35.0968, 24.6892], to: [35.1528, 24.4755], type: "car" },
-                    { from: [35.1528, 24.4755], to: [35.1525, 24.4735], type: "walk" },
-                    { from: [35.1528, 24.4755], to: [34.9945, 24.7515], type: "car" },
-                    { from: [34.9945, 24.7515], to: [34.9942, 24.7505], type: "walk" },
-                    { from: [34.9945, 24.7515], to: [35.0968, 24.6892], type: "car" }
+                    { from: [35.0968, 24.6892], to: [35.1525, 24.4735], type: "car" },
+                    { from: [35.1525, 24.4735], to: [34.9942, 24.7505], type: "car" },
+                    { from: [34.9942, 24.7505], to: [35.0968, 24.6892], type: "car" }
                 ]
             },
             12: {
-                title: "Dzień 12: Finał i Wylot z Heraklionu",
+                title: "Dzień 12: Finał, Zwrot Auta i Wylot z Heraklionu",
                 date: "Piątek, 26.06.2026",
                 distance: 80,
                 schedule: [
-                    { name_ref: "Areti Hotel", time: "06:30", text: "Wczesny wyjazd trasą górską prosto na lotnisko w Heraklionie" },
-                    { time: "07:45", text: "Tankowanie auta na stacji pod lotniskiem (zasada Same-to-Same)" },
-                    { name_ref: "Lotnisko Heraklion (HER)", time: "08:15", text: "Zwrot pojazdu w sektorze Just Rental na parkingu Caravel i wrzucenie klucza do skrzynki" },
-                    { time: "10:15", text: "Wylot samolotu powrotnego bezpośrednio do Krakowa" }
+                    { name_ref: "Areti Hotel", time: "06:30", text: "Wczesna pobudka, spakowanie aut i start trasą szybkiego ruchu przez góry na północ." },
+                    { time: "07:45", text: "Tankowanie Caraveli do pełna na stacji benzynowej tuż przed lotniskiem (zasada Same-to-Same)." },
+                    { name_ref: "Lotnisko Heraklion (HER)", time: "08:15", text: "Zwrot auta na parkingu Caravela (oddanie kluczyków pracownikowi) i przejście do terminala." },
+                    { time: "10:15", text: "Wylot samolotu Wizz Air bezpośrednio do Krakowa (waga bagażu rejestrowanego do 20kg!)." }
                 ],
-                notes: "Lotnisko w Heraklionie bywa ekstremalnie zatłoczone w sezonie, bądźcie na miejscu minimum 2 godziny przed planowanym lotem.",
+                notes: "Lotnisko HER słynie z dużych kolejek w sezonie letnim. Wyjazd o 06:30 z Agia Galini gwarantuje bezpieczny margines czasowy i zero stresu.",
                 curiosities: [
-                    "Potężne weneckie mury Heraklionu przetrwały najdłuższe oblężenie w historii świata.",
-                    "Lotnisko nosi imię Nikosa Kazantzakisa – twórcy legendarnej powieści 'Grek Zorba'."
+                    "Główny pas startowy lotniska w Heraklionie wybudowano częściowo na sztucznym nasypie wdzierającym się w Morze Egejskie.",
+                    "Lotnisko nosi imię Nikosa Kazantzakisa – najsłynniejszego kreteńskiego pisarza, autora książki 'Grek Zorba'."
                 ],
                 points: [
-                    { name: "Areti Hotel", coords: [35.0968, 24.6892], icon: "fa-arrow-right-from-bracket", color: "#D96B43", desc: "Start o świcie" },
-                    { name: "Lotnisko Heraklion (HER)", coords: [35.3397, 25.1747], icon: "fa-plane-departure", color: "#0B4F83", desc: "Bezpieczny zwrot auta i odlot" }
+                    { name: "Areti Hotel", coords: [35.0968, 24.6892], icon: "fa-arrow-right-from-bracket", color: "#6b7280", desc: "Pożegnanie bazy na południu" },
+                    { name: "Lotnisko Heraklion (HER)", coords: [35.3397, 25.1747], icon: "fa-plane-departure", color: "#0B4F83", desc: "Powrót do Polski" }
                 ],
                 routeSegments: [
                     { from: [35.0968, 24.6892], to: [35.3397, 25.1747], type: "car" }
                 ]
             }
         };
-
         // System powiadomień Toast
         function showNotification(message, type = 'info') {
             const container = document.getElementById('toast-container');
